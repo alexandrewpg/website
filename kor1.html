@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Korean — Study Reminder</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#FAF8F4;--sur:#FFFFFF;--ink:#1A1714;--mid:#6A6259;--sub:#A09488;
+  --rule:#E8E2DA;--acc:#B85C38;--acc-lt:#FAEEE8;--acc-mid:#D4785A;
+  --sage:#5D7A60;--sage-lt:#EBF2EC;--faded:#B0A89E;
+  --sh:0 2px 16px rgba(60,40,20,0.07);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);
+  min-height:100vh;padding:0 0 5rem;-webkit-font-smoothing:antialiased;}
+.kr{font-family:'Noto Sans KR',sans-serif;}
+.page{max-width:760px;margin:0 auto;padding:2.5rem 1.25rem;}
+
+/* header */
+.hd{position:relative;overflow:hidden;background:var(--sur);border-radius:20px;
+  box-shadow:var(--sh);padding:2.25rem 2.5rem 2rem;margin-bottom:2rem;}
+.hd-watermark{position:absolute;right:-6px;top:-40px;font-family:'Cormorant Garamond',serif;
+  font-size:170px;font-weight:300;color:rgba(184,92,56,0.08);line-height:1;
+  pointer-events:none;user-select:none;}
+.hd-eyebrow{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--sub);margin-bottom:.5rem;}
+.hd-title{font-family:'Cormorant Garamond',serif;font-size:34px;font-weight:700;
+  color:var(--ink);line-height:1.15;margin-bottom:.4rem;}
+.hd-sub{font-size:13.5px;color:var(--mid);font-style:italic;}
+
+/* section */
+.sec{margin-bottom:2.25rem;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:700;
+  color:var(--acc);margin-bottom:1rem;padding-bottom:.5rem;
+  border-bottom:1px solid var(--rule);}
+
+/* grammar block */
+.gblock{background:var(--sur);border-radius:16px;box-shadow:var(--sh);
+  padding:1.4rem 1.6rem;margin-bottom:1rem;}
+.gblock-head{font-size:15.5px;color:var(--ink);margin-bottom:.7rem;font-weight:500;}
+.gblock-head .kr{font-weight:700;font-size:17px;}
+.gli{display:flex;gap:9px;align-items:flex-start;margin-bottom:.5rem;font-size:14px;
+  line-height:1.6;color:var(--mid);}
+.gli:last-child{margin-bottom:0;}
+.gli::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--sage);
+  flex-shrink:0;margin-top:.55rem;}
+.gli .kr{font-size:15px;}
+.good{color:var(--sage);font-weight:500;}
+.bad{color:var(--faded);text-decoration:line-through;}
+.note-it{font-style:italic;color:var(--sub);}
+
+/* corrections */
+.corr{background:var(--sur);border-radius:14px;box-shadow:var(--sh);
+  padding:1.1rem 1.3rem;margin-bottom:.7rem;display:flex;gap:14px;align-items:flex-start;}
+.corr-num{flex-shrink:0;width:30px;height:30px;border-radius:8px;background:var(--acc-lt);
+  color:var(--acc);font-weight:700;font-size:14px;display:flex;align-items:center;
+  justify-content:center;margin-top:1px;}
+.corr-body{flex:1;}
+.corr-line{margin-bottom:.35rem;line-height:1.6;}
+.corr-label{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+  margin-right:7px;}
+.corr-wrong .corr-label{color:var(--mid);}
+.corr-right .corr-label{color:var(--sage);}
+.corr-wrong .kr{font-size:15px;color:var(--mid);}
+.corr-right .kr{font-size:15.5px;color:var(--ink);font-weight:500;}
+.corr-note{font-size:12.5px;font-style:italic;color:var(--sub);margin-top:.3rem;line-height:1.5;}
+.corr-note .kr{font-style:normal;font-size:13px;color:var(--mid);}
+
+/* vocab */
+.vgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;}
+.vrow{background:var(--sur);border-radius:11px;box-shadow:var(--sh);padding:11px 14px;}
+.vrow .kr{font-size:16px;font-weight:700;color:var(--ink);}
+.vrow .ven{font-size:12.5px;color:var(--mid);margin-top:2px;line-height:1.4;}
+
+/* footer strength note */
+.strength{background:var(--sage-lt);border-radius:14px;padding:1.1rem 1.4rem;
+  margin-top:1.5rem;font-size:14px;line-height:1.7;color:var(--mid);}
+.strength b{color:var(--sage);font-weight:600;}
+.strength .kr{color:var(--ink);font-weight:500;font-size:15px;}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="hd">
+    <div class="hd-watermark kr">복습</div>
+    <div class="hd-eyebrow">Mid-month checkpoint</div>
+    <div class="hd-title">Korean — Study Reminder</div>
+    <div class="hd-sub">Lessons 11–13 translation practice</div>
+  </div>
+
+  <!-- GRAMMAR -->
+  <div class="sec">
+    <div class="sec-title">Grammar points to lock in</div>
+
+    <div class="gblock">
+      <div class="gblock-head"><span class="kr">-는 동안</span> takes the present verb form, even about the past.</div>
+      <div class="gli"><span><span class="kr good">내려오는 동안</span> (while coming down) — not <span class="kr bad">내려온 동안</span></span></div>
+      <div class="gli"><span>The clause before <span class="kr">-는 동안</span> stays in the dictionary / present stem.</span></div>
+    </div>
+
+    <div class="gblock">
+      <div class="gblock-head"><span class="kr">-아/어도</span> vs <span class="kr">-는데</span></div>
+      <div class="gli"><span><span class="kr good">-아/어도</span> = "even though / even if" — active concession.</span></div>
+      <div class="gli"><span><span class="kr">-는데</span> = "and / but" — softer background, not true concession.</span></div>
+      <div class="gli"><span>"Even though I had no time" → <span class="kr good">시간이 없어도</span> (not <span class="kr bad">없는데</span>)</span></div>
+    </div>
+
+    <div class="gblock">
+      <div class="gblock-head"><span class="kr">걷다</span> is a <span class="kr">ㄷ</span>-irregular verb.</div>
+      <div class="gli"><span>The <span class="kr">ㄷ</span> becomes <span class="kr" style="color:var(--acc);font-weight:600;">ㄹ</span> before a vowel:</span></div>
+      <div class="gli"><span class="kr good" style="font-size:15.5px;">걷다 → 걸어요, 걸었어요, 걸을수록</span></div>
+      <div class="gli"><span class="note-it">High-frequency — worth memorising the whole set.</span></div>
+    </div>
+
+    <div class="gblock">
+      <div class="gblock-head"><span class="kr">-(으)러</span> vs <span class="kr">-(으)려고 하다</span></div>
+      <div class="gli"><span><span class="kr good">자러 가다</span> = go in order to sleep (purpose + motion verb).</span></div>
+      <div class="gli"><span><span class="kr">자려고 하다</span> = intend to sleep.</span></div>
+    </div>
+  </div>
+
+  <!-- CORRECTIONS -->
+  <div class="sec">
+    <div class="sec-title">Sentence corrections</div>
+
+    <div class="corr">
+      <div class="corr-num">2</div>
+      <div class="corr-body">
+        <div class="corr-line corr-wrong"><span class="corr-label">You wrote</span><span class="kr">거스로 … 했는대 … 거스에 하게 됐어요</span></div>
+        <div class="corr-line corr-right"><span class="corr-label">Correct</span><span class="kr">가벼운 코스로 가려고 했는데 길을 잘못 들어서 더 어려운 코스로 가게 됐어요</span></div>
+        <div class="corr-note"><span class="kr">코스</span> not <span class="kr">거스</span> · <span class="kr">-는데</span> not <span class="kr">-는대</span> · <span class="kr">코스로 가다</span> (onto + go), not <span class="kr">하다</span></div>
+      </div>
+    </div>
+
+    <div class="corr">
+      <div class="corr-num">3</div>
+      <div class="corr-body">
+        <div class="corr-line corr-wrong"><span class="corr-label">You wrote</span><span class="kr">도찬했을 때 뷴 거가 …</span></div>
+        <div class="corr-line corr-right"><span class="corr-label">Correct</span><span class="kr">정상에 도착했을 때 경치가 생각보다 더 아름다웠어요</span></div>
+        <div class="corr-note"><span class="kr">도착</span> not <span class="kr">도찬</span> · "the view" = <span class="kr">경치</span></div>
+      </div>
+    </div>
+
+    <div class="corr">
+      <div class="corr-num">4</div>
+      <div class="corr-body">
+        <div class="corr-line corr-wrong"><span class="corr-label">You wrote</span><span class="kr">내려온 동안 … 확인해야간다고</span></div>
+        <div class="corr-line corr-right"><span class="corr-label">Correct</span><span class="kr">내려오는 동안 … 확인해야겠다고 생각했어요</span></div>
+        <div class="corr-note"><span class="kr">내려오는</span> (present form) · <span class="kr">겠</span> not <span class="kr">간</span></div>
+      </div>
+    </div>
+
+    <div class="corr">
+      <div class="corr-num">6</div>
+      <div class="corr-body">
+        <div class="corr-line corr-wrong"><span class="corr-label">You wrote</span><span class="kr">자로 가려고 … 배고바서 못가를</span></div>
+        <div class="corr-line corr-right"><span class="corr-label">Correct</span><span class="kr">자러 가려고 했는데 너무 배고파서 뭔가를 먹게 됐어요</span></div>
+        <div class="corr-note"><span class="kr">자러</span> (purpose) · <span class="kr">배고파서</span> · <span class="kr">뭔가</span> = something</div>
+      </div>
+    </div>
+
+    <div class="corr">
+      <div class="corr-num">7</div>
+      <div class="corr-body">
+        <div class="corr-line corr-wrong"><span class="corr-label">You wrote</span><span class="kr">미리 음식을 가죠야 해요</span></div>
+        <div class="corr-line corr-right"><span class="corr-label">Correct</span><span class="kr">다음에는 미리 간식을 챙겨야겠어요</span></div>
+        <div class="corr-note"><span class="kr">간식</span> (snack) · <span class="kr">챙기다</span> (to pack) · <span class="kr">-야겠어요</span> (resolution)</div>
+      </div>
+    </div>
+
+    <div class="corr">
+      <div class="corr-num">8</div>
+      <div class="corr-body">
+        <div class="corr-line corr-wrong"><span class="corr-label">You wrote</span><span class="kr">생각하는 동안 언재에 대해 생각했어요</span></div>
+        <div class="corr-line corr-right"><span class="corr-label">Correct</span><span class="kr">요리하는 동안 어제에 대해 계속 생각했어요</span></div>
+        <div class="corr-note"><span class="kr">요리하다</span> (cook), not <span class="kr">생각</span> · <span class="kr">어제</span> = yesterday (not <span class="kr">언제</span> = when)</div>
+      </div>
+    </div>
+
+    <div class="corr">
+      <div class="corr-num">11</div>
+      <div class="corr-body">
+        <div class="corr-line corr-wrong"><span class="corr-label">You wrote</span><span class="kr">시간이 없는데 …</span></div>
+        <div class="corr-line corr-right"><span class="corr-label">Correct</span><span class="kr">시간이 없어도 모든 걸 먹어보고 싶었어요</span></div>
+        <div class="corr-note"><span class="kr">-아/어도</span> for "even though," not <span class="kr">-는데</span></div>
+      </div>
+    </div>
+
+    <div class="corr">
+      <div class="corr-num">13</div>
+      <div class="corr-body">
+        <div class="corr-line corr-wrong"><span class="corr-label">You wrote</span><span class="kr">지난 벗을 못 탈 … 타게 돼서 행복했어요</span></div>
+        <div class="corr-line corr-right"><span class="corr-label">Correct</span><span class="kr">마지막 버스를 놓칠 뻔했는데 다행히 탔어요</span></div>
+        <div class="corr-note"><span class="kr">마지막 버스</span> · <span class="kr">놓치다</span> (miss) · <span class="kr">다행히</span> (thankfully)</div>
+      </div>
+    </div>
+
+    <div class="corr">
+      <div class="corr-num">14</div>
+      <div class="corr-body">
+        <div class="corr-line corr-wrong"><span class="corr-label">You wrote</span><span class="kr">거럴수럭 … 고파게 됐어요</span></div>
+        <div class="corr-line corr-right"><span class="corr-label">Correct</span><span class="kr">걸을수록 더 배가 고파졌어요</span></div>
+        <div class="corr-note"><span class="kr">걸을수록</span> (ㄷ-irregular + 록) · <span class="kr">배고파지다</span> (become hungry)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VOCAB -->
+  <div class="sec">
+    <div class="sec-title">Vocabulary to bank</div>
+    <div class="vgrid">
+      <div class="vrow"><div class="kr">놀라다</div><div class="ven">to be surprised</div></div>
+      <div class="vrow"><div class="kr">떨어뜨리다</div><div class="ven">to drop (something)</div></div>
+      <div class="vrow"><div class="kr">놓치다</div><div class="ven">to miss / let slip (a bus, chance)</div></div>
+      <div class="vrow"><div class="kr">마지막</div><div class="ven">last / final</div></div>
+      <div class="vrow"><div class="kr">다행히</div><div class="ven">thankfully / luckily</div></div>
+      <div class="vrow"><div class="kr">잃어버리다</div><div class="ven">to lose (an object)</div></div>
+      <div class="vrow"><div class="kr">배고파지다</div><div class="ven">to become hungry</div></div>
+      <div class="vrow"><div class="kr">챙기다</div><div class="ven">to pack / prepare / take along</div></div>
+      <div class="vrow"><div class="kr">간식</div><div class="ven">snack</div></div>
+    </div>
+  </div>
+
+  <div class="strength">
+    <b>Strong points this round:</b> <span class="kr">-(으)ㄹ 뻔하다</span> placed correctly every time, even without the vocab. <span class="kr">-게 됐어요</span> and <span class="kr">-는지 모르다</span> both solid. The errors were vocabulary retrieval and spelling, not grammar — your structural range is ahead of your active vocabulary.
+  </div>
+
+</div>
+</body>
+</html>

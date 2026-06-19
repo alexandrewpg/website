@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alexandre Coutu — Traduction &amp; Perfectionnement</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:    #20232E;
+      --paper:  #FBF9F4;
+      --gold:   #B08D3F;
+      --slate:  #9AA0AC;
+      --rule:   #E2DDD3;
+      --soft:   #4A4D58;
+    }
+
+    html { font-size: 19px; }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: 'Spectral', Georgia, serif;
+      font-weight: 300;
+      line-height: 1.75;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .page {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 2.2rem;
+      opacity: 0;
+      animation: rise 1s ease forwards;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    header {
+      padding: 6rem 0 0;
+      text-align: center;
+    }
+    .crest {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.42em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.8rem;
+      padding-left: 0.42em;
+    }
+    .name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.8rem, 8vw, 4.2rem);
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      line-height: 1.04;
+    }
+    .name-en {
+      display: block;
+      font-family: 'Spectral', serif;
+      font-size: 0.66rem;
+      font-weight: 300;
+      font-style: italic;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--slate);
+      margin-top: 1.1rem;
+    }
+    .rule-ornament {
+      width: 100%;
+      max-width: 200px;
+      margin: 2.6rem auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.9rem;
+      color: var(--gold);
+    }
+    .rule-ornament::before,
+    .rule-ornament::after {
+      content: '';
+      height: 1px; flex: 1;
+      background: var(--rule);
+    }
+    .rule-ornament span { font-size: 0.7rem; letter-spacing: 0.3em; }
+
+    .lede {
+      margin: 3rem 0 0;
+      text-align: center;
+    }
+    .lede .fr {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.42rem;
+      font-weight: 400;
+      font-style: italic;
+      line-height: 1.5;
+      color: var(--ink);
+    }
+    .lede .en {
+      display: block;
+      margin-top: 1.1rem;
+      font-size: 0.78rem;
+      font-style: italic;
+      color: var(--slate);
+      line-height: 1.7;
+      max-width: 440px;
+      margin-left: auto; margin-right: auto;
+    }
+
+    .bio {
+      margin: 2.4rem auto 0;
+      max-width: 480px;
+      text-align: center;
+    }
+    .bio .fr {
+      font-size: 0.86rem;
+      line-height: 1.8;
+      color: var(--soft);
+    }
+    .bio .en {
+      display: block;
+      margin-top: 0.9rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid var(--rule);
+      font-size: 0.74rem;
+      font-style: italic;
+      color: var(--slate);
+      line-height: 1.7;
+    }
+
+    .section-label {
+      margin: 5rem 0 3rem;
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: var(--gold);
+      padding-left: 0.34em;
+    }
+
+    .entry {
+      padding: 0 0 3rem;
+      margin-bottom: 3rem;
+      border-bottom: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 2.4rem 1fr;
+      column-gap: 0.4rem;
+    }
+    .entry:last-of-type { border-bottom: none; }
+
+    .entry-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--gold);
+      line-height: 1.6;
+      padding-top: 0.15rem;
+    }
+    .entry-kind {
+      font-family: 'Spectral', serif;
+      font-size: 0.64rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--slate);
+      margin-bottom: 0.7rem;
+    }
+    .entry-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.7rem, 5vw, 2.1rem);
+      font-weight: 500;
+      line-height: 1.12;
+      letter-spacing: 0.005em;
+    }
+    .entry-title .en {
+      display: block;
+      font-family: 'Spectral', serif;
+      font-size: 0.66rem;
+      font-weight: 300;
+      font-style: italic;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--slate);
+      margin-top: 0.6rem;
+    }
+    .gloss { margin-top: 1.4rem; }
+    .gloss .fr {
+      font-size: 0.92rem;
+      line-height: 1.78;
+      color: var(--soft);
+    }
+    .gloss .en {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--rule);
+      font-size: 0.78rem;
+      font-style: italic;
+      line-height: 1.7;
+      color: var(--slate);
+    }
+    .entry-link {
+      display: inline-block;
+      margin-top: 1.7rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.12rem;
+      font-style: italic;
+      color: var(--ink);
+      text-decoration: none;
+      position: relative;
+      padding-bottom: 3px;
+    }
+    .entry-link::after {
+      content: '';
+      position: absolute;
+      left: 0; bottom: 0;
+      width: 1.6rem; height: 1px;
+      background: var(--gold);
+      transition: width 0.4s cubic-bezier(0.2,0.7,0.2,1);
+    }
+    .entry-link:hover::after,
+    .entry-link:focus-visible::after { width: 100%; }
+    .entry-link .arrow { color: var(--gold); font-style: normal; }
+    .entry-link .en {
+      display: block;
+      font-family: 'Spectral', serif;
+      font-size: 0.6rem;
+      font-style: normal;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--slate);
+      margin-top: 0.45rem;
+    }
+
+    /* Secondary entry (mentoring) — quieter weight */
+    .entry.secondary .entry-title { font-size: clamp(1.4rem, 4vw, 1.7rem); }
+    .entry.secondary .entry-num { opacity: 0.7; }
+
+    .colophon { margin: 1rem 0 0; text-align: center; }
+    .colophon .fr {
+      font-size: 0.84rem;
+      line-height: 1.8;
+      color: var(--soft);
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .colophon .en {
+      display: block;
+      margin-top: 0.9rem;
+      font-size: 0.72rem;
+      font-style: italic;
+      color: var(--slate);
+      max-width: 440px;
+      margin-left: auto; margin-right: auto;
+    }
+
+    footer {
+      padding: 4rem 0 3.5rem;
+      text-align: center;
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--slate);
+    }
+    .back {
+      display: inline-block;
+      margin-bottom: 1.6rem;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 0.95rem;
+      font-style: italic;
+      text-transform: none;
+      letter-spacing: normal;
+      color: var(--slate);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .back:hover, .back:focus-visible { color: var(--ink); }
+    .back .arrow { color: var(--gold); }
+
+    .entry-link.static {
+      color: var(--slate);
+      cursor: default;
+    }
+    .entry-link.static::after { display: none; }
+
+    a:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+    @media (max-width: 480px) {
+      header { padding: 4rem 0 0; }
+      .entry { grid-template-columns: 1.8rem 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .page { opacity: 1; animation: none; }
+      .entry-link::after { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <header>
+      <p class="crest">Traduction · Le métier</p>
+      <h1 class="name">
+        Alexandre Coutu
+        <span class="name-en">Translator &amp; Translation Educator</span>
+      </h1>
+      <div class="rule-ornament"><span>&#10086;</span></div>
+    </header>
+
+    <p class="lede">
+      <span class="fr">Traducteur depuis plus de <span class="years"></span> ans, l'essentiel de ma carrière en traduction législative.</span>
+      <span class="en">A translator for more than <span class="years"></span> years, most of it in legislative translation.</span>
+    </p>
+
+    <div class="bio">
+      <p class="fr">Je suis directeur de la traduction législative et parlementaire au Bureau du conseiller législatif, ministère de la Justice, gouvernement du Manitoba — poste que j'occupe depuis plus de dix ans. J'ai aussi conçu le cours <em>TRAD 4511 — Traduction juridique : textes officiels</em> à l'Université de Saint-Boniface.</p>
+      <p class="en">I am Director of Legislative and Parliamentary Translation at the Office of the Legislative Counsel, Department of Justice, Government of Manitoba — a role I have held for over ten years. I also created the course <em>TRAD 4511 — Legal Translation: Official Texts</em> at the Université de Saint-Boniface.</p>
+    </div>
+
+    <p class="section-label">L'offre</p>
+
+    <!-- MAGISTRAD COURSE — primary -->
+    <div class="entry">
+      <div class="entry-num">I</div>
+      <div>
+        <p class="entry-kind">Cours · Offert chez Magistrad</p>
+        <h2 class="entry-title">
+          Clarté et précision par l'analyse de textes législatifs
+          <span class="en">A Course Offered Through Magistrad</span>
+        </h2>
+        <div class="gloss">
+          <p class="fr">Comment atteindre la clarté et la précision dans nos traductions, par l'analyse de textes législatifs et une série d'exercices pratiques. Un cours destiné aux traducteurs qui veulent affermir leur rendu des phrases complexes et nuancées, fondé sur l'expérience concrète de la traduction des lois.</p>
+          <p class="en">How to achieve clarity and precision in our translations, through the analysis of legislative texts and a series of practical exercises. A course for translators who want to strengthen their handling of complex, nuanced sentences — grounded in the real work of translating legislation.</p>
+        </div>
+        <a class="entry-link" href="https://epekho.magistrad.com/catalogItemDetails/en-trd-31-001/73/-1/-1" target="_blank" rel="noopener">
+          Voir le cours chez Magistrad <span class="arrow">&rarr;</span>
+          <span class="en">View the course on Magistrad</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- MENTORING — secondary -->
+    <div class="entry secondary">
+      <div class="entry-num">II</div>
+      <div>
+        <p class="entry-kind">Accompagnement · Mentoring</p>
+        <h2 class="entry-title">
+          Le mentorat
+          <span class="en">One-on-One Mentoring</span>
+        </h2>
+        <div class="gloss">
+          <p class="fr">Un accompagnement individuel pour les langagiers qui souhaitent approfondir leur pratique. Offert ponctuellement — les détails et les coordonnées suivront.</p>
+          <p class="en">Individual guidance for language professionals wishing to deepen their practice. Offered selectively — details and contact information to follow.</p>
+        </div>
+        <span class="entry-link static">
+          Bientôt
+          <span class="en">Coming soon</span>
+        </span>
+      </div>
+    </div>
+
+    <p class="section-label">À qui s'adresse</p>
+
+    <div class="colophon">
+      <p class="fr">Aux traducteurs et réviseurs en exercice qui veulent affermir leur métier — qu'ils travaillent en cabinet, en entreprise ou à leur compte.</p>
+      <p class="en">For practising translators and revisers who want to strengthen their craft — whether in an agency, in-house, or freelance.</p>
+    </div>
+
+    <footer>
+      <a class="back" href="landing.html"><span class="arrow">&larr;</span> Retour à l'accueil · Back to entrance</a><br>
+      &copy; <span id="yr"></span> Alexandre Coutu
+    </footer>
+
+  </div>
+  <script>
+    document.getElementById('yr').textContent = new Date().getFullYear();
+    var yrs = new Date().getFullYear() - 1999;
+    document.querySelectorAll('.years').forEach(function(el){ el.textContent = yrs; });
+  </script>
+</body>
+</html>

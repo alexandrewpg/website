@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Korean — Lessons 18–19</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#FAF8F4;--sur:#FFFFFF;--ink:#1A1714;--mid:#6A6259;--sub:#A09488;
+  --rule:#E8E2DA;--acc:#B85C38;--acc-lt:#FAEEE8;--acc-mid:#D4785A;
+  --gold:#C9963A;--sage:#5D7A60;--sage-lt:#EBF2EC;
+  --sh:0 2px 16px rgba(60,40,20,0.07);--sh-hover:0 4px 24px rgba(60,40,20,0.12);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding:0 0 7rem;-webkit-font-smoothing:antialiased;}
+.nav{position:sticky;top:0;z-index:100;background:rgba(237,232,225,0.97);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);padding:0.7rem 1.25rem;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.nav-label{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);padding-right:10px;border-right:1px solid var(--rule);margin-right:2px;white-space:nowrap;}
+.np{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:var(--mid);background:none;border:none;border-radius:20px;padding:6px 14px;cursor:pointer;transition:all .2s;white-space:nowrap;position:relative;}
+.np:hover{background:var(--sur);color:var(--ink);box-shadow:var(--sh);}
+.np.on{background:var(--sur);color:var(--ink);font-weight:600;box-shadow:var(--sh);}
+.np.on::after{content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:20px;height:2px;background:var(--gold);border-radius:1px;}
+.np .pip{position:absolute;top:2px;right:4px;width:14px;height:14px;border-radius:50%;background:var(--acc);color:#fff;font-size:8px;font-weight:700;display:none;align-items:center;justify-content:center;line-height:1;}
+.np .pip.show{display:flex;}
+.page{max-width:760px;margin:0 auto;padding:2.5rem 1.25rem;}
+.lesson{display:none;}.lesson.on{display:block;}
+.lsn-header{position:relative;overflow:hidden;padding:2.5rem 2.5rem 2.25rem;margin-bottom:2.25rem;background:var(--sur);border-radius:20px;box-shadow:var(--sh);}
+.lsn-watermark{position:absolute;right:-12px;top:-28px;font-family:'Cormorant Garamond',serif;font-size:220px;font-weight:300;color:rgba(184,92,56,0.09);line-height:1;pointer-events:none;user-select:none;letter-spacing:-.02em;}
+.lsn-eyebrow{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);margin-bottom:.6rem;}
+.lsn-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--ink);line-height:1.18;margin-bottom:.5rem;}
+.lsn-sub{font-size:14.5px;color:var(--mid);line-height:1.7;margin-bottom:1.1rem;max-width:520px;font-style:italic;}
+.new-pill{display:inline-flex;align-items:center;gap:10px;background:var(--acc-lt);border-radius:16px;padding:9px 16px;}
+.new-pill-label{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);flex-shrink:0;}
+.new-pill-pat{font-family:'Noto Sans KR',sans-serif;font-size:16px;font-weight:700;color:var(--ink);}
+.new-pill-mean{font-size:12.5px;color:var(--mid);}
+.sec-label{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--sage);margin-bottom:.85rem;}
+.reading-card{background:var(--sur);border-radius:16px;box-shadow:var(--sh);padding:1.75rem 2rem;margin-bottom:2rem;}
+.reading-kr{font-family:'Noto Sans KR',sans-serif;font-size:18px;line-height:2.4;color:var(--ink);margin-bottom:1.25rem;}
+.dlg{display:flex;gap:14px;margin-bottom:.75rem;align-items:flex-start;}
+.dlg-who{font-size:12px;font-weight:700;min-width:42px;padding-top:5px;flex-shrink:0;color:var(--sage);letter-spacing:.02em;text-transform:uppercase;}
+.dlg-ipa{font-family:'Inter',sans-serif;font-size:12px;color:var(--sub);font-style:italic;line-height:1.5;margin-top:3px;letter-spacing:.01em;}
+.vc-hanja{font-family:'Noto Sans KR',serif;font-size:11px;color:var(--sage);font-weight:500;line-height:1.3;margin-top:1px;letter-spacing:.04em;}
+.vc-ipa{font-family:'Inter',sans-serif;font-size:10px;color:var(--sub);font-style:italic;line-height:1.3;margin-top:1px;}
+.dlg-txt{font-family:'Noto Sans KR',sans-serif;font-size:17px;line-height:2;color:var(--ink);}
+.ctrl-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:1.1rem;margin-bottom:.85rem;}
+.lbtn{display:inline-flex;align-items:center;gap:7px;background:var(--acc);color:#fff;border:none;border-radius:24px;padding:9px 18px;font-size:13.5px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(184,92,56,0.25);}
+.lbtn:hover{transform:translateY(-1px);background:var(--acc-mid);box-shadow:0 4px 12px rgba(184,92,56,0.3);}
+.lbtn svg{width:10px;height:10px;flex-shrink:0;}
+.spd{font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;border:1px solid var(--rule);border-radius:24px;background:var(--bg);color:var(--mid);cursor:pointer;}
+.tl-btn{font-family:'Inter',sans-serif;font-size:13px;border:1px solid var(--rule);border-radius:24px;padding:8px 14px;cursor:pointer;transition:all .2s;background:transparent;color:var(--mid);}
+.tl-btn:hover{background:var(--acc-lt);border-color:var(--acc-mid);color:var(--acc);}
+.tl-box{font-size:14px;color:var(--mid);line-height:1.85;border-radius:10px;padding:1rem 1.25rem;display:none;margin-top:.5rem;background:var(--bg);border-left:3px solid var(--acc-mid);}
+.tl-box.on{display:block;}
+.reading-ipa{font-family:'Inter',sans-serif;font-size:12.5px;color:var(--sub);font-style:italic;line-height:1.7;margin:-0.4rem 0 1.1rem;letter-spacing:.01em;}
+.tts-note{font-size:12px;color:var(--sub);font-style:italic;margin-top:.85rem;}
+.gram-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:2rem;}
+@media(max-width:520px){.gram-grid{grid-template-columns:1fr;}}
+.gc{background:var(--sur);border-radius:14px;box-shadow:var(--sh);padding:1.35rem 1.4rem;transition:box-shadow .2s;}
+.gc:hover{box-shadow:var(--sh-hover);}
+.gc.new-card{background:var(--acc-lt);box-shadow:0 2px 16px rgba(184,92,56,0.1);}
+.gc.new-card:hover{box-shadow:0 4px 24px rgba(184,92,56,0.18);}
+.new-star{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);margin-bottom:.45rem;display:block;}
+.gc-pat{font-family:'Noto Sans KR',sans-serif;font-size:17.5px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.gc-mean{font-size:12px;font-weight:600;letter-spacing:.03em;color:var(--mid);margin-bottom:.75rem;}
+.gc-ex{font-family:'Noto Sans KR',sans-serif;font-size:14px;line-height:1.7;background:var(--bg);border-radius:8px;padding:8px 11px;cursor:pointer;margin-bottom:6px;border:none;width:100%;text-align:left;color:var(--ink);transition:background .15s;}
+.gc-ex:hover{background:var(--rule);}
+.gc-en{font-size:12px;font-style:italic;color:var(--mid);}
+.gc-note{font-size:11.5px;color:var(--sub);margin-top:.6rem;line-height:1.55;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:8px;margin-bottom:2rem;}
+.vc{display:flex;align-items:center;gap:10px;background:var(--sur);border-radius:12px;padding:10px 13px;cursor:pointer;box-shadow:var(--sh);transition:all .2s;}
+.vc:hover{transform:translateY(-2px);box-shadow:var(--sh-hover);}
+.vc-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;background:var(--bg);}
+.vc-kr{font-family:'Noto Sans KR',sans-serif;font-size:14.5px;font-weight:700;color:var(--ink);margin-bottom:1px;}
+.vc-en{font-size:12px;color:var(--mid);line-height:1.35;}
+.sent-list{display:flex;flex-direction:column;gap:8px;margin-bottom:2rem;}
+.sent-row{display:flex;align-items:flex-start;gap:12px;background:var(--sur);border-radius:12px;padding:14px 16px;box-shadow:var(--sh);transition:box-shadow .2s;}
+.sent-row:hover{box-shadow:var(--sh-hover);}
+.snum{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11.5px;font-weight:700;margin-top:2px;background:var(--sage-lt);color:var(--sage);}
+.sent-body{flex:1;}
+.sent-kr{font-family:'Noto Sans KR',sans-serif;font-size:16.5px;color:var(--ink);line-height:1.85;}
+.sent-en{font-size:13.5px;color:var(--mid);font-style:italic;display:none;margin-top:6px;padding-top:6px;border-top:1px solid var(--rule);}
+.sent-en.on{display:block;}
+.stl{font-size:12px;background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;padding:2px 0;color:var(--sage);text-decoration:underline;text-underline-offset:3px;margin-top:4px;display:block;}
+.sbtn{border:1px solid var(--rule);border-radius:20px;padding:5px 13px;font-size:12.5px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;flex-shrink:0;background:var(--bg);color:var(--mid);transition:all .15s;}
+.sbtn:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
+.ex-sec{background:var(--sur);border-radius:16px;box-shadow:var(--sh);padding:1.5rem 1.75rem;margin-bottom:1.1rem;}
+.ex-head{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.ex-badge{width:24px;height:24px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;flex-shrink:0;background:var(--acc);color:#fff;}
+.ex-title{font-size:14.5px;font-weight:600;color:var(--ink);}
+.ex-sub{font-size:12px;color:var(--sub);margin-top:1px;}
+.ex-item{margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--rule);}
+.ex-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.ex-q{font-family:'Noto Sans KR',sans-serif;font-size:15.5px;color:var(--ink);line-height:1.9;margin-bottom:4px;}
+.ex-q-en{font-size:13px;color:var(--mid);margin-bottom:7px;font-style:italic;}
+.c-en{font-size:15px;font-weight:500;margin-bottom:8px;color:var(--ink);}
+.blank{display:inline-block;min-width:50px;border-bottom:2px solid var(--acc-mid);font-weight:600;padding:0 3px;color:var(--acc);}
+.at{font-family:'Inter',sans-serif;font-size:12.5px;border:1px solid var(--rule);border-radius:20px;padding:5px 13px;cursor:pointer;transition:all .15s;margin-right:4px;background:var(--bg);color:var(--mid);}
+.at:hover{background:var(--acc-lt);border-color:var(--acc-mid);color:var(--acc);}
+.ans-box{display:none;margin-top:8px;border-radius:12px;overflow:hidden;}
+.ans-box.on{display:block;}
+.ans-main{padding:10px 14px;background:var(--acc-lt);}
+.ans-kr{font-family:'Noto Sans KR',sans-serif;font-size:15.5px;font-weight:600;margin-bottom:3px;color:var(--ink);}
+.ans-kr strong{text-decoration:underline;text-decoration-color:var(--acc);text-underline-offset:3px;text-decoration-thickness:2px;color:var(--acc);}
+.ans-note{font-size:12.5px;color:var(--mid);line-height:1.6;}
+.ans-alt{background:var(--bg);padding:8px 14px;border-top:1px solid rgba(184,92,56,0.15);}
+.al{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);margin-bottom:2px;}
+.ak{font-family:'Noto Sans KR',sans-serif;font-size:13.5px;color:var(--mid);}
+.row-btns{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:7px;}
+.px{display:inline-flex;align-items:center;gap:4px;background:var(--acc);color:#fff;border:none;border-radius:20px;padding:5px 11px;font-size:12.5px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;}
+.px:hover{background:var(--acc-mid);transform:translateY(-1px);}
+.px svg{width:8px;height:8px;}
+.divider{border:none;border-top:1px solid var(--rule);margin:1.75rem 0;}
+.sb{margin-bottom:2rem;}
+.mark-done-row{display:flex;justify-content:flex-end;margin-top:1.1rem;padding-top:.9rem;border-top:1px solid var(--rule);}
+.mdbtn{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;border:1.5px solid;border-radius:20px;padding:8px 18px;cursor:pointer;transition:all .2s;letter-spacing:.01em;}
+.mdbtn.undone{color:var(--ink);background:var(--sur);border-color:var(--mid);box-shadow:0 1px 4px rgba(60,40,20,0.08);}
+.mdbtn.undone:hover{border-color:var(--acc);color:var(--acc);background:var(--acc-lt);box-shadow:0 2px 8px rgba(184,92,56,0.15);}
+.mdbtn.done-state{color:#fff;background:var(--acc);border-color:var(--acc);box-shadow:0 2px 8px rgba(184,92,56,0.3);}
+.mdbtn.done-state:hover{background:var(--acc-mid);}
+#lesson-kb{padding:1rem 0;}
+.kb-header{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--rule);}
+.kb-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--ink);margin-bottom:.35rem;}
+.kb-sub{font-size:14px;color:var(--mid);line-height:1.65;}
+.kb-reset{font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;border:1px solid var(--rule);background:none;color:var(--sub);border-radius:20px;padding:6px 14px;cursor:pointer;margin-top:.9rem;transition:all .15s;}
+.kb-reset:hover{border-color:var(--mid);color:var(--ink);}
+.kb-lesson{background:var(--sur);border-radius:16px;box-shadow:var(--sh);padding:1.25rem 1.5rem;margin-bottom:1rem;}
+.kb-lesson-title{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:.85rem;display:flex;align-items:center;gap:8px;}
+.kb-dot{width:7px;height:7px;border-radius:50%;background:var(--sage);flex-shrink:0;}
+.kb-progress{font-size:12px;color:var(--sub);margin-left:auto;}
+.kb-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.kb-col-label{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);margin-bottom:6px;}
+.kb-col-cards{display:flex;flex-direction:column;gap:5px;min-height:36px;}
+.kb-card{background:var(--bg);border:1px solid var(--rule);border-radius:10px;padding:9px 13px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;transition:all .15s;user-select:none;}
+.kb-card:hover{border-color:var(--acc-mid);background:var(--acc-lt);}
+.kb-card.done{background:var(--acc-lt);border-color:var(--acc-mid);border-left:3px solid var(--acc);}
+.kb-card-text{font-size:13.5px;color:var(--ink);}
+.kb-card.done .kb-card-text{color:var(--acc);}
+.kb-card-arrow{font-size:14px;color:var(--sub);flex-shrink:0;}
+.kb-card.done .kb-card-arrow{color:var(--acc);}
+.kb-empty{font-size:12.5px;color:var(--sub);font-style:italic;padding:5px 0;}
+
+.speak-sec{background:var(--sur);border-radius:16px;box-shadow:var(--sh);padding:1.5rem 1.75rem;margin-bottom:1.1rem;}
+.speak-intro{font-size:13px;color:var(--mid);font-style:italic;line-height:1.6;margin-bottom:1.1rem;padding-bottom:.9rem;border-bottom:1px solid var(--rule);}
+.speak-item{margin-bottom:1.1rem;padding-bottom:1.1rem;border-bottom:1px solid var(--rule);}
+.speak-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.speak-tag{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);background:var(--sage-lt);border-radius:5px;padding:3px 8px;margin-bottom:.55rem;}
+.speak-tag.role{color:var(--acc);background:var(--acc-lt);}
+.speak-prompt-kr{font-family:'Noto Sans KR',sans-serif;font-size:15.5px;color:var(--ink);line-height:1.85;margin-bottom:3px;}
+.speak-prompt-en{font-size:12.5px;color:var(--mid);font-style:italic;line-height:1.5;margin-bottom:.6rem;}
+.speak-hint{font-family:'Noto Sans KR',sans-serif;font-size:13px;color:var(--sage);background:var(--sage-lt);border-radius:8px;padding:7px 11px;margin-bottom:.5rem;display:inline-block;}
+.speak-hint-label{font-family:'Inter',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--sage);margin-right:6px;}
+.speak-model{display:none;margin-top:.5rem;border-radius:10px;overflow:hidden;border:1px solid var(--rule);}
+.speak-model.on{display:block;}
+.speak-model-kr{font-family:'Noto Sans KR',sans-serif;font-size:14.5px;font-weight:500;color:var(--ink);background:var(--acc-lt);padding:10px 13px;line-height:1.8;}
+.speak-model-label{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--acc);margin-bottom:3px;display:block;}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <span class="nav-label">Lessons</span>
+  <button class="np on" id="np-l18" onclick="sw('l18')">18<span class="pip" id="pip-l18"></span></button>
+  <button class="np" id="np-l19" onclick="sw('l19')">19<span class="pip" id="pip-l19"></span></button>
+  <button class="np"    id="np-kb"  onclick="sw('kb')">Progress</button>
+</div>
+
+<div class="page">
+
+<div class="lesson on" id="lesson-l18">
+  <div class="lsn-header">
+    <div class="lsn-watermark">18</div>
+    <div class="lsn-eyebrow">Lesson 18 · New pattern</div>
+    <div class="lsn-title">Asking Around the Neighbourhood</div>
+    <div class="lsn-sub">Settling into a new area — asking neighbours questions and reporting what they said</div>
+    <div class="new-pill">
+      <span class="new-pill-label">New this lesson</span>
+      <span class="new-pill-pat">-냐고 하다 / 묻다</span>
+      <span class="new-pill-mean">— Reporting a question</span>
+    </div>
+  </div>
+  <div class="sec-label">Reading text — dialogue</div>
+  <div class="reading-card">
+    <div style="margin-bottom:.7rem;font-size:12px;color:var(--sub);">이웃 — your neighbour · 나 — you</div>
+    <div class="dlg"><span class="dlg-who">이웃</span><span class="dlg-txt">이사 온 지 얼마 안 됐죠? 필요한 거 있으면 언제든지 물어봐요.<div class="dlg-ipa">[i.sa on dʑi ʌl.ma an dwɛt̚.t͈ɕjo | pʰi.ɾjo.ɦan ɡʌ i.s͈ɯ.mjʌn ʌn.dʑe.dɯn.dʑi mu.ɾʌ.bwa.jo]</div></span></div>
+    <div class="dlg"><span class="dlg-who">나</span><span class="dlg-txt">감사합니다. 사실 어제 누가 저한테 분리수거를 어떻게 하냐고 물어봤는데 저도 잘 몰라서요.<div class="dlg-ipa">[kam.sa.ɦap̚.n͈i.da | sa.ɕil ʌ.dʑe nu.ɡa dʑʌ.ɦan.tʰe bul.li.su.ɡʌ.ɾɯl ʌ.t͈ʌ.kʰe ha.nja.ɡo mu.ɾʌ.bwan.nɯn.de dʑʌ.do tɕal mol.la.sʌ.jo]</div></span></div>
+    <div class="dlg"><span class="dlg-who">이웃</span><span class="dlg-txt">아, 그거요. 관리실에서 요일을 지키라고 했어요. 화요일하고 금요일에만 내놓으면 돼요.<div class="dlg-ipa">[a kɯ.ɡʌ.jo | kwal.li.ɕi.ɾe.sʌ jo.i.ɾɯl tɕi.kʰi.ɾa.ɡo hɛ.s͈ʌ.jo | hwa.jo.il.ɦa.ɡo kɯ.mjo.i.ɾe.man nɛ.no.ɯ.mjʌn dwɛ.jo]</div></span></div>
+    <div class="dlg"><span class="dlg-who">나</span><span class="dlg-txt">그렇군요. 그리고 근처에 괜찮은 마트가 있냐고 물어보려고 했어요.<div class="dlg-ipa">[kɯ.ɾʌ.kʰun.jo | kɯ.ɾi.ɡo kɯn.tɕʰʌ.e kwɛn.tɕʰa.nɯn ma.tʰɯ.ɡa in.nja.ɡo mu.ɾʌ.bo.ɾjʌ.ɡo hɛ.s͈ʌ.jo]</div></span></div>
+    <div class="dlg"><span class="dlg-who">이웃</span><span class="dlg-txt">걷다 보면 큰길 끝에 하나 있어요. 사람들이 거기가 제일 싸다고 하더라고요.<div class="dlg-ipa">[kʌt̚.t͈a bo.mjʌn kʰɯn.ɡil k͈ɯ.tʰe ha.na i.s͈ʌ.jo | sa.ɾam.dɯ.ɾi kʌ.ɡi.ɡa tɕe.il s͈a.da.ɡo ha.dʌ.ɾa.ɡo.jo]</div></span></div>
+    <div class="ctrl-row">
+      <button class="lbtn" id="mb-l18" onclick="spkMain('l18')"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg> Listen</button>
+      <select class="spd" id="ms-l18"><option value="0.75" selected>Slow</option><option value="1">Normal</option></select>
+      <button class="tl-btn" id="tlbtn-l18" onclick="togTl('l18')">Show translation</button>
+    </div>
+    <div class="tl-box" id="tlb-l18">Neighbour: You moved in not long ago, right? If you need anything, ask anytime. / Me: Thank you. Actually, yesterday someone asked me how to sort the recycling, and I didn't really know either. / Neighbour: Ah, that. The management office told us to keep to the days. You just put it out on Tuesdays and Fridays. / Me: I see. And I was going to ask whether there's a decent supermarket nearby. / Neighbour: If you keep walking, there's one at the end of the main road. People say that's the cheapest.</div>
+    <div class="tts-note">Audio uses your browser's Korean TTS — quality varies by device</div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-l18-0" onclick="mdToggle('l18',0)">Mark done ✓</button></div>
+  </div>
+  <hr class="divider">
+  <div class="sb">
+    <div class="sec-label">Grammar — tap any example to hear it</div>
+    <div class="gram-grid">
+      <div class="gc new-card">
+        <span class="new-star">★ New this lesson</span>
+        <div class="gc-pat">-냐고 하다 / 묻다</div>
+        <div class="gc-mean">Reporting a question — review/new</div>
+        <button class="gc-ex" onclick="spkRaw('누가 분리수거를 어떻게 하냐고 물어봤어요.',this)">누가 분리수거를 어떻게 하냐고 물어봤어요.</button>
+        <div class="gc-en">Someone asked how to sort the recycling</div>
+        <div class="gc-note">★ new — report a question with -냐고. Verb+냐고, adjective+냐고/(으)냐고.</div>
+      </div>
+      <div class="gc">
+        <div class="gc-pat">-다고 하다</div>
+        <div class="gc-mean">Reported statement</div>
+        <button class="gc-ex" onclick="spkRaw('사람들이 거기가 제일 싸다고 해요.',this)">사람들이 거기가 제일 싸다고 해요.</button>
+        <div class="gc-en">People say that place is the cheapest</div>
+        <div class="gc-note">Plain form + -다고. From lesson 14.</div>
+      </div>
+      <div class="gc">
+        <div class="gc-pat">-(으)라고 하다</div>
+        <div class="gc-mean">Reported command</div>
+        <button class="gc-ex" onclick="spkRaw('관리실에서 요일을 지키라고 했어요.',this)">관리실에서 요일을 지키라고 했어요.</button>
+        <div class="gc-en">The office told us to keep to the days</div>
+        <div class="gc-note">Command → -(으)라고. From lesson 14.</div>
+      </div>
+      <div class="gc">
+        <div class="gc-pat">-다 보면</div>
+        <div class="gc-mean">If you keep doing</div>
+        <button class="gc-ex" onclick="spkRaw('걷다 보면 큰길 끝에 마트가 있어요.',this)">걷다 보면 큰길 끝에 마트가 있어요.</button>
+        <div class="gc-en">If you keep walking, there's a supermarket</div>
+        <div class="gc-note">Consolidation from lesson 15.</div>
+      </div>
+    </div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-l18-2" onclick="mdToggle('l18',2)">Mark done ✓</button></div>
+  </div>
+  <hr class="divider">
+  <div class="sb"><div class="sec-label">Vocabulary</div><div class="vocab-grid" id="vg-l18"></div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-l18-3" onclick="mdToggle('l18',3)">Mark done ✓</button></div></div>
+  <hr class="divider">
+  <div class="sb"><div class="sec-label">Key sentences</div><div class="sent-list" id="sl-l18"></div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-l18-4" onclick="mdToggle('l18',4)">Mark done ✓</button></div></div>
+  <hr class="divider">
+  <div class="sb">
+    <div class="sec-label">Exercises</div>
+    <div class="ex-sec">
+      <div class="ex-head"><div class="ex-badge">A</div><div><div class="ex-title">Fill in the blanks</div><div class="ex-sub">Translation given; complete, then reveal</div></div></div>
+      <div class="ex-item">
+        <div class="ex-q">누가 저한테 김치를 어떻게 만드<span class="blank">___</span> 물어봤어요.</div>
+        <div class="ex-q-en">Someone asked me how to make kimchi.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l18a1')">Show answer</button></div>
+        <div class="ans-box" id="l18a1"><div class="ans-main"><div class="ans-kr">누가 저한테 김치를 어떻게 만드<strong>냐고</strong> 물어봤어요.</div><div class="ans-note">-냐고 하다 = reported question. 만들다 → 만드냐고 (ㄹ drops before ㄴ).</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('누가 저한테 김치를 어떻게 만드냐고 물어봤어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">친구가 근처에 약국이 있<span class="blank">___</span> 물어봤어요.</div>
+        <div class="ex-q-en">My friend asked whether there's a pharmacy nearby.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l18a2')">Show answer</button></div>
+        <div class="ans-box" id="l18a2"><div class="ans-main"><div class="ans-kr">친구가 근처에 약국이 있<strong>냐고</strong> 물어봤어요.</div><div class="ans-note">있다 → 있냐고. -냐고 works for both verbs and 있다/없다.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('친구가 근처에 약국이 있냐고 물어봤어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">관리실에서 쓰레기를 화요일에 내놓<span class="blank">___</span> 했어요.</div>
+        <div class="ex-q-en">The office told us to put the rubbish out on Tuesday.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l18a3')">Show answer</button></div>
+        <div class="ans-box" id="l18a3"><div class="ans-main"><div class="ans-kr">관리실에서 쓰레기를 화요일에 내놓<strong>으라고</strong> 했어요.</div><div class="ans-note">-(으)라고 하다 = reported command. 내놓다 → 내놓으라고.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('관리실에서 쓰레기를 화요일에 내놓으라고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">사람들이 그 가게가 제일 싸<span class="blank">___</span> 해요.</div>
+        <div class="ex-q-en">People say that shop is the cheapest.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l18a4')">Show answer</button></div>
+        <div class="ans-box" id="l18a4"><div class="ans-main"><div class="ans-kr">사람들이 그 가게가 제일 싸<strong>다고</strong> 해요.</div><div class="ans-note">-다고 하다 = reported statement. 싸다 → 싸다고.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('사람들이 그 가게가 제일 싸다고 해요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-l18-5" onclick="mdToggle('l18',5)">Mark done ✓</button></div>
+    </div>
+    <div class="ex-sec">
+      <div class="ex-head"><div class="ex-badge">B</div><div><div class="ex-title">Questions about the text</div><div class="ex-sub">Answer before revealing</div></div></div>
+      <div class="ex-item">
+        <div class="ex-q">이웃은 화자에게 무엇을 물어보라고 했어요?</div>
+        <div class="ex-q-en">What did the neighbour invite the speaker to do?</div>
+        <div class="row-btns"><button class="px" onclick="spkSm('이웃은 화자에게 무엇을 물어보라고 했어요?',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Hear</button><button class="at" onclick="togA('l18b1')">Show answer</button></div>
+        <div class="ans-box" id="l18b1"><div class="ans-main"><div class="ans-kr">필요한 게 있으면 언제든지 물어보라고 했어요.</div><div class="ans-note">-(으)라고 하다 = reported invitation/command.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">도움이 필요하면 물어보라고 했어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('필요한 게 있으면 언제든지 물어보라고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">마트에 대해 사람들이 뭐라고 해요?</div>
+        <div class="ex-q-en">What do people say about the supermarket?</div>
+        <div class="row-btns"><button class="px" onclick="spkSm('마트에 대해 사람들이 뭐라고 해요?',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Hear</button><button class="at" onclick="togA('l18b2')">Show answer</button></div>
+        <div class="ans-box" id="l18b2"><div class="ans-main"><div class="ans-kr">거기가 제일 싸다고 해요.</div><div class="ans-note">-다고 하다 = reported statement (general hearsay).</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">큰길 끝에 있는 마트가 제일 싸다고 하더라고요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('거기가 제일 싸다고 해요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-l18-6" onclick="mdToggle('l18',6)">Mark done ✓</button></div>
+    </div>
+    <div class="ex-sec">
+      <div class="ex-head"><div class="ex-badge">C</div><div><div class="ex-title">Translation</div><div class="ex-sub">Six sentences — mixed patterns</div></div></div>
+      <div class="ex-item">
+        <div class="c-en">1. Someone asked me where the station was.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l18c1')">Show answer</button></div>
+        <div class="ans-box" id="l18c1"><div class="ans-main"><div class="ans-kr">누가 저한테 역이 어디 있냐고 물어봤어요.</div><div class="ans-note">-냐고 하다 = reported question. 어디 있냐고 = asked where it is.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">누가 역이 어디냐고 물어봤어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('누가 저한테 역이 어디 있냐고 물어봤어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">2. My friend asked whether I had eaten.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l18c2')">Show answer</button></div>
+        <div class="ans-box" id="l18c2"><div class="ans-main"><div class="ans-kr">친구가 밥을 먹었냐고 물어봤어요.</div><div class="ans-note">Past + -냐고: 먹었냐고. Reports a past-tense question.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">친구가 밥 먹었냐고 했어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('친구가 밥을 먹었냐고 물어봤어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">3. The staff told us not to take photos.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l18c3')">Show answer</button></div>
+        <div class="ans-box" id="l18c3"><div class="ans-main"><div class="ans-kr">직원이 사진을 찍지 말라고 했어요.</div><div class="ans-note">-지 말라고 하다 = reported negative command.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">직원이 촬영하지 말라고 했어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('직원이 사진을 찍지 말라고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">4. People say this neighbourhood is quiet.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l18c4')">Show answer</button></div>
+        <div class="ans-box" id="l18c4"><div class="ans-main"><div class="ans-kr">사람들이 이 동네가 조용하다고 해요.</div><div class="ans-note">-다고 하다 = reported statement / hearsay.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">이 동네가 살기 좋다고 해요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('사람들이 이 동네가 조용하다고 해요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">5. As I kept asking around, I found a good restaurant.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l18c5')">Show answer</button></div>
+        <div class="ans-box" id="l18c5"><div class="ans-main"><div class="ans-kr">여기저기 물어보다 보니까 좋은 식당을 찾았어요.</div><div class="ans-note">-다 보니까 = as I kept doing, I found. From lesson 14.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">물어보다 보니까 맛집을 알게 됐어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('여기저기 물어보다 보니까 좋은 식당을 찾았어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">6. My neighbour asked when I moved in.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l18c6')">Show answer</button></div>
+        <div class="ans-box" id="l18c6"><div class="ans-main"><div class="ans-kr">이웃이 언제 이사 왔냐고 물어봤어요.</div><div class="ans-note">-냐고 with 언제 = asked when. 이사 오다 = to move in.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">이웃이 언제 이사 왔는지 물어봤어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('이웃이 언제 이사 왔냐고 물어봤어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-l18-7" onclick="mdToggle('l18',7)">Mark done ✓</button></div>
+    </div>
+  </div>
+  <hr class="divider">
+  <div class="sb">
+    <div class="sec-label">Speak — out loud</div>
+    <div class="speak-sec">
+      <div class="speak-intro">Speak aloud — no need for perfection. Notice where you stall or reach for a word.</div>
+      <div class="speak-item">
+        <span class="speak-tag">Self-talk</span>
+        <div class="speak-prompt-kr">최근에 누가 당신에게 무엇을 물어봤어요? 그 질문을 다시 전해 보세요.</div>
+        <div class="speak-prompt-en">Recently, what did someone ask you? Report the question.</div>
+        <div class="speak-hint"><span class="speak-hint-label">Vocab</span>-냐고 물어보다, 어떻게, 어디, 있다</div>
+        <div class="row-btns"><button class="at" onclick="togSpeak('l18sp0')">Show model answer</button><button class="px" onclick="spkSm('어제 동료가 저한테 주말에 뭐 하냐고 물어봤어요. 그래서 그냥 집에서 쉴 거라고 대답했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div>
+        <div class="speak-model" id="l18sp0"><div class="speak-model-kr"><span class="speak-model-label">Model answer — compare after speaking</span>어제 동료가 저한테 주말에 뭐 하냐고 물어봤어요. 그래서 그냥 집에서 쉴 거라고 대답했어요.</div></div>
+      </div>
+      <div class="speak-item">
+        <span class="speak-tag">Scenario</span>
+        <div class="speak-prompt-kr">새 동네로 이사 왔습니다. 이웃에게 궁금한 것 세 가지를 물어보세요.</div>
+        <div class="speak-prompt-en">You moved to a new neighbourhood. Ask a neighbour three things you’re curious about.</div>
+        <div class="speak-hint"><span class="speak-hint-label">Vocab</span>근처, 마트, 분리수거, -냐고, 어떻게</div>
+        <div class="row-btns"><button class="at" onclick="togSpeak('l18sp1')">Show model answer</button><button class="px" onclick="spkSm('혹시 근처에 마트가 어디 있어요? 그리고 분리수거는 어떻게 해요? 요일을 지켜야 하나요?',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div>
+        <div class="speak-model" id="l18sp1"><div class="speak-model-kr"><span class="speak-model-label">Model answer — compare after speaking</span>혹시 근처에 마트가 어디 있어요? 그리고 분리수거는 어떻게 해요? 요일을 지켜야 하나요?</div></div>
+      </div>
+      <div class="speak-item">
+        <span class="speak-tag role">Role-play</span>
+        <div class="speak-prompt-kr">이웃이 되어 새로 이사 온 사람에게 동네를 안내해 보세요.</div>
+        <div class="speak-prompt-en">Play the neighbour. Show a newcomer around the area.</div>
+        <div class="speak-hint"><span class="speak-hint-label">Vocab</span>큰길, 끝, 싸다, -다 보면, 물어보다</div>
+        <div class="row-btns"><button class="at" onclick="togSpeak('l18sp2')">Show model answer</button><button class="px" onclick="spkSm('큰길 끝에 마트가 하나 있어요. 거기가 제일 싸요. 더 궁금한 게 있으면 언제든지 물어보세요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div>
+        <div class="speak-model" id="l18sp2"><div class="speak-model-kr"><span class="speak-model-label">Model answer — compare after speaking</span>큰길 끝에 마트가 하나 있어요. 거기가 제일 싸요. 더 궁금한 게 있으면 언제든지 물어보세요.</div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-l18-8" onclick="mdToggle('l18',8)">Mark done ✓</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="lesson" id="lesson-l19">
+  <div class="lsn-header">
+    <div class="lsn-watermark">19</div>
+    <div class="lsn-eyebrow">Lesson 19 · New pattern</div>
+    <div class="lsn-title">Planning a Trip with a Friend</div>
+    <div class="lsn-sub">Two friends deciding where to go — suggestions, opinions, and what each one heard</div>
+    <div class="new-pill">
+      <span class="new-pill-label">New this lesson</span>
+      <span class="new-pill-pat">-자고 하다 · -다고 생각하다/듣다</span>
+      <span class="new-pill-mean">— Suggestions and embedded thought</span>
+    </div>
+  </div>
+  <div class="sec-label">Reading text — dialogue</div>
+  <div class="reading-card">
+    <div style="margin-bottom:.7rem;font-size:12px;color:var(--sub);">민수 — your friend · 나 — you</div>
+    <div class="dlg"><span class="dlg-who">민수</span><span class="dlg-txt">이번 휴가 때 어디 갈지 정했어? 난 바다 쪽으로 가자고 하고 싶은데.<div class="dlg-ipa">[i.bʌn hju.ɡa t͈ɛ ʌ.di kal.dʑi tɕʌŋ.ɦɛ.s͈ʌ | nan ba.da t͈ɕo.ɡɯ.ɾo ka.dʑa.ɡo ha.ɡo ɕi.pʰɯn.de]</div></span></div>
+    <div class="dlg"><span class="dlg-who">나</span><span class="dlg-txt">나도 바다 좋아. 근데 친구가 그러는데 요즘 산이 더 시원하다고 들었어.<div class="dlg-ipa">[na.do ba.da tɕo.a | kɯn.de tɕʰin.ɡu.ɡa kɯ.ɾʌ.nɯn.de jo.dʑɯm sa.ni dʌ ɕi.wʌn.ɦa.da.ɡo dɯ.ɾʌ.s͈ʌ]</div></span></div>
+    <div class="dlg"><span class="dlg-who">민수</span><span class="dlg-txt">음… 산도 좋지. 근데 짐을 많이 챙겨야 하니까 좀 힘들 거라고 생각해.<div class="dlg-ipa">[ɯm | san.do tɕo.tɕʰi | kɯn.de tɕi.mɯl ma.ni tɕʰɛŋ.ɡjʌ.ja ha.ni.k͈a tɕom him.dɯl k͈ʌ.ɾa.ɡo sɛŋ.ɡa.kʰɛ]</div></span></div>
+    <div class="dlg"><span class="dlg-who">나</span><span class="dlg-txt">그럼 이렇게 하자. 첫날은 바다, 둘째 날은 산. 둘 다 가기로 하면 어때?<div class="dlg-ipa">[kɯ.ɾʌm i.ɾʌ.kʰe ha.dʑa | tɕʌt̚.n͈al.ɯn ba.da tul.t͈ɕɛ na.ɾɯn san | tul ta ka.ɡi.ɾo ha.mjʌn ʌ.t͈ɛ]</div></span></div>
+    <div class="dlg"><span class="dlg-who">민수</span><span class="dlg-txt">좋은 생각이야! 가면 갈수록 더 기대된다. 숙소는 내가 알아보기로 할게.<div class="dlg-ipa">[tɕo.ɯn sɛŋ.ɡa.ɡi.ja | ka.mjʌn kal.s͈u.ɾok̚ tʌ ki.dɛ.dwen.da | suk̚.s͈o.nɯn nɛ.ɡa a.ɾa.bo.ɡi.ɾo hal.k͈e]</div></span></div>
+    <div class="ctrl-row">
+      <button class="lbtn" id="mb-l19" onclick="spkMain('l19')"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg> Listen</button>
+      <select class="spd" id="ms-l19"><option value="0.75" selected>Slow</option><option value="1">Normal</option></select>
+      <button class="tl-btn" id="tlbtn-l19" onclick="togTl('l19')">Show translation</button>
+    </div>
+    <div class="tl-box" id="tlb-l19">Minsu: Have you decided where to go for this holiday? I want to suggest we go toward the sea. / Me: I like the sea too. But a friend was saying — I heard the mountains are cooler these days. / Minsu: Hmm, mountains are good too. But since you have to pack a lot, I think it'll be a bit tough. / Me: Then let's do this. First day the sea, second day the mountains. How about we decide to go to both? / Minsu: Good idea! The more we plan, the more I look forward to it. I'll look into the accommodation.</div>
+    <div class="tts-note">Audio uses your browser's Korean TTS — quality varies by device</div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-l19-0" onclick="mdToggle('l19',0)">Mark done ✓</button></div>
+  </div>
+  <hr class="divider">
+  <div class="sb">
+    <div class="sec-label">Grammar — tap any example to hear it</div>
+    <div class="gram-grid">
+      <div class="gc new-card">
+        <span class="new-star">★ New this lesson</span>
+        <div class="gc-pat">-자고 하다</div>
+        <div class="gc-mean">Reported suggestion — new</div>
+        <button class="gc-ex" onclick="spkRaw('친구가 바다 쪽으로 가자고 했어요.',this)">친구가 바다 쪽으로 가자고 했어요.</button>
+        <div class="gc-en">My friend suggested we go toward the sea</div>
+        <div class="gc-note">★ new — report a suggestion ("let's…"). 가다 → 가자고.</div>
+      </div>
+      <div class="gc new-card">
+        <span class="new-star">★ New this lesson</span>
+        <div class="gc-pat">-다고 생각하다</div>
+        <div class="gc-mean">Embedded thought — I think that</div>
+        <button class="gc-ex" onclick="spkRaw('좀 힘들 거라고 생각해요.',this)">좀 힘들 거라고 생각해요.</button>
+        <div class="gc-en">I think it'll be a bit tough</div>
+        <div class="gc-note">★ new — -다고 생각하다 = think that. Future: -(으)ㄹ 거라고 생각하다.</div>
+      </div>
+      <div class="gc">
+        <div class="gc-pat">-다고 듣다</div>
+        <div class="gc-mean">Embedded hearsay — I heard that</div>
+        <button class="gc-ex" onclick="spkRaw('산이 더 시원하다고 들었어요.',this)">산이 더 시원하다고 들었어요.</button>
+        <div class="gc-en">I heard the mountains are cooler</div>
+        <div class="gc-note">-다고 듣다 = heard that. Pairs naturally with -다고 하다.</div>
+      </div>
+      <div class="gc">
+        <div class="gc-pat">-(으)ㄹ수록</div>
+        <div class="gc-mean">The more… the more</div>
+        <button class="gc-ex" onclick="spkRaw('가면 갈수록 더 기대돼요.',this)">가면 갈수록 더 기대돼요.</button>
+        <div class="gc-en">The more we plan, the more I look forward</div>
+        <div class="gc-note">Consolidation from lesson 15.</div>
+      </div>
+    </div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-l19-2" onclick="mdToggle('l19',2)">Mark done ✓</button></div>
+  </div>
+  <hr class="divider">
+  <div class="sb"><div class="sec-label">Vocabulary</div><div class="vocab-grid" id="vg-l19"></div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-l19-3" onclick="mdToggle('l19',3)">Mark done ✓</button></div></div>
+  <hr class="divider">
+  <div class="sb"><div class="sec-label">Key sentences</div><div class="sent-list" id="sl-l19"></div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-l19-4" onclick="mdToggle('l19',4)">Mark done ✓</button></div></div>
+  <hr class="divider">
+  <div class="sb">
+    <div class="sec-label">Exercises</div>
+    <div class="ex-sec">
+      <div class="ex-head"><div class="ex-badge">A</div><div><div class="ex-title">Fill in the blanks</div><div class="ex-sub">Translation given; complete, then reveal</div></div></div>
+      <div class="ex-item">
+        <div class="ex-q">친구가 이번 주말에 영화 보<span class="blank">___</span> 했어요.</div>
+        <div class="ex-q-en">My friend suggested we watch a movie this weekend.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l19a1')">Show answer</button></div>
+        <div class="ans-box" id="l19a1"><div class="ans-main"><div class="ans-kr">친구가 이번 주말에 영화 보<strong>자고</strong> 했어요.</div><div class="ans-note">-자고 하다 = reported suggestion. 보다 → 보자고.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('친구가 이번 주말에 영화 보자고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">저는 그 계획이 좀 위험하<span class="blank">___</span> 생각해요.</div>
+        <div class="ex-q-en">I think that plan is a bit risky.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l19a2')">Show answer</button></div>
+        <div class="ans-box" id="l19a2"><div class="ans-main"><div class="ans-kr">저는 그 계획이 좀 위험하<strong>다고</strong> 생각해요.</div><div class="ans-note">-다고 생각하다 = think that. 위험하다 → 위험하다고.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('저는 그 계획이 좀 위험하다고 생각해요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">뉴스에서 내일 비가 온<span class="blank">___</span> 들었어요.</div>
+        <div class="ex-q-en">I heard on the news that it'll rain tomorrow.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l19a3')">Show answer</button></div>
+        <div class="ans-box" id="l19a3"><div class="ans-main"><div class="ans-kr">뉴스에서 내일 비가 온<strong>다고</strong> 들었어요.</div><div class="ans-note">-다고 듣다 = heard that. 오다 → 온다고 (present plain).</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('뉴스에서 내일 비가 온다고 들었어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">짐이 많아서 좀 힘들 거<span class="blank">___</span> 생각해요.</div>
+        <div class="ex-q-en">I think it'll be tough since there's a lot of luggage.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l19a4')">Show answer</button></div>
+        <div class="ans-box" id="l19a4"><div class="ans-main"><div class="ans-kr">짐이 많아서 좀 힘들 거<strong>라고</strong> 생각해요.</div><div class="ans-note">Future -(으)ㄹ 거라고 생각하다 = think it will be. 거 + 라고.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('짐이 많아서 좀 힘들 거라고 생각해요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-l19-5" onclick="mdToggle('l19',5)">Mark done ✓</button></div>
+    </div>
+    <div class="ex-sec">
+      <div class="ex-head"><div class="ex-badge">B</div><div><div class="ex-title">Questions about the text</div><div class="ex-sub">Answer before revealing</div></div></div>
+      <div class="ex-item">
+        <div class="ex-q">민수는 휴가 때 어디에 가자고 했어요?</div>
+        <div class="ex-q-en">Where did Minsu suggest going for the holiday?</div>
+        <div class="row-btns"><button class="px" onclick="spkSm('민수는 휴가 때 어디에 가자고 했어요?',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Hear</button><button class="at" onclick="togA('l19b1')">Show answer</button></div>
+        <div class="ans-box" id="l19b1"><div class="ans-main"><div class="ans-kr">바다 쪽으로 가자고 했어요.</div><div class="ans-note">-자고 하다 = reported suggestion.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">처음에는 바다에 가자고 했어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('바다 쪽으로 가자고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">화자는 산에 대해 무엇을 들었어요?</div>
+        <div class="ex-q-en">What did the speaker hear about the mountains?</div>
+        <div class="row-btns"><button class="px" onclick="spkSm('화자는 산에 대해 무엇을 들었어요?',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Hear</button><button class="at" onclick="togA('l19b2')">Show answer</button></div>
+        <div class="ans-box" id="l19b2"><div class="ans-main"><div class="ans-kr">요즘 산이 더 시원하다고 들었어요.</div><div class="ans-note">-다고 듣다 = heard that. 시원하다 = to be cool.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">친구한테 산이 더 시원하다고 들었어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('요즘 산이 더 시원하다고 들었어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-l19-6" onclick="mdToggle('l19',6)">Mark done ✓</button></div>
+    </div>
+    <div class="ex-sec">
+      <div class="ex-head"><div class="ex-badge">C</div><div><div class="ex-title">Translation</div><div class="ex-sub">Six sentences — mixed patterns</div></div></div>
+      <div class="ex-item">
+        <div class="c-en">1. My friend suggested we meet at six.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l19c1')">Show answer</button></div>
+        <div class="ans-box" id="l19c1"><div class="ans-main"><div class="ans-kr">친구가 여섯 시에 만나자고 했어요.</div><div class="ans-note">-자고 하다 = reported suggestion. 만나다 → 만나자고.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">친구가 여섯 시에 보자고 했어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('친구가 여섯 시에 만나자고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">2. I think this restaurant is better than that one.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l19c2')">Show answer</button></div>
+        <div class="ans-box" id="l19c2"><div class="ans-main"><div class="ans-kr">저는 이 식당이 저 식당보다 더 좋다고 생각해요.</div><div class="ans-note">-다고 생각하다 = think that. 보다 = than.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">이 집이 더 낫다고 생각해요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('저는 이 식당이 저 식당보다 더 좋다고 생각해요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">3. I heard that the new café is really popular.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l19c3')">Show answer</button></div>
+        <div class="ans-box" id="l19c3"><div class="ans-main"><div class="ans-kr">새로 생긴 카페가 정말 인기가 많다고 들었어요.</div><div class="ans-note">-다고 듣다 = heard that. 인기가 많다 = to be popular.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">그 카페가 유명하다고 들었어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('새로 생긴 카페가 정말 인기가 많다고 들었어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">4. She suggested we not go too late.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l19c4')">Show answer</button></div>
+        <div class="ans-box" id="l19c4"><div class="ans-main"><div class="ans-kr">너무 늦게 가지 말자고 했어요.</div><div class="ans-note">-지 말자고 하다 = suggest we not do. Negative of -자고.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">너무 늦지 말자고 했어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('너무 늦게 가지 말자고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">5. The more I think about it, the better the idea seems.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l19c5')">Show answer</button></div>
+        <div class="ans-box" id="l19c5"><div class="ans-main"><div class="ans-kr">생각하면 할수록 더 좋은 생각인 것 같아요.</div><div class="ans-note">-(으)ㄹ수록 = the more. 생각하면 할수록 = the more I think.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">생각할수록 괜찮은 것 같아요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('생각하면 할수록 더 좋은 생각인 것 같아요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">6. I think we should decide to go to both places.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l19c6')">Show answer</button></div>
+        <div class="ans-box" id="l19c6"><div class="ans-main"><div class="ans-kr">두 곳 다 가기로 하는 게 좋다고 생각해요.</div><div class="ans-note">-기로 하다 + -다고 생각하다 combined. 두 곳 다 = both places.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">둘 다 가기로 하면 좋겠다고 생각해요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('두 곳 다 가기로 하는 게 좋다고 생각해요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-l19-7" onclick="mdToggle('l19',7)">Mark done ✓</button></div>
+    </div>
+  </div>
+  <hr class="divider">
+  <div class="sb">
+    <div class="sec-label">Speak — out loud</div>
+    <div class="speak-sec">
+      <div class="speak-intro">Speak aloud — no need for perfection. Notice where you stall or reach for a word.</div>
+      <div class="speak-item">
+        <span class="speak-tag">Self-talk</span>
+        <div class="speak-prompt-kr">친구와 여행을 계획한다면 어디에 가자고 하고 싶어요? 이유도 말해 보세요.</div>
+        <div class="speak-prompt-en">If you were planning a trip with a friend, where would you suggest going? Say why.</div>
+        <div class="speak-hint"><span class="speak-hint-label">Vocab</span>-자고 하다, -다고 생각하다, 시원하다, 기대되다</div>
+        <div class="row-btns"><button class="at" onclick="togSpeak('l19sp0')">Show model answer</button><button class="px" onclick="spkSm('저는 친구한테 바다에 가자고 하고 싶어요. 여름에는 바다가 제일 시원하다고 생각하거든요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div>
+        <div class="speak-model" id="l19sp0"><div class="speak-model-kr"><span class="speak-model-label">Model answer — compare after speaking</span>저는 친구한테 바다에 가자고 하고 싶어요. 여름에는 바다가 제일 시원하다고 생각하거든요.</div></div>
+      </div>
+      <div class="speak-item">
+        <span class="speak-tag">Scenario</span>
+        <div class="speak-prompt-kr">친구가 산에 가자고 합니다. 당신은 바다가 더 좋다고 생각합니다. 의견을 말해 보세요.</div>
+        <div class="speak-prompt-en">A friend suggests the mountains. You think the sea is better. Voice your opinion.</div>
+        <div class="speak-hint"><span class="speak-hint-label">Vocab</span>-자고 하다, -다고 생각하다, -지만, 둘 다</div>
+        <div class="row-btns"><button class="at" onclick="togSpeak('l19sp1')">Show model answer</button><button class="px" onclick="spkSm('산도 좋지만 저는 바다가 더 시원하다고 생각해요. 그래도 둘 다 가면 어때요?',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div>
+        <div class="speak-model" id="l19sp1"><div class="speak-model-kr"><span class="speak-model-label">Model answer — compare after speaking</span>산도 좋지만 저는 바다가 더 시원하다고 생각해요. 그래도 둘 다 가면 어때요?</div></div>
+      </div>
+      <div class="speak-item">
+        <span class="speak-tag role">Role-play</span>
+        <div class="speak-prompt-kr">여행사 직원에게 추천받은 곳을 친구에게 전해 보세요. (들은 내용 보고)</div>
+        <div class="speak-prompt-en">Report to a friend what a travel agent recommended. (reporting what you heard)</div>
+        <div class="speak-hint"><span class="speak-hint-label">Vocab</span>-다고 듣다, -(으)라고 하다, 추천하다, 숙소</div>
+        <div class="row-btns"><button class="at" onclick="togSpeak('l19sp2')">Show model answer</button><button class="px" onclick="spkSm('여행사에서 그러는데 제주도가 요즘 제일 좋다고 들었어. 숙소는 미리 예약하라고 했어.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div>
+        <div class="speak-model" id="l19sp2"><div class="speak-model-kr"><span class="speak-model-label">Model answer — compare after speaking</span>여행사에서 그러는데 제주도가 요즘 제일 좋다고 들었어. 숙소는 미리 예약하라고 했어.</div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-l19-8" onclick="mdToggle('l19',8)">Mark done ✓</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="lesson" id="lesson-kb">
+  <div class="kb-header">
+    <div class="kb-title">Progress Tracker</div>
+    <div class="kb-sub">Tap any task to move it to Done. Tap again to move it back. Progress saves automatically across all lesson files.</div>
+    <button class="kb-reset" onclick="kbReset()">Reset all</button>
+  </div>
+  <div id="kb-board"></div>
+</div>
+
+</div>
+
+<script>
+var R=0.75,cu=null;
+var V={
+  l18:[
+    {kr:'이사 오다',ipa:'i.sa o.da',hanja:'移徙',en:'to move in',bg:'#F0EAFA',icon:'📦'},
+    {kr:'이웃',ipa:'i.ut̚',en:'neighbour',bg:'#E5F5EE',icon:'🏠'},
+    {kr:'분리수거',ipa:'bul.li.su.ɡʌ',hanja:'分離收去',en:'recycling / waste sorting',bg:'#E6EEF9',icon:'♻️'},
+    {kr:'관리실',ipa:'kwal.li.ɕil',hanja:'管理室',en:'management office',bg:'#FBF0E0',icon:'🏢'},
+    {kr:'요일을 지키다',ipa:'jo.i.ɾɯl tɕi.kʰi.da',hanja:'曜日',en:'to keep to the days',bg:'#FBEAF0',icon:'📅'},
+    {kr:'내놓다',ipa:'nɛ.no.tʰa',en:'to put out',bg:'#FDF3E3',icon:'🗑️'},
+    {kr:'근처',ipa:'kɯn.tɕʰʌ',hanja:'近處',en:'nearby',bg:'#F0EAFA',icon:'📍'},
+    {kr:'마트',ipa:'ma.tʰɯ',en:'supermarket',bg:'#E5F5EE',icon:'🏪'},
+    {kr:'큰길',ipa:'kʰɯn.ɡil',en:'main road',bg:'#E6EEF9',icon:'🛣️'},
+    {kr:'끝',ipa:'k͈ɯt̚',en:'end',bg:'#FBF0E0',icon:'🔚'},
+    {kr:'싸다',ipa:'s͈a.da',en:'to be cheap',bg:'#FBEAF0',icon:'💰'},
+    {kr:'언제든지',ipa:'ʌn.dʑe.dɯn.dʑi',en:'anytime',bg:'#FDF3E3',icon:'⏰'},
+    {kr:'필요하다',ipa:'pʰi.ɾjo.ɦa.da',hanja:'必要',en:'to need',bg:'#F0EAFA',icon:'✅'},
+    {kr:'사실',ipa:'sa.ɕil',hanja:'事實',en:'actually / in fact',bg:'#E5F5EE',icon:'💬'},
+    {kr:'묻다',ipa:'mut̚.t͈a',en:'to ask',bg:'#E6EEF9',icon:'❓'},
+    {kr:'물어보다',ipa:'mu.ɾʌ.bo.da',en:'to ask / inquire',bg:'#FBF0E0',icon:'🔍'},
+    {kr:'어떻게',ipa:'ʌ.t͈ʌ.kʰe',en:'how',bg:'#FBEAF0',icon:'↔️'},
+    {kr:'요일',ipa:'jo.il',hanja:'曜日',en:'day of the week',bg:'#FDF3E3',icon:'📆'},
+    {kr:'지키다',ipa:'tɕi.kʰi.da',en:'to keep / observe',bg:'#F0EAFA',icon:'🔑'},
+    {kr:'제일',ipa:'tɕe.il',hanja:'第一',en:'most / the most',bg:'#E5F5EE',icon:'⭐'},
+  ],
+  l19:[
+    {kr:'휴가',ipa:'hju.ɡa',hanja:'休暇',en:'holiday / leave',bg:'#F0EAFA',icon:'📦'},
+    {kr:'정하다',ipa:'tɕʌŋ.ɦa.da',hanja:'定',en:'to decide / settle',bg:'#E5F5EE',icon:'🏠'},
+    {kr:'바다',ipa:'ba.da',en:'sea',bg:'#E6EEF9',icon:'♻️'},
+    {kr:'쪽',ipa:'t͈ɕok̚',en:'direction / side',bg:'#FBF0E0',icon:'🏢'},
+    {kr:'시원하다',ipa:'ɕi.wʌn.ɦa.da',en:'to be cool / refreshing',bg:'#FBEAF0',icon:'📅'},
+    {kr:'짐',ipa:'tɕim',en:'luggage',bg:'#FDF3E3',icon:'🗑️'},
+    {kr:'챙기다',ipa:'tɕʰɛŋ.ɡi.da',en:'to pack / take along',bg:'#F0EAFA',icon:'📍'},
+    {kr:'힘들다',ipa:'him.dɯl.da',en:'to be hard / tough',bg:'#E5F5EE',icon:'🏪'},
+    {kr:'첫날',ipa:'tɕʌt̚.n͈al',en:'first day',bg:'#E6EEF9',icon:'🛣️'},
+    {kr:'둘째',ipa:'tul.t͈ɕɛ',en:'second',bg:'#FBF0E0',icon:'🔚'},
+    {kr:'기대되다',ipa:'ki.dɛ.dwe.da',hanja:'期待',en:'to look forward to',bg:'#FBEAF0',icon:'💰'},
+    {kr:'숙소',ipa:'suk̚.s͈o',hanja:'宿所',en:'accommodation',bg:'#FDF3E3',icon:'⏰'},
+    {kr:'알아보다',ipa:'a.ɾa.bo.da',en:'to look into / find out',bg:'#F0EAFA',icon:'✅'},
+    {kr:'요즘',ipa:'jo.dʑɯm',en:'these days',bg:'#E5F5EE',icon:'💬'},
+    {kr:'생각하다',ipa:'sɛŋ.ɡa.kʰa.da',en:'to think',bg:'#E6EEF9',icon:'❓'},
+    {kr:'듣다',ipa:'tɯt̚.t͈a',en:'to hear / listen',bg:'#FBF0E0',icon:'🔍'},
+    {kr:'좋은 생각',ipa:'tɕo.ɯn sɛŋ.ɡak̚',en:'good idea',bg:'#FBEAF0',icon:'↔️'},
+    {kr:'이렇게',ipa:'i.ɾʌ.kʰe',en:'like this',bg:'#FDF3E3',icon:'📆'},
+    {kr:'둘 다',ipa:'tul ta',en:'both',bg:'#F0EAFA',icon:'🔑'},
+    {kr:'어때',ipa:'ʌ.t͈ɛ',en:'how about',bg:'#E5F5EE',icon:'⭐'},
+  ],
+};
+
+var S={
+  l18:[
+    {kr:'누가 저한테 분리수거를 어떻게 하냐고 물어봤어요.',en:'Someone asked me how to sort the recycling.',bg:'#F0EAFA',fg:'#2A1040'},
+    {kr:'근처에 괜찮은 마트가 있냐고 물어보려고 했어요.',en:'I was going to ask whether there\'s a decent supermarket nearby.',bg:'#FDF3E3',fg:'#4A2A00'},
+    {kr:'관리실에서 요일을 지키라고 했어요.',en:'The management office told us to keep to the days.',bg:'#E6EEF9',fg:'#0E1F3A'},
+    {kr:'사람들이 거기가 제일 싸다고 하더라고요.',en:'People say that place is the cheapest.',bg:'#FBEAF0',fg:'#72243E'},
+    {kr:'필요한 거 있으면 언제든지 물어봐요.',en:'If you need anything, ask anytime.',bg:'#E5F5EE',fg:'#1A3326'},
+    {kr:'화요일하고 금요일에만 내놓으면 돼요.',en:'You just put it out on Tuesdays and Fridays only.',bg:'#FBF0E0',fg:'#3D2000'},
+  ],
+  l19:[
+    {kr:'친구가 바다 쪽으로 가자고 했어요.',en:'My friend suggested we go toward the sea.',bg:'#F0EAFA',fg:'#2A1040'},
+    {kr:'요즘 산이 더 시원하다고 들었어요.',en:'I heard the mountains are cooler these days.',bg:'#FDF3E3',fg:'#4A2A00'},
+    {kr:'짐을 많이 챙겨야 해서 좀 힘들 거라고 생각해요.',en:'Since you have to pack a lot, I think it\'ll be a bit tough.',bg:'#E6EEF9',fg:'#0E1F3A'},
+    {kr:'둘 다 가기로 하면 어때요?',en:'How about we decide to go to both?',bg:'#FBEAF0',fg:'#72243E'},
+    {kr:'가면 갈수록 더 기대돼요.',en:'The more we plan, the more I look forward to it.',bg:'#E5F5EE',fg:'#1A3326'},
+    {kr:'숙소는 내가 알아보기로 할게요.',en:'I\'ll decide to look into the accommodation.',bg:'#FBF0E0',fg:'#3D2000'},
+  ],
+};
+
+var LESSON_IDS=['l18','l19'];
+var LESSON_COLORS={'l18':'#2C7A6E','l19':'#2555A0'};
+var LESSON_TITLES={'l18':'18 — Neighbourhood','l19':'19 — Trip Planning'};
+var KB_TASKS=['Read the text','Listen at 0.75×','Grammar cards','Vocabulary','Key sentences','Section A','Section B','Section C','Speak practice'];
+var KB_KEY='kr_kb_v1';
+function stopAll(){if(cu){window.speechSynthesis.cancel();cu=null;}document.querySelectorAll('.playing').forEach(function(el){el.classList.remove('playing');if(el.classList.contains('lbtn'))el.innerHTML='<svg width="10" height="10" viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg> Listen';if(el.classList.contains('px'))el.innerHTML='<svg width="8" height="8" viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen';if(el.classList.contains('sbtn'))el.textContent='Listen';});}
+function doSpeak(t,rate,oS,oE){if(!window.speechSynthesis)return;stopAll();var u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';u.rate=rate;cu=u;if(oS)oS();u.onend=u.onerror=function(){cu=null;if(oE)oE();};window.speechSynthesis.speak(u);}
+function spkMain(lid){var b=document.getElementById('mb-'+lid);if(b.classList.contains('playing')){stopAll();return;}var rate=parseFloat(document.getElementById('ms-'+lid).value);var txt=document.getElementById('mt-'+lid);var raw=txt?txt.innerText:Array.from(document.querySelectorAll('#lesson-'+lid+' .dlg-txt')).map(function(el){return el.innerText;}).join(' ');doSpeak(raw,rate,function(){b.classList.add('playing');b.innerHTML='<svg width="10" height="10" viewBox="0 0 16 16" fill="white"><rect x="3" y="2" width="3.5" height="10"/><rect x="9.5" y="2" width="3.5" height="10"/></svg> Stop';},function(){b.classList.remove('playing');b.innerHTML='<svg width="10" height="10" viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg> Listen';});}
+function spkRaw(t,el){el.style.opacity='0.5';setTimeout(function(){el.style.opacity='1';},700);doSpeak(t,R,null,null);}
+function spkVC(id){var c=document.getElementById(id);if(!c)return;if(c.classList.contains('playing')){stopAll();return;}doSpeak(c.dataset.kr,R,function(){c.classList.add('playing');},function(){c.classList.remove('playing');});}
+function spkSent(id,t){var b=document.getElementById(id);if(b.classList.contains('playing')){stopAll();return;}doSpeak(t,R,function(){b.classList.add('playing');b.textContent='Stop';},function(){b.classList.remove('playing');b.textContent='Listen';});}
+function spkSm(t,btn){if(btn.classList.contains('playing')){stopAll();return;}doSpeak(t,R,function(){btn.classList.add('playing');btn.innerHTML='<svg width="8" height="8" viewBox="0 0 16 16" fill="white"><rect x="3" y="2" width="3.5" height="10"/><rect x="9.5" y="2" width="3.5" height="10"/></svg>Stop';},function(){btn.classList.remove('playing');btn.innerHTML='<svg width="8" height="8" viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen';});}
+function togTl(lid){var b=document.getElementById('tlb-'+lid),btn=document.getElementById('tlbtn-'+lid);if(b.classList.contains('on')){b.classList.remove('on');btn.textContent='Show translation';}else{b.classList.add('on');btn.textContent='Hide translation';}}
+function togSpeak(id){var b=document.getElementById(id);if(!b)return;var btn=b.previousElementSibling;if(b.classList.contains('on')){b.classList.remove('on');if(btn&&btn.classList.contains('at'))btn.textContent='Show model answer';}else{b.classList.add('on');if(btn&&btn.classList.contains('at'))btn.textContent='Hide model answer';}}
+function togA(id){var b=document.getElementById(id);if(!b)return;var prev=b.previousElementSibling;var btn=prev?prev.querySelector('.at'):null;if(b.classList.contains('on')){b.classList.remove('on');if(btn)btn.textContent='Show answer';}else{b.classList.add('on');if(btn)btn.textContent='Hide answer';}}
+function togSE(id){var el=document.getElementById('se-'+id),btn=document.getElementById('st-'+id);if(el.classList.contains('on')){el.classList.remove('on');btn.textContent='show translation';}else{el.classList.add('on');btn.textContent='hide translation';}}
+function sw(lid){document.querySelectorAll('.lesson').forEach(function(l){l.classList.remove('on');});document.querySelectorAll('.np').forEach(function(b){b.classList.remove('on');});document.getElementById('lesson-'+lid).classList.add('on');document.getElementById('np-'+lid).classList.add('on');stopAll();window.scrollTo({top:0,behavior:'smooth'});}
+function kbLoad(){try{return JSON.parse(localStorage.getItem(KB_KEY)||'{}');}catch(e){return {};}}
+function kbSave(d){localStorage.setItem(KB_KEY,JSON.stringify(d));}
+function kbToggle(lid,idx){var d=kbLoad();if(!d[lid])d[lid]=[];d[lid][idx]=!d[lid][idx];kbSave(d);buildKanban();updatePips();}
+function kbReset(){if(!confirm('Reset all progress?'))return;localStorage.removeItem(KB_KEY);buildKanban();updatePips();}
+function buildKanban(){
+  var d=kbLoad();var board=document.getElementById('kb-board');board.innerHTML='';
+  LESSON_IDS.forEach(function(lid){
+    var state=d[lid]||[];var doneCount=state.filter(function(v,i){return v&&i!==1;}).length;
+    var sec=document.createElement('div');sec.className='kb-lesson';
+    var hdr=document.createElement('div');hdr.className='kb-lesson-title';
+    hdr.innerHTML='<div class="kb-dot" style="background:'+LESSON_COLORS[lid]+'"></div><span>'+LESSON_TITLES[lid]+'</span><span class="kb-progress">'+doneCount+' / '+(KB_TASKS.length-1)+'</span>';
+    sec.appendChild(hdr);
+    var cols=document.createElement('div');cols.className='kb-cols';
+    var todoCol=document.createElement('div');var doneCol=document.createElement('div');
+    var todoLbl=document.createElement('div');todoLbl.className='kb-col-label';todoLbl.textContent='To do';
+    var doneLbl=document.createElement('div');doneLbl.className='kb-col-label';doneLbl.textContent='Done ✓';
+    todoCol.appendChild(todoLbl);doneCol.appendChild(doneLbl);
+    var todoCards=document.createElement('div');todoCards.className='kb-col-cards';
+    var doneCards=document.createElement('div');doneCards.className='kb-col-cards';
+    var hasTodo=false,hasDone=false;
+    KB_TASKS.forEach(function(task,idx){
+      if(idx===1)return;
+      var done=!!state[idx];var card=document.createElement('div');
+      card.className='kb-card'+(done?' done':'');
+      card.innerHTML='<span class="kb-card-text">'+task+'</span><span class="kb-card-arrow">'+(done?'↩':'→')+'</span>';
+      card.onclick=(function(l,i){return function(){kbToggle(l,i);};})(lid,idx);
+      if(done){doneCards.appendChild(card);hasDone=true;}else{todoCards.appendChild(card);hasTodo=true;}
+    });
+    if(!hasTodo){var e=document.createElement('div');e.className='kb-empty';e.textContent='All done!';todoCards.appendChild(e);}
+    if(!hasDone){var e2=document.createElement('div');e2.className='kb-empty';e2.textContent='Nothing yet';doneCards.appendChild(e2);}
+    todoCol.appendChild(todoCards);doneCol.appendChild(doneCards);cols.appendChild(todoCol);cols.appendChild(doneCol);sec.appendChild(cols);board.appendChild(sec);
+  });
+}
+function updatePips(){
+  var d=kbLoad();
+  LESSON_IDS.forEach(function(lid){
+    var state=d[lid]||[];var done=state.filter(function(v,i){return v&&i!==1;}).length;var pip=document.getElementById('pip-'+lid);if(!pip)return;
+    if(done>0&&done<(KB_TASKS.length-1)){pip.textContent=done;pip.style.background=LESSON_COLORS[lid];pip.classList.add('show');}
+    else if(done===(KB_TASKS.length-1)){pip.textContent='✓';pip.style.background='#2C6E4F';pip.classList.add('show');}
+    else{pip.classList.remove('show');}
+  });
+}
+function renderVocab(lid){var vg=document.getElementById('vg-'+lid);V[lid].forEach(function(v,i){var id='vc-'+lid+'-'+i,c=document.createElement('div');c.className='vc';c.id=id;c.dataset.kr=v.kr;c.onclick=function(){spkVC(id);};var hj=v.hanja?'<div class="vc-hanja">'+v.hanja+'</div>':'';c.innerHTML='<div class="vc-icon" style="background:'+v.bg+'">'+v.icon+'</div><div><div class="vc-kr">'+v.kr+'</div>'+hj+'<div class="vc-ipa">['+v.ipa+']</div><div class="vc-en">'+v.en+'</div></div>';vg.appendChild(c);});}
+function renderSents(lid){var sl=document.getElementById('sl-'+lid);S[lid].forEach(function(s,i){var sid=lid+'s'+i,r=document.createElement('div');r.className='sent-row';r.innerHTML='<div class="snum" style="background:'+s.bg+';color:'+s.fg+'">'+(i+1)+'</div><div class="sent-body"><div class="sent-kr">'+s.kr+'</div><div class="sent-en" id="se-'+sid+'">'+s.en+'</div><button class="stl" id="st-'+sid+'" onclick="togSE(\''+sid+'\')">show translation</button></div><button class="sbtn" id="ss-'+sid+'" onclick="spkSent(\'ss-'+sid+'\',\''+s.kr.replace(/'/g,"\\'")+'\')">Listen</button>';sl.appendChild(r);});}
+function mdBtn(lid,idx){return document.getElementById('md-'+lid+'-'+idx);}
+function refreshMdBtn(lid,idx){var btn=mdBtn(lid,idx);if(!btn)return;var d=kbLoad();var done=!!(d[lid]&&d[lid][idx]);btn.className='mdbtn '+(done?'done-state':'undone');btn.innerHTML=done?'✓ Done — tap to undo':'Mark done ✓';}
+function mdToggle(lid,idx){var d=kbLoad();if(!d[lid])d[lid]=[];d[lid][idx]=!d[lid][idx];kbSave(d);refreshMdBtn(lid,idx);if(document.getElementById('kb-board').innerHTML!=='')buildKanban();updatePips();}
+function initMdBtns(){['l18','l19'].forEach(function(lid){[0,2,3,4,5,6,7,8].forEach(function(idx){refreshMdBtn(lid,idx);});});}
+['l18','l19'].forEach(function(lid){renderVocab(lid);renderSents(lid);});
+buildKanban();updatePips();initMdBtns();
+</script>
+</body>
+</html>

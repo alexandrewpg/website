@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Korean — Lessons 20–21</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#FAF8F4;--sur:#FFFFFF;--ink:#1A1714;--mid:#6A6259;--sub:#A09488;
+  --rule:#E8E2DA;--acc:#B85C38;--acc-lt:#FAEEE8;--acc-mid:#D4785A;
+  --gold:#C9963A;--sage:#5D7A60;--sage-lt:#EBF2EC;
+  --sh:0 2px 16px rgba(60,40,20,0.07);--sh-hover:0 4px 24px rgba(60,40,20,0.12);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding:0 0 7rem;-webkit-font-smoothing:antialiased;}
+.nav{position:sticky;top:0;z-index:100;background:rgba(237,232,225,0.97);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);padding:0.7rem 1.25rem;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.nav-label{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);padding-right:10px;border-right:1px solid var(--rule);margin-right:2px;white-space:nowrap;}
+.np{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:var(--mid);background:none;border:none;border-radius:20px;padding:6px 14px;cursor:pointer;transition:all .2s;white-space:nowrap;position:relative;}
+.np:hover{background:var(--sur);color:var(--ink);box-shadow:var(--sh);}
+.np.on{background:var(--sur);color:var(--ink);font-weight:600;box-shadow:var(--sh);}
+.np.on::after{content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:20px;height:2px;background:var(--gold);border-radius:1px;}
+.np .pip{position:absolute;top:2px;right:4px;width:14px;height:14px;border-radius:50%;background:var(--acc);color:#fff;font-size:8px;font-weight:700;display:none;align-items:center;justify-content:center;line-height:1;}
+.np .pip.show{display:flex;}
+.page{max-width:760px;margin:0 auto;padding:2.5rem 1.25rem;}
+.lesson{display:none;}.lesson.on{display:block;}
+.lsn-header{position:relative;overflow:hidden;padding:2.5rem 2.5rem 2.25rem;margin-bottom:2.25rem;background:var(--sur);border-radius:20px;box-shadow:var(--sh);}
+.lsn-watermark{position:absolute;right:-12px;top:-28px;font-family:'Cormorant Garamond',serif;font-size:220px;font-weight:300;color:rgba(184,92,56,0.09);line-height:1;pointer-events:none;user-select:none;letter-spacing:-.02em;}
+.lsn-eyebrow{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);margin-bottom:.6rem;}
+.lsn-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--ink);line-height:1.18;margin-bottom:.5rem;}
+.lsn-sub{font-size:14.5px;color:var(--mid);line-height:1.7;margin-bottom:1.1rem;max-width:520px;font-style:italic;}
+.new-pill{display:inline-flex;align-items:center;gap:10px;background:var(--acc-lt);border-radius:16px;padding:9px 16px;}
+.new-pill-label{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);flex-shrink:0;}
+.new-pill-pat{font-family:'Noto Sans KR',sans-serif;font-size:16px;font-weight:700;color:var(--ink);}
+.new-pill-mean{font-size:12.5px;color:var(--mid);}
+.sec-label{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--sage);margin-bottom:.85rem;}
+.reading-card{background:var(--sur);border-radius:16px;box-shadow:var(--sh);padding:1.75rem 2rem;margin-bottom:2rem;}
+.reading-kr{font-family:'Noto Sans KR',sans-serif;font-size:18px;line-height:2.4;color:var(--ink);margin-bottom:1.25rem;}
+.dlg{display:flex;gap:14px;margin-bottom:.75rem;align-items:flex-start;}
+.dlg-who{font-size:12px;font-weight:700;min-width:42px;padding-top:5px;flex-shrink:0;color:var(--sage);letter-spacing:.02em;text-transform:uppercase;}
+.dlg-ipa{font-family:'Inter',sans-serif;font-size:12px;color:var(--sub);font-style:italic;line-height:1.5;margin-top:3px;letter-spacing:.01em;}
+.vc-hanja{font-family:'Noto Sans KR',serif;font-size:11px;color:var(--sage);font-weight:500;line-height:1.3;margin-top:1px;letter-spacing:.04em;}
+.vc-ipa{font-family:'Inter',sans-serif;font-size:10px;color:var(--sub);font-style:italic;line-height:1.3;margin-top:1px;}
+.dlg-txt{font-family:'Noto Sans KR',sans-serif;font-size:17px;line-height:2;color:var(--ink);}
+.ctrl-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:1.1rem;margin-bottom:.85rem;}
+.lbtn{display:inline-flex;align-items:center;gap:7px;background:var(--acc);color:#fff;border:none;border-radius:24px;padding:9px 18px;font-size:13.5px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(184,92,56,0.25);}
+.lbtn:hover{transform:translateY(-1px);background:var(--acc-mid);box-shadow:0 4px 12px rgba(184,92,56,0.3);}
+.lbtn svg{width:10px;height:10px;flex-shrink:0;}
+.spd{font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;border:1px solid var(--rule);border-radius:24px;background:var(--bg);color:var(--mid);cursor:pointer;}
+.tl-btn{font-family:'Inter',sans-serif;font-size:13px;border:1px solid var(--rule);border-radius:24px;padding:8px 14px;cursor:pointer;transition:all .2s;background:transparent;color:var(--mid);}
+.tl-btn:hover{background:var(--acc-lt);border-color:var(--acc-mid);color:var(--acc);}
+.tl-box{font-size:14px;color:var(--mid);line-height:1.85;border-radius:10px;padding:1rem 1.25rem;display:none;margin-top:.5rem;background:var(--bg);border-left:3px solid var(--acc-mid);}
+.tl-box.on{display:block;}
+.reading-ipa{font-family:'Inter',sans-serif;font-size:12.5px;color:var(--sub);font-style:italic;line-height:1.7;margin:-0.4rem 0 1.1rem;letter-spacing:.01em;}
+.tts-note{font-size:12px;color:var(--sub);font-style:italic;margin-top:.85rem;}
+.gram-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:2rem;}
+@media(max-width:520px){.gram-grid{grid-template-columns:1fr;}}
+.gc{background:var(--sur);border-radius:14px;box-shadow:var(--sh);padding:1.35rem 1.4rem;transition:box-shadow .2s;}
+.gc:hover{box-shadow:var(--sh-hover);}
+.gc.new-card{background:var(--acc-lt);box-shadow:0 2px 16px rgba(184,92,56,0.1);}
+.gc.new-card:hover{box-shadow:0 4px 24px rgba(184,92,56,0.18);}
+.new-star{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);margin-bottom:.45rem;display:block;}
+.gc-pat{font-family:'Noto Sans KR',sans-serif;font-size:17.5px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.gc-mean{font-size:12px;font-weight:600;letter-spacing:.03em;color:var(--mid);margin-bottom:.75rem;}
+.gc-ex{font-family:'Noto Sans KR',sans-serif;font-size:14px;line-height:1.7;background:var(--bg);border-radius:8px;padding:8px 11px;cursor:pointer;margin-bottom:6px;border:none;width:100%;text-align:left;color:var(--ink);transition:background .15s;}
+.gc-ex:hover{background:var(--rule);}
+.gc-en{font-size:12px;font-style:italic;color:var(--mid);}
+.gc-note{font-size:11.5px;color:var(--sub);margin-top:.6rem;line-height:1.55;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:8px;margin-bottom:2rem;}
+.vc{display:flex;align-items:center;gap:10px;background:var(--sur);border-radius:12px;padding:10px 13px;cursor:pointer;box-shadow:var(--sh);transition:all .2s;}
+.vc:hover{transform:translateY(-2px);box-shadow:var(--sh-hover);}
+.vc-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;background:var(--bg);}
+.vc-kr{font-family:'Noto Sans KR',sans-serif;font-size:14.5px;font-weight:700;color:var(--ink);margin-bottom:1px;}
+.vc-en{font-size:12px;color:var(--mid);line-height:1.35;}
+.sent-list{display:flex;flex-direction:column;gap:8px;margin-bottom:2rem;}
+.sent-row{display:flex;align-items:flex-start;gap:12px;background:var(--sur);border-radius:12px;padding:14px 16px;box-shadow:var(--sh);transition:box-shadow .2s;}
+.sent-row:hover{box-shadow:var(--sh-hover);}
+.snum{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11.5px;font-weight:700;margin-top:2px;background:var(--sage-lt);color:var(--sage);}
+.sent-body{flex:1;}
+.sent-kr{font-family:'Noto Sans KR',sans-serif;font-size:16.5px;color:var(--ink);line-height:1.85;}
+.sent-en{font-size:13.5px;color:var(--mid);font-style:italic;display:none;margin-top:6px;padding-top:6px;border-top:1px solid var(--rule);}
+.sent-en.on{display:block;}
+.stl{font-size:12px;background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;padding:2px 0;color:var(--sage);text-decoration:underline;text-underline-offset:3px;margin-top:4px;display:block;}
+.sbtn{border:1px solid var(--rule);border-radius:20px;padding:5px 13px;font-size:12.5px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;flex-shrink:0;background:var(--bg);color:var(--mid);transition:all .15s;}
+.sbtn:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
+.ex-sec{background:var(--sur);border-radius:16px;box-shadow:var(--sh);padding:1.5rem 1.75rem;margin-bottom:1.1rem;}
+.ex-head{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.ex-badge{width:24px;height:24px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;flex-shrink:0;background:var(--acc);color:#fff;}
+.ex-title{font-size:14.5px;font-weight:600;color:var(--ink);}
+.ex-sub{font-size:12px;color:var(--sub);margin-top:1px;}
+.ex-item{margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--rule);}
+.ex-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.ex-q{font-family:'Noto Sans KR',sans-serif;font-size:15.5px;color:var(--ink);line-height:1.9;margin-bottom:4px;}
+.ex-q-en{font-size:13px;color:var(--mid);margin-bottom:7px;font-style:italic;}
+.c-en{font-size:15px;font-weight:500;margin-bottom:8px;color:var(--ink);}
+.blank{display:inline-block;min-width:50px;border-bottom:2px solid var(--acc-mid);font-weight:600;padding:0 3px;color:var(--acc);}
+.at{font-family:'Inter',sans-serif;font-size:12.5px;border:1px solid var(--rule);border-radius:20px;padding:5px 13px;cursor:pointer;transition:all .15s;margin-right:4px;background:var(--bg);color:var(--mid);}
+.at:hover{background:var(--acc-lt);border-color:var(--acc-mid);color:var(--acc);}
+.ans-box{display:none;margin-top:8px;border-radius:12px;overflow:hidden;}
+.ans-box.on{display:block;}
+.ans-main{padding:10px 14px;background:var(--acc-lt);}
+.ans-kr{font-family:'Noto Sans KR',sans-serif;font-size:15.5px;font-weight:600;margin-bottom:3px;color:var(--ink);}
+.ans-kr strong{text-decoration:underline;text-decoration-color:var(--acc);text-underline-offset:3px;text-decoration-thickness:2px;color:var(--acc);}
+.ans-note{font-size:12.5px;color:var(--mid);line-height:1.6;}
+.ans-alt{background:var(--bg);padding:8px 14px;border-top:1px solid rgba(184,92,56,0.15);}
+.al{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);margin-bottom:2px;}
+.ak{font-family:'Noto Sans KR',sans-serif;font-size:13.5px;color:var(--mid);}
+.row-btns{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:7px;}
+.px{display:inline-flex;align-items:center;gap:4px;background:var(--acc);color:#fff;border:none;border-radius:20px;padding:5px 11px;font-size:12.5px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;}
+.px:hover{background:var(--acc-mid);transform:translateY(-1px);}
+.px svg{width:8px;height:8px;}
+.divider{border:none;border-top:1px solid var(--rule);margin:1.75rem 0;}
+.sb{margin-bottom:2rem;}
+.mark-done-row{display:flex;justify-content:flex-end;margin-top:1.1rem;padding-top:.9rem;border-top:1px solid var(--rule);}
+.mdbtn{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;border:1.5px solid;border-radius:20px;padding:8px 18px;cursor:pointer;transition:all .2s;letter-spacing:.01em;}
+.mdbtn.undone{color:var(--ink);background:var(--sur);border-color:var(--mid);box-shadow:0 1px 4px rgba(60,40,20,0.08);}
+.mdbtn.undone:hover{border-color:var(--acc);color:var(--acc);background:var(--acc-lt);box-shadow:0 2px 8px rgba(184,92,56,0.15);}
+.mdbtn.done-state{color:#fff;background:var(--acc);border-color:var(--acc);box-shadow:0 2px 8px rgba(184,92,56,0.3);}
+.mdbtn.done-state:hover{background:var(--acc-mid);}
+#lesson-kb{padding:1rem 0;}
+.kb-header{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--rule);}
+.kb-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--ink);margin-bottom:.35rem;}
+.kb-sub{font-size:14px;color:var(--mid);line-height:1.65;}
+.kb-reset{font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;border:1px solid var(--rule);background:none;color:var(--sub);border-radius:20px;padding:6px 14px;cursor:pointer;margin-top:.9rem;transition:all .15s;}
+.kb-reset:hover{border-color:var(--mid);color:var(--ink);}
+.kb-lesson{background:var(--sur);border-radius:16px;box-shadow:var(--sh);padding:1.25rem 1.5rem;margin-bottom:1rem;}
+.kb-lesson-title{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:.85rem;display:flex;align-items:center;gap:8px;}
+.kb-dot{width:7px;height:7px;border-radius:50%;background:var(--sage);flex-shrink:0;}
+.kb-progress{font-size:12px;color:var(--sub);margin-left:auto;}
+.kb-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.kb-col-label{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);margin-bottom:6px;}
+.kb-col-cards{display:flex;flex-direction:column;gap:5px;min-height:36px;}
+.kb-card{background:var(--bg);border:1px solid var(--rule);border-radius:10px;padding:9px 13px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;transition:all .15s;user-select:none;}
+.kb-card:hover{border-color:var(--acc-mid);background:var(--acc-lt);}
+.kb-card.done{background:var(--acc-lt);border-color:var(--acc-mid);border-left:3px solid var(--acc);}
+.kb-card-text{font-size:13.5px;color:var(--ink);}
+.kb-card.done .kb-card-text{color:var(--acc);}
+.kb-card-arrow{font-size:14px;color:var(--sub);flex-shrink:0;}
+.kb-card.done .kb-card-arrow{color:var(--acc);}
+.kb-empty{font-size:12.5px;color:var(--sub);font-style:italic;padding:5px 0;}
+
+.speak-sec{background:var(--sur);border-radius:16px;box-shadow:var(--sh);padding:1.5rem 1.75rem;margin-bottom:1.1rem;}
+.speak-intro{font-size:13px;color:var(--mid);font-style:italic;line-height:1.6;margin-bottom:1.1rem;padding-bottom:.9rem;border-bottom:1px solid var(--rule);}
+.speak-item{margin-bottom:1.1rem;padding-bottom:1.1rem;border-bottom:1px solid var(--rule);}
+.speak-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.speak-tag{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);background:var(--sage-lt);border-radius:5px;padding:3px 8px;margin-bottom:.55rem;}
+.speak-tag.role{color:var(--acc);background:var(--acc-lt);}
+.speak-prompt-kr{font-family:'Noto Sans KR',sans-serif;font-size:15.5px;color:var(--ink);line-height:1.85;margin-bottom:3px;}
+.speak-prompt-en{font-size:12.5px;color:var(--mid);font-style:italic;line-height:1.5;margin-bottom:.6rem;}
+.speak-hint{font-family:'Noto Sans KR',sans-serif;font-size:13px;color:var(--sage);background:var(--sage-lt);border-radius:8px;padding:7px 11px;margin-bottom:.5rem;display:inline-block;}
+.speak-hint-label{font-family:'Inter',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--sage);margin-right:6px;}
+.speak-model{display:none;margin-top:.5rem;border-radius:10px;overflow:hidden;border:1px solid var(--rule);}
+.speak-model.on{display:block;}
+.speak-model-kr{font-family:'Noto Sans KR',sans-serif;font-size:14.5px;font-weight:500;color:var(--ink);background:var(--acc-lt);padding:10px 13px;line-height:1.8;}
+.speak-model-label{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--acc);margin-bottom:3px;display:block;}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <span class="nav-label">Lessons</span>
+  <button class="np on" id="np-l20" onclick="sw('l20')">20<span class="pip" id="pip-l20"></span></button>
+  <button class="np" id="np-l21" onclick="sw('l21')">21<span class="pip" id="pip-l21"></span></button>
+  <button class="np"    id="np-kb"  onclick="sw('kb')">Progress</button>
+</div>
+
+<div class="page">
+
+<div class="lesson on" id="lesson-l20">
+  <div class="lsn-header">
+    <div class="lsn-watermark">20</div>
+    <div class="lsn-eyebrow">Lesson 20 · New pattern</div>
+    <div class="lsn-title">Remembering an Old Café</div>
+    <div class="lsn-sub">Recalling a place from the past — what it was like, and wishing it were still there</div>
+    <div class="new-pill">
+      <span class="new-pill-label">New this lesson</span>
+      <span class="new-pill-pat">-더라/-던 · -았/었으면 좋겠다</span>
+      <span class="new-pill-mean">— Recalling and wishing</span>
+    </div>
+  </div>
+  <div class="sec-label">Reading text</div>
+  <div class="reading-card">
+    <div class="reading-kr" id="mt-l20">예전에 자주 가던 카페가 하나 있었어요. 골목 안에 작고 조용한 곳이었는데 커피가 정말 맛있더라고요. 주인 아저씨가 늘 직접 원두를 볶더라고요. 그때는 그게 얼마나 특별한지 잘 몰랐어요. 지금 생각해 보면 그런 곳이 점점 사라지는 것 같아요. 다시 그 카페에 갈 수 있으면 좋겠어요. 그 동네를 걷다 보면 아직도 그 커피 냄새가 기억나요. 언젠가 비슷한 곳을 다시 찾았으면 좋겠어요.</div>
+    <div class="reading-ipa">[je.dʑʌ.ne tɕa.dʑu ka.dʌn kʰa.pʰe.ɡa ha.na i.s͈ʌ.s͈ʌ.jo | kol.mok̚ a.ne tɕak̚.k͈o tɕo.joŋ.ɦan ɡo.ɕi.ʌn.nɯn.de kʰʌ.pʰi.ɡa tɕʌŋ.mal ma.ɕit̚.t͈ʌ.ɾa.ɡo.jo | tɕu.in a.dʑʌ.ɕi.ɡa nɯl tɕik̚.t͈ɕʌp̚ wʌn.du.ɾɯl bok̚.t͈ʌ.ɾa.ɡo.jo | kɯ.t͈ɛ.nɯn kɯ.ɡe ʌl.ma.na tʰɯk̚.p͈jʌl.ɦan.dʑi tɕal mol.la.s͈ʌ.jo | tɕi.ɡɯm sɛŋ.ɡa.kʰɛ bo.mjʌn kɯ.ɾʌn ɡo.ɕi tɕʌm.dʑʌm sa.ɾa.dʑi.nɯn ɡʌt̚ ka.tʰa.jo | ta.ɕi kɯ kʰa.pʰe.e kal s͈u i.s͈ɯ.mjʌn tɕo.kʰe.s͈ʌ.jo | kɯ doŋ.ne.ɾɯl kʌt̚.t͈a bo.mjʌn a.dʑik̚.t͈o kɯ kʰʌ.pʰi nɛm.sɛ.ɡa ki.ʌŋ.na.jo | ʌn.dʑen.ɡa bi.sɯ.tʰan ɡo.sɯl ta.ɕi tɕʰa.dʑa.s͈ɯ.mjʌn tɕo.kʰe.s͈ʌ.jo]</div>
+    <div class="ctrl-row">
+      <button class="lbtn" id="mb-l20" onclick="spkMain('l20')"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg> Listen</button>
+      <select class="spd" id="ms-l20"><option value="0.75" selected>Slow</option><option value="1">Normal</option></select>
+      <button class="tl-btn" id="tlbtn-l20" onclick="togTl('l20')">Show translation</button>
+    </div>
+    <div class="tl-box" id="tlb-l20">There was a café I used to go to often. It was a small, quiet place in an alley, and the coffee was really delicious (I recall). The owner always roasted the beans himself (I remember seeing). Back then I didn't really know how special that was. Thinking about it now, places like that seem to be gradually disappearing. I wish I could go to that café again. When I walk through that neighbourhood, I still remember the smell of that coffee. I hope someday I'll find a similar place again.</div>
+    <div class="tts-note">Audio uses your browser's Korean TTS — quality varies by device</div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-l20-0" onclick="mdToggle('l20',0)">Mark done ✓</button></div>
+  </div>
+  <hr class="divider">
+  <div class="sb">
+    <div class="sec-label">Grammar — tap any example to hear it</div>
+    <div class="gram-grid">
+      <div class="gc new-card">
+        <span class="new-star">★ New this lesson</span>
+        <div class="gc-pat">-더라 / -더라고요</div>
+        <div class="gc-mean">Recalling what you witnessed — new</div>
+        <button class="gc-ex" onclick="spkRaw('커피가 정말 맛있더라고요.',this)">커피가 정말 맛있더라고요.</button>
+        <div class="gc-en">The coffee was really delicious (I recall)</div>
+        <div class="gc-note">★ new — -더라고요 reports something you personally witnessed/experienced.</div>
+      </div>
+      <div class="gc new-card">
+        <span class="new-star">★ New this lesson</span>
+        <div class="gc-pat">-던</div>
+        <div class="gc-mean">Recalled ongoing/habitual past — new</div>
+        <button class="gc-ex" onclick="spkRaw('예전에 자주 가던 카페',this)">예전에 자주 가던 카페</button>
+        <div class="gc-en">a café I used to go to often</div>
+        <div class="gc-note">★ new — -던 modifies a noun with a remembered, repeated/ongoing past action.</div>
+      </div>
+      <div class="gc new-card">
+        <span class="new-star">★ New this lesson</span>
+        <div class="gc-pat">-았/었으면 좋겠다</div>
+        <div class="gc-mean">Wishing — new</div>
+        <button class="gc-ex" onclick="spkRaw('다시 갈 수 있으면 좋겠어요.',this)">다시 갈 수 있으면 좋겠어요.</button>
+        <div class="gc-en">I wish I could go again</div>
+        <div class="gc-note">★ new — -았/었으면 좋겠다 expresses a wish/hope.</div>
+      </div>
+      <div class="gc">
+        <div class="gc-pat">-다 보면</div>
+        <div class="gc-mean">If you keep doing</div>
+        <button class="gc-ex" onclick="spkRaw('그 동네를 걷다 보면 냄새가 기억나요.',this)">그 동네를 걷다 보면 냄새가 기억나요.</button>
+        <div class="gc-en">When I walk through, I remember the smell</div>
+        <div class="gc-note">Consolidation from lesson 15.</div>
+      </div>
+    </div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-l20-2" onclick="mdToggle('l20',2)">Mark done ✓</button></div>
+  </div>
+  <hr class="divider">
+  <div class="sb"><div class="sec-label">Vocabulary</div><div class="vocab-grid" id="vg-l20"></div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-l20-3" onclick="mdToggle('l20',3)">Mark done ✓</button></div></div>
+  <hr class="divider">
+  <div class="sb"><div class="sec-label">Key sentences</div><div class="sent-list" id="sl-l20"></div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-l20-4" onclick="mdToggle('l20',4)">Mark done ✓</button></div></div>
+  <hr class="divider">
+  <div class="sb">
+    <div class="sec-label">Exercises</div>
+    <div class="ex-sec">
+      <div class="ex-head"><div class="ex-badge">A</div><div><div class="ex-title">Fill in the blanks</div><div class="ex-sub">Translation given; complete, then reveal</div></div></div>
+      <div class="ex-item">
+        <div class="ex-q">어제 간 식당, 음식이 정말 맛있<span class="blank">___</span>.</div>
+        <div class="ex-q-en">The restaurant I went to yesterday — the food was really good (I recall).</div>
+        <div class="row-btns"><button class="at" onclick="togA('l20a1')">Show answer</button></div>
+        <div class="ans-box" id="l20a1"><div class="ans-main"><div class="ans-kr">어제 간 식당, 음식이 정말 맛있<strong>더라고요</strong>.</div><div class="ans-note">-더라고요 = recalling what you witnessed first-hand.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('어제 간 식당, 음식이 정말 맛있더라고요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">이건 제가 어렸을 때 자주 듣<span class="blank">___</span> 노래예요.</div>
+        <div class="ex-q-en">This is a song I used to listen to often when I was young.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l20a2')">Show answer</button></div>
+        <div class="ans-box" id="l20a2"><div class="ans-main"><div class="ans-kr">이건 제가 어렸을 때 자주 듣<strong>던</strong> 노래예요.</div><div class="ans-note">-던 = remembered habitual past. 듣다 → 듣던.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('이건 제가 어렸을 때 자주 듣던 노래예요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">시험에 합격했<span class="blank">___</span> 좋겠어요.</div>
+        <div class="ex-q-en">I wish I had passed the exam. / I hope I pass.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l20a3')">Show answer</button></div>
+        <div class="ans-box" id="l20a3"><div class="ans-main"><div class="ans-kr">시험에 합격했<strong>으면</strong> 좋겠어요.</div><div class="ans-note">-았/었으면 좋겠다 = wish/hope. 합격하다 → 합격했으면.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('시험에 합격했으면 좋겠어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">그 가게가 아직 있<span class="blank">___</span> 좋겠어요.</div>
+        <div class="ex-q-en">I hope that shop is still there.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l20a4')">Show answer</button></div>
+        <div class="ans-box" id="l20a4"><div class="ans-main"><div class="ans-kr">그 가게가 아직 있<strong>으면</strong> 좋겠어요.</div><div class="ans-note">-(으)면 좋겠다 (present) = hope. Wishing about now/future.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('그 가게가 아직 있으면 좋겠어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-l20-5" onclick="mdToggle('l20',5)">Mark done ✓</button></div>
+    </div>
+    <div class="ex-sec">
+      <div class="ex-head"><div class="ex-badge">B</div><div><div class="ex-title">Questions about the text</div><div class="ex-sub">Answer before revealing</div></div></div>
+      <div class="ex-item">
+        <div class="ex-q">화자가 기억하는 카페는 어떤 곳이었어요?</div>
+        <div class="ex-q-en">What kind of place was the café the speaker remembers?</div>
+        <div class="row-btns"><button class="px" onclick="spkSm('화자가 기억하는 카페는 어떤 곳이었어요?',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Hear</button><button class="at" onclick="togA('l20b1')">Show answer</button></div>
+        <div class="ans-box" id="l20b1"><div class="ans-main"><div class="ans-kr">골목 안에 작고 조용한 곳이었는데 커피가 맛있더라고요.</div><div class="ans-note">-더라고요 = recalled first-hand. 작고 조용하다 = small and quiet.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">주인이 직접 원두를 볶던 작은 카페였어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('골목 안에 작고 조용한 곳이었는데 커피가 맛있더라고요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">화자는 무엇을 바라요?</div>
+        <div class="ex-q-en">What does the speaker wish for?</div>
+        <div class="row-btns"><button class="px" onclick="spkSm('화자는 무엇을 바라요?',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Hear</button><button class="at" onclick="togA('l20b2')">Show answer</button></div>
+        <div class="ans-box" id="l20b2"><div class="ans-main"><div class="ans-kr">다시 그 카페에 갈 수 있으면 좋겠다고 해요.</div><div class="ans-note">-(으)면 좋겠다 = wish. Also: 비슷한 곳을 찾았으면 좋겠어요.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">비슷한 곳을 다시 찾았으면 좋겠어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('다시 그 카페에 갈 수 있으면 좋겠다고 해요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-l20-6" onclick="mdToggle('l20',6)">Mark done ✓</button></div>
+    </div>
+    <div class="ex-sec">
+      <div class="ex-head"><div class="ex-badge">C</div><div><div class="ex-title">Translation</div><div class="ex-sub">Six sentences — mixed patterns</div></div></div>
+      <div class="ex-item">
+        <div class="c-en">1. The view from the mountain was really beautiful (I recall).</div>
+        <div class="row-btns"><button class="at" onclick="togA('l20c1')">Show answer</button></div>
+        <div class="ans-box" id="l20c1"><div class="ans-main"><div class="ans-kr">산에서 본 경치가 정말 아름답더라고요.</div><div class="ans-note">-더라고요 = recalling what you witnessed.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">산 위 경치가 진짜 멋있더라고요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('산에서 본 경치가 정말 아름답더라고요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">2. This is the park I used to play in as a child.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l20c2')">Show answer</button></div>
+        <div class="ans-box" id="l20c2"><div class="ans-main"><div class="ans-kr">여기는 제가 어렸을 때 놀던 공원이에요.</div><div class="ans-note">-던 = remembered habitual past. 놀다 → 놀던.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">어렸을 때 자주 가던 공원이에요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('여기는 제가 어렸을 때 놀던 공원이에요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">3. I wish I had more time these days.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l20c3')">Show answer</button></div>
+        <div class="ans-box" id="l20c3"><div class="ans-main"><div class="ans-kr">요즘 시간이 더 많았으면 좋겠어요.</div><div class="ans-note">-았/었으면 좋겠다 = wish (about now). 많다 → 많았으면.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">시간이 좀 더 있으면 좋겠어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('요즘 시간이 더 많았으면 좋겠어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">4. The café I used to go to disappeared.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l20c4')">Show answer</button></div>
+        <div class="ans-box" id="l20c4"><div class="ans-main"><div class="ans-kr">제가 자주 가던 카페가 없어졌어요.</div><div class="ans-note">-던 + past result. 없어지다 = to disappear.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">단골이던 카페가 문을 닫았어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('제가 자주 가던 카페가 없어졌어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">5. I hope I can travel there again someday.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l20c5')">Show answer</button></div>
+        <div class="ans-box" id="l20c5"><div class="ans-main"><div class="ans-kr">언젠가 그곳에 다시 갈 수 있으면 좋겠어요.</div><div class="ans-note">-(으)면 좋겠다 = hope. 언젠가 = someday.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">다시 그곳에 가 보고 싶어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('언젠가 그곳에 다시 갈 수 있으면 좋겠어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">6. The weather was surprisingly cold that day (I recall).</div>
+        <div class="row-btns"><button class="at" onclick="togA('l20c6')">Show answer</button></div>
+        <div class="ans-box" id="l20c6"><div class="ans-main"><div class="ans-kr">그날 날씨가 생각보다 춥더라고요.</div><div class="ans-note">-더라고요 = recalled first-hand surprise. 생각보다 = than expected.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">그날 의외로 춥더라고요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('그날 날씨가 생각보다 춥더라고요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-l20-7" onclick="mdToggle('l20',7)">Mark done ✓</button></div>
+    </div>
+  </div>
+  <hr class="divider">
+  <div class="sb">
+    <div class="sec-label">Speak — out loud</div>
+    <div class="speak-sec">
+      <div class="speak-intro">Speak aloud — no need for perfection. Notice where you stall or reach for a word.</div>
+      <div class="speak-item">
+        <span class="speak-tag">Self-talk</span>
+        <div class="speak-prompt-kr">예전에 자주 가던 장소를 하나 떠올려 보세요. 어떤 곳이었는지 -더라고요로 말해 보세요.</div>
+        <div class="speak-prompt-en">Recall a place you used to go often. Describe what it was like using -더라고요.</div>
+        <div class="speak-hint"><span class="speak-hint-label">Vocab</span>-던, -더라고요, 조용하다, 특별하다</div>
+        <div class="row-btns"><button class="at" onclick="togSpeak('l20sp0')">Show model answer</button><button class="px" onclick="spkSm('어렸을 때 자주 가던 도서관이 있었어요. 조용하고 분위기가 참 좋더라고요. 거기서 책을 많이 읽었어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div>
+        <div class="speak-model" id="l20sp0"><div class="speak-model-kr"><span class="speak-model-label">Model answer — compare after speaking</span>어렸을 때 자주 가던 도서관이 있었어요. 조용하고 분위기가 참 좋더라고요. 거기서 책을 많이 읽었어요.</div></div>
+      </div>
+      <div class="speak-item">
+        <span class="speak-tag">Scenario</span>
+        <div class="speak-prompt-kr">없어져서 아쉬운 가게나 장소가 있어요? 다시 생겼으면 좋겠다고 말해 보세요.</div>
+        <div class="speak-prompt-en">Is there a shop or place you miss? Say you wish it would come back.</div>
+        <div class="speak-hint"><span class="speak-hint-label">Vocab</span>사라지다, -았/었으면 좋겠다, 아쉽다, 다시</div>
+        <div class="row-btns"><button class="at" onclick="togSpeak('l20sp1')">Show model answer</button><button class="px" onclick="spkSm('집 앞에 작은 빵집이 있었는데 없어져서 너무 아쉬워요. 다시 생겼으면 좋겠어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div>
+        <div class="speak-model" id="l20sp1"><div class="speak-model-kr"><span class="speak-model-label">Model answer — compare after speaking</span>집 앞에 작은 빵집이 있었는데 없어져서 너무 아쉬워요. 다시 생겼으면 좋겠어요.</div></div>
+      </div>
+      <div class="speak-item">
+        <span class="speak-tag">Self-talk</span>
+        <div class="speak-prompt-kr">요즘 가장 바라는 것 한 가지를 -았/었으면 좋겠다로 말해 보세요.</div>
+        <div class="speak-prompt-en">Say one thing you most wish for these days, using -았/었으면 좋겠다.</div>
+        <div class="speak-hint"><span class="speak-hint-label">Vocab</span>-았/었으면 좋겠다, 시간, 건강, 여행</div>
+        <div class="row-btns"><button class="at" onclick="togSpeak('l20sp2')">Show model answer</button><button class="px" onclick="spkSm('요즘 너무 바빠서 시간이 좀 더 많았으면 좋겠어요. 그리고 올해는 꼭 여행을 갈 수 있으면 좋겠어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div>
+        <div class="speak-model" id="l20sp2"><div class="speak-model-kr"><span class="speak-model-label">Model answer — compare after speaking</span>요즘 너무 바빠서 시간이 좀 더 많았으면 좋겠어요. 그리고 올해는 꼭 여행을 갈 수 있으면 좋겠어요.</div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-l20-8" onclick="mdToggle('l20',8)">Mark done ✓</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="lesson" id="lesson-l21">
+  <div class="lsn-header">
+    <div class="lsn-watermark">21</div>
+    <div class="lsn-eyebrow">Lesson 21 · Review</div>
+    <div class="lsn-title">Review — Lessons 18 to 20</div>
+    <div class="lsn-sub">Meeting an old friend — reported questions, suggestions, and looking back together</div>
+    <div class="new-pill">
+      <span class="new-pill-label">Reviewing</span>
+      <span class="new-pill-pat">-냐고 · -자고 하다 · -더라/-던 · -았/었으면 좋겠다</span>
+    </div>
+  </div>
+  <div class="sec-label">Reading text</div>
+  <div class="reading-card">
+    <div class="reading-kr" id="mt-l21">어제 옛날 동네 친구를 오랜만에 만났어요. 친구가 요즘 어떻게 지내냐고 물어봤어요. 그리고 다음에 같이 옛날 살던 동네에 가보자고 했어요. 그 동네가 많이 변했다고 들었는데 직접 보면 좋겠어요. 우리가 자주 가던 분식집이 아직 있는지 궁금해요. 그때 떡볶이가 정말 맛있더라고요. 다시 그 맛을 느낄 수 있으면 좋겠어요.</div>
+    <div class="reading-ipa">[ʌ.dʑe jen.nal doŋ.ne tɕʰin.ɡu.ɾɯl o.ɾɛn.ma.ne man.na.s͈ʌ.jo | tɕʰin.ɡu.ɡa jo.dʑɯm ʌ.t͈ʌ.kʰe tɕi.nɛ.nja.ɡo mu.ɾʌ.bwa.s͈ʌ.jo | kɯ.ɾi.ɡo ta.ɯ.me ka.tʰi jen.nal sal.dʌn doŋ.ne.e ka.bo.dʑa.ɡo hɛ.s͈ʌ.jo | kɯ doŋ.ne.ɡa ma.ni bjʌn.ɦɛt̚.t͈a.ɡo dɯ.ɾʌn.nɯn.de tɕik̚.t͈ɕʌp̚ bo.mjʌn tɕo.kʰe.s͈ʌ.jo | u.ɾi.ɡa tɕa.dʑu ka.dʌn bun.ɕik̚.t͈ɕi.bi a.dʑik̚ in.nɯn.dʑi ɡuŋ.ɡɯm.ɦɛ.jo | kɯ.t͈ɛ t͈ʌk̚.p͈o.k͈i.ɡa tɕʌŋ.mal ma.ɕit̚.t͈ʌ.ɾa.ɡo.jo | ta.ɕi kɯ ma.s͈ɯl nɯ.k͈il s͈u i.s͈ɯ.mjʌn tɕo.kʰe.s͈ʌ.jo]</div>
+    <div class="ctrl-row">
+      <button class="lbtn" id="mb-l21" onclick="spkMain('l21')"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg> Listen</button>
+      <select class="spd" id="ms-l21"><option value="0.75" selected>Slow</option><option value="1">Normal</option></select>
+      <button class="tl-btn" id="tlbtn-l21" onclick="togTl('l21')">Show translation</button>
+    </div>
+    <div class="tl-box" id="tlb-l21">Yesterday I met an old neighbourhood friend after a long time. My friend asked how I've been doing these days. And he suggested we go together next time to the neighbourhood we used to live in. I heard that area has changed a lot, but I'd love to see it for myself. I wonder whether the snack shop we used to go to often is still there. The tteokbokki back then was really delicious (I recall). I wish I could taste that flavour again.</div>
+    <div class="tts-note">Audio uses your browser's Korean TTS — quality varies by device</div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-l21-0" onclick="mdToggle('l21',0)">Mark done ✓</button></div>
+  </div>
+  <hr class="divider">
+  <div class="sb">
+    <div class="sec-label">Grammar review — tap any example to hear it</div>
+    <div class="gram-grid">
+      <div class="gc">
+        <div class="gc-pat">-냐고 하다 / 묻다</div>
+        <div class="gc-mean">Reported question — review</div>
+        <button class="gc-ex" onclick="spkRaw('친구가 어떻게 지내냐고 물어봤어요.',this)">친구가 어떻게 지내냐고 물어봤어요.</button>
+        <div class="gc-en">My friend asked how I've been</div>
+        <div class="gc-note">From lesson 18. Verb/adj + 냐고.</div>
+      </div>
+      <div class="gc">
+        <div class="gc-pat">-자고 하다</div>
+        <div class="gc-mean">Reported suggestion — review</div>
+        <button class="gc-ex" onclick="spkRaw('같이 가보자고 했어요.',this)">같이 가보자고 했어요.</button>
+        <div class="gc-en">He suggested we go together</div>
+        <div class="gc-note">From lesson 19. 가다 → 가자고.</div>
+      </div>
+      <div class="gc">
+        <div class="gc-pat">-더라 / -던</div>
+        <div class="gc-mean">Recalling the past — review</div>
+        <button class="gc-ex" onclick="spkRaw('자주 가던 분식집, 떡볶이가 맛있더라고요.',this)">자주 가던 분식집, 떡볶이가 맛있더라고요.</button>
+        <div class="gc-en">The snack shop I used to go to — the tteokbokki was great</div>
+        <div class="gc-note">From lesson 20. -던 (habitual past) + -더라고요 (witnessed).</div>
+      </div>
+      <div class="gc">
+        <div class="gc-pat">-았/었으면 좋겠다</div>
+        <div class="gc-mean">Wishing — review</div>
+        <button class="gc-ex" onclick="spkRaw('다시 그 맛을 느낄 수 있으면 좋겠어요.',this)">다시 그 맛을 느낄 수 있으면 좋겠어요.</button>
+        <div class="gc-en">I wish I could taste that flavour again</div>
+        <div class="gc-note">From lesson 20.</div>
+      </div>
+    </div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-l21-2" onclick="mdToggle('l21',2)">Mark done ✓</button></div>
+  </div>
+  <hr class="divider">
+  <div class="sb"><div class="sec-label">Vocabulary</div><div class="vocab-grid" id="vg-l21"></div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-l21-3" onclick="mdToggle('l21',3)">Mark done ✓</button></div></div>
+  <hr class="divider">
+  <div class="sb"><div class="sec-label">Key sentences</div><div class="sent-list" id="sl-l21"></div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-l21-4" onclick="mdToggle('l21',4)">Mark done ✓</button></div></div>
+  <hr class="divider">
+  <div class="sb">
+    <div class="sec-label">Exercises</div>
+    <div class="ex-sec">
+      <div class="ex-head"><div class="ex-badge">A</div><div><div class="ex-title">Fill in the blanks</div><div class="ex-sub">Translation given; complete, then reveal</div></div></div>
+      <div class="ex-item">
+        <div class="ex-q">친구가 주말에 뭐 하<span class="blank">___</span> 물어봤어요.</div>
+        <div class="ex-q-en">My friend asked what I'm doing this weekend.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l21a1')">Show answer</button></div>
+        <div class="ans-box" id="l21a1"><div class="ans-main"><div class="ans-kr">친구가 주말에 뭐 하<strong>냐고</strong> 물어봤어요.</div><div class="ans-note">-냐고 하다 = reported question. From lesson 18.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('친구가 주말에 뭐 하냐고 물어봤어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">같이 옛날 동네에 가보<span class="blank">___</span> 했어요.</div>
+        <div class="ex-q-en">He suggested we go to the old neighbourhood together.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l21a2')">Show answer</button></div>
+        <div class="ans-box" id="l21a2"><div class="ans-main"><div class="ans-kr">같이 옛날 동네에 가보<strong>자고</strong> 했어요.</div><div class="ans-note">-자고 하다 = reported suggestion. From lesson 19.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('같이 옛날 동네에 가보자고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">그때 떡볶이가 정말 맛있<span class="blank">___</span>.</div>
+        <div class="ex-q-en">The tteokbokki back then was really delicious (I recall).</div>
+        <div class="row-btns"><button class="at" onclick="togA('l21a3')">Show answer</button></div>
+        <div class="ans-box" id="l21a3"><div class="ans-main"><div class="ans-kr">그때 떡볶이가 정말 맛있<strong>더라고요</strong>.</div><div class="ans-note">-더라고요 = recalling first-hand. From lesson 20.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('그때 떡볶이가 정말 맛있더라고요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">그 가게가 아직 있<span class="blank">___</span> 좋겠어요.</div>
+        <div class="ex-q-en">I hope that shop is still there.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l21a4')">Show answer</button></div>
+        <div class="ans-box" id="l21a4"><div class="ans-main"><div class="ans-kr">그 가게가 아직 있<strong>으면</strong> 좋겠어요.</div><div class="ans-note">-(으)면 좋겠다 = wish/hope. From lesson 20.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('그 가게가 아직 있으면 좋겠어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-l21-5" onclick="mdToggle('l21',5)">Mark done ✓</button></div>
+    </div>
+    <div class="ex-sec">
+      <div class="ex-head"><div class="ex-badge">B</div><div><div class="ex-title">Questions about the text</div><div class="ex-sub">Answer before revealing</div></div></div>
+      <div class="ex-item">
+        <div class="ex-q">친구가 화자에게 무엇을 물어봤어요?</div>
+        <div class="ex-q-en">What did the friend ask the speaker?</div>
+        <div class="row-btns"><button class="px" onclick="spkSm('친구가 화자에게 무엇을 물어봤어요?',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Hear</button><button class="at" onclick="togA('l21b1')">Show answer</button></div>
+        <div class="ans-box" id="l21b1"><div class="ans-main"><div class="ans-kr">요즘 어떻게 지내냐고 물어봤어요.</div><div class="ans-note">-냐고 하다 = reported question.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">잘 지내냐고 물어봤어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('요즘 어떻게 지내냐고 물어봤어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">두 사람은 무엇을 하기로 했어요?</div>
+        <div class="ex-q-en">What did the two of them decide to do?</div>
+        <div class="row-btns"><button class="px" onclick="spkSm('두 사람은 무엇을 하기로 했어요?',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Hear</button><button class="at" onclick="togA('l21b2')">Show answer</button></div>
+        <div class="ans-box" id="l21b2"><div class="ans-main"><div class="ans-kr">옛날 살던 동네에 같이 가보자고 했어요.</div><div class="ans-note">-자고 하다 = reported suggestion. 살던 = used to live (-던).</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">다음에 옛날 동네에 같이 가기로 했어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('옛날 살던 동네에 같이 가보자고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-l21-6" onclick="mdToggle('l21',6)">Mark done ✓</button></div>
+    </div>
+    <div class="ex-sec">
+      <div class="ex-head"><div class="ex-badge">C</div><div><div class="ex-title">Translation</div><div class="ex-sub">Six sentences — mixed patterns</div></div></div>
+      <div class="ex-item">
+        <div class="c-en">1. My friend asked whether I still live in Seoul.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l21c1')">Show answer</button></div>
+        <div class="ans-box" id="l21c1"><div class="ans-main"><div class="ans-kr">친구가 아직 서울에 사냐고 물어봤어요.</div><div class="ans-note">-냐고 하다 = reported question. 살다 → 사냐고.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">친구가 서울에 아직 사는지 물어봤어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('친구가 아직 서울에 사냐고 물어봤어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">2. She suggested we visit the old market together.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l21c2')">Show answer</button></div>
+        <div class="ans-box" id="l21c2"><div class="ans-main"><div class="ans-kr">옛날 시장에 같이 가보자고 했어요.</div><div class="ans-note">-자고 하다 = reported suggestion.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">그 시장에 같이 가보자고 했어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('옛날 시장에 같이 가보자고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">3. The street I used to walk every day has changed a lot.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l21c3')">Show answer</button></div>
+        <div class="ans-box" id="l21c3"><div class="ans-main"><div class="ans-kr">매일 걷던 길이 많이 변했어요.</div><div class="ans-note">-던 = habitual past modifier. 걷다 → 걷던.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">자주 다니던 길이 달라졌어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('매일 걷던 길이 많이 변했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">4. The food at that place was surprisingly good (I recall).</div>
+        <div class="row-btns"><button class="at" onclick="togA('l21c4')">Show answer</button></div>
+        <div class="ans-box" id="l21c4"><div class="ans-main"><div class="ans-kr">그 집 음식이 생각보다 맛있더라고요.</div><div class="ans-note">-더라고요 = recalled first-hand. 생각보다 = than expected.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">그 식당이 의외로 괜찮더라고요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('그 집 음식이 생각보다 맛있더라고요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">5. I heard that the neighbourhood has changed a lot.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l21c5')">Show answer</button></div>
+        <div class="ans-box" id="l21c5"><div class="ans-main"><div class="ans-kr">그 동네가 많이 변했다고 들었어요.</div><div class="ans-note">-다고 듣다 = heard that. From lesson 19.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">동네가 많이 달라졌다고 들었어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('그 동네가 많이 변했다고 들었어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">6. I wish I could meet my old friends again.</div>
+        <div class="row-btns"><button class="at" onclick="togA('l21c6')">Show answer</button></div>
+        <div class="ans-box" id="l21c6"><div class="ans-main"><div class="ans-kr">옛날 친구들을 다시 만날 수 있으면 좋겠어요.</div><div class="ans-note">-(으)면 좋겠다 = wish. 옛날 친구 = old friends.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">오랜 친구들을 다시 봤으면 좋겠어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('옛날 친구들을 다시 만날 수 있으면 좋겠어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-l21-7" onclick="mdToggle('l21',7)">Mark done ✓</button></div>
+    </div>
+  </div>
+  <hr class="divider">
+  <div class="sb">
+    <div class="sec-label">Speak — out loud</div>
+    <div class="speak-sec">
+      <div class="speak-intro">Speak aloud. This pulls together everything from 18–20 — notice which patterns come easily and which still stall.</div>
+      <div class="speak-item">
+        <span class="speak-tag">Self-talk</span>
+        <div class="speak-prompt-kr">오랜만에 만난 사람과 어떤 이야기를 나눴어요? 무엇을 물어봤고 무엇을 하자고 했는지 말해 보세요.</div>
+        <div class="speak-prompt-en">What did you talk about with someone you met after a long time? Report the questions and suggestions.</div>
+        <div class="speak-hint"><span class="speak-hint-label">Vocab</span>-냐고 하다, -자고 하다, 오랜만에, 지내다</div>
+        <div class="row-btns"><button class="at" onclick="togSpeak('l21sp0')">Show model answer</button><button class="px" onclick="spkSm('얼마 전에 옛날 친구를 만났어요. 친구가 요즘 어떻게 지내냐고 물어봤어요. 그리고 다음에 같이 여행 가자고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div>
+        <div class="speak-model" id="l21sp0"><div class="speak-model-kr"><span class="speak-model-label">Model answer — compare after speaking</span>얼마 전에 옛날 친구를 만났어요. 친구가 요즘 어떻게 지내냐고 물어봤어요. 그리고 다음에 같이 여행 가자고 했어요.</div></div>
+      </div>
+      <div class="speak-item">
+        <span class="speak-tag">Scenario</span>
+        <div class="speak-prompt-kr">어린 시절 추억의 장소를 묘사해 보세요. 어땠는지 -더라고요로, 바람은 -았/었으면 좋겠다로.</div>
+        <div class="speak-prompt-en">Describe a place from your childhood. Use -더라고요 for how it was, -았/었으면 좋겠다 for your wish.</div>
+        <div class="speak-hint"><span class="speak-hint-label">Vocab</span>-던, -더라고요, -았/었으면 좋겠다, 추억</div>
+        <div class="row-btns"><button class="at" onclick="togSpeak('l21sp1')">Show model answer</button><button class="px" onclick="spkSm('어렸을 때 자주 가던 놀이터가 있었어요. 거기서 친구들이랑 매일 놀았는데 정말 즐겁더라고요. 지금도 그대로 있으면 좋겠어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div>
+        <div class="speak-model" id="l21sp1"><div class="speak-model-kr"><span class="speak-model-label">Model answer — compare after speaking</span>어렸을 때 자주 가던 놀이터가 있었어요. 거기서 친구들이랑 매일 놀았는데 정말 즐겁더라고요. 지금도 그대로 있으면 좋겠어요.</div></div>
+      </div>
+      <div class="speak-item">
+        <span class="speak-tag role">Role-play</span>
+        <div class="speak-prompt-kr">오랜만에 만난 친구가 되어 상대방에게 안부를 묻고 다음 약속을 제안해 보세요.</div>
+        <div class="speak-prompt-en">Play a friend met after a long time. Ask how they’ve been and suggest a next plan.</div>
+        <div class="speak-hint"><span class="speak-hint-label">Vocab</span>-냐고, -자고, 지내다, 오랜만에</div>
+        <div class="row-btns"><button class="at" onclick="togSpeak('l21sp2')">Show model answer</button><button class="px" onclick="spkSm('와, 진짜 오랜만이다! 요즘 어떻게 지내? 우리 조만간 같이 밥 먹자. 옛날에 자주 가던 그 집 아직 있더라고!',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div>
+        <div class="speak-model" id="l21sp2"><div class="speak-model-kr"><span class="speak-model-label">Model answer — compare after speaking</span>와, 진짜 오랜만이다! 요즘 어떻게 지내? 우리 조만간 같이 밥 먹자. 옛날에 자주 가던 그 집 아직 있더라고!</div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-l21-8" onclick="mdToggle('l21',8)">Mark done ✓</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="lesson" id="lesson-kb">
+  <div class="kb-header">
+    <div class="kb-title">Progress Tracker</div>
+    <div class="kb-sub">Tap any task to move it to Done. Tap again to move it back. Progress saves automatically across all lesson files.</div>
+    <button class="kb-reset" onclick="kbReset()">Reset all</button>
+  </div>
+  <div id="kb-board"></div>
+</div>
+
+</div>
+
+<script>
+var R=0.75,cu=null;
+var V={
+  l20:[
+    {kr:'예전에',ipa:'je.dʑʌ.ne',en:'in the past / a while ago',bg:'#F0EAFA',icon:'📦'},
+    {kr:'자주',ipa:'tɕa.dʑu',en:'often',bg:'#E5F5EE',icon:'🏠'},
+    {kr:'골목',ipa:'kol.mok̚',en:'alley',bg:'#E6EEF9',icon:'♻️'},
+    {kr:'조용하다',ipa:'tɕo.joŋ.ɦa.da',en:'to be quiet',bg:'#FBF0E0',icon:'🏢'},
+    {kr:'직접',ipa:'tɕik̚.t͈ɕʌp̚',hanja:'直接',en:'directly / in person',bg:'#FBEAF0',icon:'📅'},
+    {kr:'원두',ipa:'wʌn.du',hanja:'原豆',en:'coffee beans',bg:'#FDF3E3',icon:'🗑️'},
+    {kr:'볶다',ipa:'bok̚.t͈a',en:'to roast',bg:'#F0EAFA',icon:'📍'},
+    {kr:'특별하다',ipa:'tʰɯk̚.p͈jʌl.ɦa.da',hanja:'特別',en:'to be special',bg:'#E5F5EE',icon:'🏪'},
+    {kr:'사라지다',ipa:'sa.ɾa.dʑi.da',en:'to disappear',bg:'#E6EEF9',icon:'🛣️'},
+    {kr:'동네',ipa:'toŋ.ne',en:'neighbourhood',bg:'#FBF0E0',icon:'🔚'},
+    {kr:'아직도',ipa:'a.dʑik̚.t͈o',en:'still',bg:'#FBEAF0',icon:'💰'},
+    {kr:'냄새',ipa:'nɛm.sɛ',en:'smell',bg:'#FDF3E3',icon:'⏰'},
+    {kr:'기억나다',ipa:'ki.ʌŋ.na.da',hanja:'記憶',en:'to remember / come to mind',bg:'#F0EAFA',icon:'✅'},
+    {kr:'언젠가',ipa:'ʌn.dʑen.ɡa',en:'someday',bg:'#E5F5EE',icon:'💬'},
+    {kr:'비슷하다',ipa:'bi.sɯ.tʰa.da',en:'to be similar',bg:'#E6EEF9',icon:'❓'},
+    {kr:'찾다',ipa:'tɕʰat̚.t͈a',en:'to find / look for',bg:'#FBF0E0',icon:'🔍'},
+    {kr:'다시',ipa:'ta.ɕi',en:'again',bg:'#FBEAF0',icon:'↔️'},
+    {kr:'늘',ipa:'nɯl',en:'always',bg:'#FDF3E3',icon:'📆'},
+    {kr:'그때',ipa:'kɯ.t͈ɛ',en:'back then',bg:'#F0EAFA',icon:'🔑'},
+    {kr:'점점',ipa:'tɕʌm.dʑʌm',hanja:'漸漸',en:'gradually',bg:'#E5F5EE',icon:'⭐'},
+  ],
+  l21:[
+    {kr:'옛날',ipa:'jen.nal',en:'old days / long ago',bg:'#F0EAFA',icon:'📦'},
+    {kr:'오랜만에',ipa:'o.ɾɛn.ma.ne',en:'after a long time',bg:'#E5F5EE',icon:'🏠'},
+    {kr:'지내다',ipa:'tɕi.nɛ.da',en:'to get by / spend time',bg:'#E6EEF9',icon:'♻️'},
+    {kr:'변하다',ipa:'bjʌn.ɦa.da',hanja:'變',en:'to change',bg:'#FBF0E0',icon:'🏢'},
+    {kr:'직접',ipa:'tɕik̚.t͈ɕʌp̚',hanja:'直接',en:'directly / in person',bg:'#FBEAF0',icon:'📅'},
+    {kr:'분식집',ipa:'bun.ɕik̚.t͈ɕip̚',hanja:'粉食',en:'snack shop',bg:'#FDF3E3',icon:'🗑️'},
+    {kr:'궁금하다',ipa:'kuŋ.ɡɯm.ɦa.da',en:'to be curious / wonder',bg:'#F0EAFA',icon:'📍'},
+    {kr:'떡볶이',ipa:'t͈ʌk̚.p͈o.k͈i',en:'tteokbokki',bg:'#E5F5EE',icon:'🏪'},
+    {kr:'맛',ipa:'mat̚',en:'taste / flavour',bg:'#E6EEF9',icon:'🛣️'},
+    {kr:'느끼다',ipa:'nɯ.k͈i.da',en:'to feel',bg:'#FBF0E0',icon:'🔚'},
+    {kr:'살다',ipa:'sal.da',en:'to live',bg:'#FBEAF0',icon:'💰'},
+    {kr:'만나다',ipa:'man.na.da',en:'to meet',bg:'#FDF3E3',icon:'⏰'},
+    {kr:'동네',ipa:'toŋ.ne',en:'neighbourhood',bg:'#F0EAFA',icon:'✅'},
+    {kr:'다음',ipa:'ta.ɯm',en:'next',bg:'#E5F5EE',icon:'💬'},
+    {kr:'같이',ipa:'ka.tʰi',en:'together',bg:'#E6EEF9',icon:'❓'},
+    {kr:'요즘',ipa:'jo.dʑɯm',en:'these days',bg:'#FBF0E0',icon:'🔍'},
+    {kr:'아직',ipa:'a.dʑik̚',en:'still / yet',bg:'#FBEAF0',icon:'↔️'},
+    {kr:'어떻게',ipa:'ʌ.t͈ʌ.kʰe',en:'how',bg:'#FDF3E3',icon:'📆'},
+    {kr:'정말',ipa:'tɕʌŋ.mal',hanja:'正',en:'really',bg:'#F0EAFA',icon:'🔑'},
+    {kr:'그때',ipa:'kɯ.t͈ɛ',en:'back then',bg:'#E5F5EE',icon:'⭐'},
+  ],
+};
+
+var S={
+  l20:[
+    {kr:'예전에 자주 가던 카페가 있었어요.',en:'There was a café I used to go to often.',bg:'#F0EAFA',fg:'#2A1040'},
+    {kr:'커피가 정말 맛있더라고요.',en:'The coffee was really delicious (I recall).',bg:'#FDF3E3',fg:'#4A2A00'},
+    {kr:'주인 아저씨가 늘 직접 원두를 볶더라고요.',en:'The owner always roasted the beans himself (I remember).',bg:'#E6EEF9',fg:'#0E1F3A'},
+    {kr:'다시 그 카페에 갈 수 있으면 좋겠어요.',en:'I wish I could go to that café again.',bg:'#FBEAF0',fg:'#72243E'},
+    {kr:'그런 곳이 점점 사라지는 것 같아요.',en:'Places like that seem to be gradually disappearing.',bg:'#E5F5EE',fg:'#1A3326'},
+    {kr:'언젠가 비슷한 곳을 다시 찾았으면 좋겠어요.',en:'I hope someday I\'ll find a similar place again.',bg:'#FBF0E0',fg:'#3D2000'},
+  ],
+  l21:[
+    {kr:'친구가 요즘 어떻게 지내냐고 물어봤어요.',en:'My friend asked how I\'ve been doing these days.',bg:'#F0EAFA',fg:'#2A1040'},
+    {kr:'옛날 살던 동네에 같이 가보자고 했어요.',en:'He suggested we go together to the neighbourhood we used to live in.',bg:'#FDF3E3',fg:'#4A2A00'},
+    {kr:'그 동네가 많이 변했다고 들었어요.',en:'I heard that area has changed a lot.',bg:'#E6EEF9',fg:'#0E1F3A'},
+    {kr:'분식집이 아직 있는지 궁금해요.',en:'I wonder whether the snack shop is still there.',bg:'#FBEAF0',fg:'#72243E'},
+    {kr:'그때 떡볶이가 정말 맛있더라고요.',en:'The tteokbokki back then was really delicious (I recall).',bg:'#E5F5EE',fg:'#1A3326'},
+    {kr:'다시 그 맛을 느낄 수 있으면 좋겠어요.',en:'I wish I could taste that flavour again.',bg:'#FBF0E0',fg:'#3D2000'},
+  ],
+};
+
+var LESSON_IDS=['l20','l21'];
+var LESSON_COLORS={'l20':'#9C4A6E','l21':'#5D7A60'};
+var LESSON_TITLES={'l20':'20 — Old Café','l21':'21 — Review 18–20'};
+var KB_TASKS=['Read the text','Listen at 0.75×','Grammar cards','Vocabulary','Key sentences','Section A','Section B','Section C','Speak practice'];
+var KB_KEY='kr_kb_v1';
+function stopAll(){if(cu){window.speechSynthesis.cancel();cu=null;}document.querySelectorAll('.playing').forEach(function(el){el.classList.remove('playing');if(el.classList.contains('lbtn'))el.innerHTML='<svg width="10" height="10" viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg> Listen';if(el.classList.contains('px'))el.innerHTML='<svg width="8" height="8" viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen';if(el.classList.contains('sbtn'))el.textContent='Listen';});}
+function doSpeak(t,rate,oS,oE){if(!window.speechSynthesis)return;stopAll();var u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';u.rate=rate;cu=u;if(oS)oS();u.onend=u.onerror=function(){cu=null;if(oE)oE();};window.speechSynthesis.speak(u);}
+function spkMain(lid){var b=document.getElementById('mb-'+lid);if(b.classList.contains('playing')){stopAll();return;}var rate=parseFloat(document.getElementById('ms-'+lid).value);var txt=document.getElementById('mt-'+lid);var raw=txt?txt.innerText:Array.from(document.querySelectorAll('#lesson-'+lid+' .dlg-txt')).map(function(el){return el.innerText;}).join(' ');doSpeak(raw,rate,function(){b.classList.add('playing');b.innerHTML='<svg width="10" height="10" viewBox="0 0 16 16" fill="white"><rect x="3" y="2" width="3.5" height="10"/><rect x="9.5" y="2" width="3.5" height="10"/></svg> Stop';},function(){b.classList.remove('playing');b.innerHTML='<svg width="10" height="10" viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg> Listen';});}
+function spkRaw(t,el){el.style.opacity='0.5';setTimeout(function(){el.style.opacity='1';},700);doSpeak(t,R,null,null);}
+function spkVC(id){var c=document.getElementById(id);if(!c)return;if(c.classList.contains('playing')){stopAll();return;}doSpeak(c.dataset.kr,R,function(){c.classList.add('playing');},function(){c.classList.remove('playing');});}
+function spkSent(id,t){var b=document.getElementById(id);if(b.classList.contains('playing')){stopAll();return;}doSpeak(t,R,function(){b.classList.add('playing');b.textContent='Stop';},function(){b.classList.remove('playing');b.textContent='Listen';});}
+function spkSm(t,btn){if(btn.classList.contains('playing')){stopAll();return;}doSpeak(t,R,function(){btn.classList.add('playing');btn.innerHTML='<svg width="8" height="8" viewBox="0 0 16 16" fill="white"><rect x="3" y="2" width="3.5" height="10"/><rect x="9.5" y="2" width="3.5" height="10"/></svg>Stop';},function(){btn.classList.remove('playing');btn.innerHTML='<svg width="8" height="8" viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen';});}
+function togTl(lid){var b=document.getElementById('tlb-'+lid),btn=document.getElementById('tlbtn-'+lid);if(b.classList.contains('on')){b.classList.remove('on');btn.textContent='Show translation';}else{b.classList.add('on');btn.textContent='Hide translation';}}
+function togSpeak(id){var b=document.getElementById(id);if(!b)return;var btn=b.previousElementSibling;if(b.classList.contains('on')){b.classList.remove('on');if(btn&&btn.classList.contains('at'))btn.textContent='Show model answer';}else{b.classList.add('on');if(btn&&btn.classList.contains('at'))btn.textContent='Hide model answer';}}
+function togA(id){var b=document.getElementById(id);if(!b)return;var prev=b.previousElementSibling;var btn=prev?prev.querySelector('.at'):null;if(b.classList.contains('on')){b.classList.remove('on');if(btn)btn.textContent='Show answer';}else{b.classList.add('on');if(btn)btn.textContent='Hide answer';}}
+function togSE(id){var el=document.getElementById('se-'+id),btn=document.getElementById('st-'+id);if(el.classList.contains('on')){el.classList.remove('on');btn.textContent='show translation';}else{el.classList.add('on');btn.textContent='hide translation';}}
+function sw(lid){document.querySelectorAll('.lesson').forEach(function(l){l.classList.remove('on');});document.querySelectorAll('.np').forEach(function(b){b.classList.remove('on');});document.getElementById('lesson-'+lid).classList.add('on');document.getElementById('np-'+lid).classList.add('on');stopAll();window.scrollTo({top:0,behavior:'smooth'});}
+function kbLoad(){try{return JSON.parse(localStorage.getItem(KB_KEY)||'{}');}catch(e){return {};}}
+function kbSave(d){localStorage.setItem(KB_KEY,JSON.stringify(d));}
+function kbToggle(lid,idx){var d=kbLoad();if(!d[lid])d[lid]=[];d[lid][idx]=!d[lid][idx];kbSave(d);buildKanban();updatePips();}
+function kbReset(){if(!confirm('Reset all progress?'))return;localStorage.removeItem(KB_KEY);buildKanban();updatePips();}
+function buildKanban(){
+  var d=kbLoad();var board=document.getElementById('kb-board');board.innerHTML='';
+  LESSON_IDS.forEach(function(lid){
+    var state=d[lid]||[];var doneCount=state.filter(function(v,i){return v&&i!==1;}).length;
+    var sec=document.createElement('div');sec.className='kb-lesson';
+    var hdr=document.createElement('div');hdr.className='kb-lesson-title';
+    hdr.innerHTML='<div class="kb-dot" style="background:'+LESSON_COLORS[lid]+'"></div><span>'+LESSON_TITLES[lid]+'</span><span class="kb-progress">'+doneCount+' / '+(KB_TASKS.length-1)+'</span>';
+    sec.appendChild(hdr);
+    var cols=document.createElement('div');cols.className='kb-cols';
+    var todoCol=document.createElement('div');var doneCol=document.createElement('div');
+    var todoLbl=document.createElement('div');todoLbl.className='kb-col-label';todoLbl.textContent='To do';
+    var doneLbl=document.createElement('div');doneLbl.className='kb-col-label';doneLbl.textContent='Done ✓';
+    todoCol.appendChild(todoLbl);doneCol.appendChild(doneLbl);
+    var todoCards=document.createElement('div');todoCards.className='kb-col-cards';
+    var doneCards=document.createElement('div');doneCards.className='kb-col-cards';
+    var hasTodo=false,hasDone=false;
+    KB_TASKS.forEach(function(task,idx){
+      if(idx===1)return;
+      var done=!!state[idx];var card=document.createElement('div');
+      card.className='kb-card'+(done?' done':'');
+      card.innerHTML='<span class="kb-card-text">'+task+'</span><span class="kb-card-arrow">'+(done?'↩':'→')+'</span>';
+      card.onclick=(function(l,i){return function(){kbToggle(l,i);};})(lid,idx);
+      if(done){doneCards.appendChild(card);hasDone=true;}else{todoCards.appendChild(card);hasTodo=true;}
+    });
+    if(!hasTodo){var e=document.createElement('div');e.className='kb-empty';e.textContent='All done!';todoCards.appendChild(e);}
+    if(!hasDone){var e2=document.createElement('div');e2.className='kb-empty';e2.textContent='Nothing yet';doneCards.appendChild(e2);}
+    todoCol.appendChild(todoCards);doneCol.appendChild(doneCards);cols.appendChild(todoCol);cols.appendChild(doneCol);sec.appendChild(cols);board.appendChild(sec);
+  });
+}
+function updatePips(){
+  var d=kbLoad();
+  LESSON_IDS.forEach(function(lid){
+    var state=d[lid]||[];var done=state.filter(function(v,i){return v&&i!==1;}).length;var pip=document.getElementById('pip-'+lid);if(!pip)return;
+    if(done>0&&done<(KB_TASKS.length-1)){pip.textContent=done;pip.style.background=LESSON_COLORS[lid];pip.classList.add('show');}
+    else if(done===(KB_TASKS.length-1)){pip.textContent='✓';pip.style.background='#2C6E4F';pip.classList.add('show');}
+    else{pip.classList.remove('show');}
+  });
+}
+function renderVocab(lid){var vg=document.getElementById('vg-'+lid);V[lid].forEach(function(v,i){var id='vc-'+lid+'-'+i,c=document.createElement('div');c.className='vc';c.id=id;c.dataset.kr=v.kr;c.onclick=function(){spkVC(id);};var hj=v.hanja?'<div class="vc-hanja">'+v.hanja+'</div>':'';c.innerHTML='<div class="vc-icon" style="background:'+v.bg+'">'+v.icon+'</div><div><div class="vc-kr">'+v.kr+'</div>'+hj+'<div class="vc-ipa">['+v.ipa+']</div><div class="vc-en">'+v.en+'</div></div>';vg.appendChild(c);});}
+function renderSents(lid){var sl=document.getElementById('sl-'+lid);S[lid].forEach(function(s,i){var sid=lid+'s'+i,r=document.createElement('div');r.className='sent-row';r.innerHTML='<div class="snum" style="background:'+s.bg+';color:'+s.fg+'">'+(i+1)+'</div><div class="sent-body"><div class="sent-kr">'+s.kr+'</div><div class="sent-en" id="se-'+sid+'">'+s.en+'</div><button class="stl" id="st-'+sid+'" onclick="togSE(\''+sid+'\')">show translation</button></div><button class="sbtn" id="ss-'+sid+'" onclick="spkSent(\'ss-'+sid+'\',\''+s.kr.replace(/'/g,"\\'")+'\')">Listen</button>';sl.appendChild(r);});}
+function mdBtn(lid,idx){return document.getElementById('md-'+lid+'-'+idx);}
+function refreshMdBtn(lid,idx){var btn=mdBtn(lid,idx);if(!btn)return;var d=kbLoad();var done=!!(d[lid]&&d[lid][idx]);btn.className='mdbtn '+(done?'done-state':'undone');btn.innerHTML=done?'✓ Done — tap to undo':'Mark done ✓';}
+function mdToggle(lid,idx){var d=kbLoad();if(!d[lid])d[lid]=[];d[lid][idx]=!d[lid][idx];kbSave(d);refreshMdBtn(lid,idx);if(document.getElementById('kb-board').innerHTML!=='')buildKanban();updatePips();}
+function initMdBtns(){['l20','l21'].forEach(function(lid){[0,2,3,4,5,6,7,8].forEach(function(idx){refreshMdBtn(lid,idx);});});}
+['l20','l21'].forEach(function(lid){renderVocab(lid);renderSents(lid);});
+buildKanban();updatePips();initMdBtns();
+</script>
+</body>
+</html>

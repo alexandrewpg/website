@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.13/html-to-image.min.js" integrity="sha512-iZ2ORl595Wx6miw+GuadDet4WQbdSWS3JLMoNfY8cRGoEFy6oT3G9IbcrBeL6AfkgpA51ETt/faX6yLV+/gFJg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+      (function() {
+        // Capture host references before any artifact code runs: Window.parent
+        // is [Replaceable] (a top-level `var parent` in artifact code would
+        // replace the accessor with a data property), and a top-level
+        // `const crypto` would shadow the global — either would otherwise
+        // silently break the bridge for artifacts that worked before.
+        const realParent = window.parent;
+        const cryptoObj = window.crypto;
+        // crypto.randomUUID exists only in Secure Contexts; fall back to a
+        // unique non-crypto id elsewhere (http://LAN-IP dev flows) —
+        // uniqueness is what the bridge needs, unpredictability is
+        // defense-in-depth on top of the source guards.
+        const newRequestId =
+          cryptoObj && typeof cryptoObj.randomUUID === "function"
+            ? function () { return cryptoObj.randomUUID(); }
+            : function () { return Date.now() + "-" + Math.random(); };
+        const originalConsole = window.console;
+        window.console = {
+          log: (...args) => {
+            originalConsole.log(...args);
+            realParent.postMessage({ type: 'console', message: args.join(' ') }, '*');
+          },
+          error: (...args) => {
+            originalConsole.error(...args);
+            realParent.postMessage({ type: 'console', message: 'Error: ' + args.join(' ') }, '*');
+          },
+          warn: (...args) => {
+            originalConsole.warn(...args);
+            realParent.postMessage({ type: 'console', message: 'Warning: ' + args.join(' ') }, '*');
+          }
+        };
+
+        // Bridge request ids are crypto-random (not sequential) so they
+        // cannot be predicted by other frames in the tab.
+        let callbacksMap = new Map();
+        let streamControllers = new Map();
+        
+        window.claude = {
+          complete: (prompt) => {
+            return new Promise((resolve, reject) => {
+              const id = newRequestId();
+              callbacksMap.set(id, { resolve, reject });
+              realParent.postMessage({ type: 'claudeComplete', id, prompt }, '*');
+            });
+          }
+        };
+
+        window.storage = {
+          get: (key, shared = false) => {
+            return new Promise((resolve, reject) => {
+              const id = newRequestId();
+              callbacksMap.set(id, { resolve, reject });
+              realParent.postMessage({ type: 'storageGet', id, key, shared }, '*');
+            });
+          },
+          set: (key, value, shared = false) => {
+            return new Promise((resolve, reject) => {
+              const id = newRequestId();
+              callbacksMap.set(id, { resolve, reject });
+              realParent.postMessage({ type: 'storageSet', id, key, value, shared }, '*');
+            });
+          },
+          delete: (key, shared = false) => {
+            return new Promise((resolve, reject) => {
+              const id = newRequestId();
+              callbacksMap.set(id, { resolve, reject });
+              realParent.postMessage({ type: 'storageDelete', id, key, shared }, '*');
+            });
+          },
+          list: (prefix, shared = false) => {
+            return new Promise((resolve, reject) => {
+              const id = newRequestId();
+              callbacksMap.set(id, { resolve, reject });
+              realParent.postMessage({ type: 'storageList', id, prefix, shared }, '*');
+            });
+          }
+        };
+
+        let pendingBlobs = new Map();
+        URL.createObjectURL = (blob) => {
+          // Store the blob and create an ID and URL for it
+          const blobId = `blob-${Date.now()}-${Math.random()}`;
+          pendingBlobs.set(blobId, blob);
+          return `blob-request://${blobId}`;
+        };
+
+        URL.revokeObjectURL = (url) => {
+          // Remove the blob from our store
+          const blobId = url.replace("blob-request://", "");
+          pendingBlobs.delete(blobId);
+        };
+
+        const getBlobFromURL = (url) => {
+          const blobId = url.replace("blob-request://", "");
+          return pendingBlobs.get(blobId);
+        };
+
+        // Override global fetch with streaming support
+        window.fetch = (url, init = {}) => {
+          return new Promise((resolve, reject) => {
+            const id = newRequestId();
+            const channelId = `fetch-${id}-${Date.now()}`;
+            
+            callbacksMap.set(id, { 
+              resolve: (response) => {
+                // Null-body statuses: Response(stream, {status: 204}) throws
+                // per the Fetch spec, which would escape this resolver and
+                // hang the artifact's await forever.
+                if (response.status === 204 || response.status === 205 || response.status === 304) {
+                  try {
+                    resolve(new Response(null, {
+                      status: response.status,
+                      statusText: response.statusText,
+                      headers: response.headers
+                    }));
+                  } catch (err) {
+                    // Invalid statusText/header bytes can throw here too.
+                    reject(new TypeError(
+                      'Bridge fetch: unconstructable response (status ' + response.status + ')'
+                    ));
+                  }
+                  return;
+                }
+                // Create a ReadableStream for the response body
+                const stream = new ReadableStream({
+                  start(controller) {
+                    streamControllers.set(channelId, controller);
+                  },
+                  cancel() {
+                    streamControllers.delete(channelId);
+                  }
+                });
+                
+                // Create and return the Response with the stream. Response()
+                // requires status in [200, 599]; an opaque/no-cors fetch
+                // forwards status 0, which would throw here and escape the
+                // resolver, hanging the artifact's await. Surface it as a
+                // network-error-shaped rejection instead.
+                try {
+                  resolve(new Response(stream, {
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: response.headers
+                  }));
+                } catch (err) {
+                  streamControllers.delete(channelId);
+                  reject(new TypeError(
+                    'Bridge fetch: unconstructable response (status ' + response.status + ')'
+                  ));
+                }
+              },
+              reject,
+              channelId
+            });
+            
+            realParent.postMessage({
+              type: 'proxyFetch',
+              id,
+              url,
+              init,
+              channelId
+            }, '*');
+          });
+        };
+
+        window.addEventListener('message', async (event) => {
+          // Only the embedding parent may drive the bridge — sibling and
+          // nested frames can also postMessage into this window.
+          if (event.source !== realParent) return;
+          if (event.data.type === 'takeScreenshot') {
+            // Echo the request's nonce so the requester can correlate the
+            // reply to ITS request — a reply without the expected nonce
+            // (e.g. from a stale pre-remount artifact) is ignored upstream.
+            const screenshotNonce = event.data.nonce;
+            const rootElement = document.getElementById('artifacts-component-root-html');
+            if (!rootElement) {
+              realParent.postMessage({
+                type: 'screenshotError',
+                nonce: screenshotNonce,
+                error: new Error('Root element not found'),
+              }, '*');
+              return;
+            }
+            // Catch CDN load failures (htmlToImage undefined) and toPng errors
+            // so the parent always gets a response instead of hanging forever.
+            try {
+              const screenshot = await htmlToImage.toPng(rootElement, {
+                imagePlaceholder:
+                  "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAA1JREFUGFdjePDgwX8ACOQDoNsk0PMAAAAASUVORK5CYII=",
+              });
+              realParent.postMessage({
+                type: 'screenshotData',
+                nonce: screenshotNonce,
+                data: screenshot,
+              }, '*');
+            } catch (err) {
+              realParent.postMessage({
+                type: 'screenshotError',
+                nonce: screenshotNonce,
+                error: err instanceof Error ? err : new Error(String(err)),
+              }, '*');
+            }
+          } else if (event.data.type === 'claudeComplete') {
+            const callback = callbacksMap.get(event.data.id);
+            if (!callback) return;
+            if (event.data.error) {
+              callback.reject(new Error(event.data.error));
+            } else {
+              callback.resolve(event.data.completion);
+            }
+            callbacksMap.delete(event.data.id);
+          } else if (event.data.type === 'proxyFetchResponse') {
+            const callback = callbacksMap.get(event.data.id);
+            if (!callback) return;
+            if (event.data.error) {
+              callback.reject(new Error(event.data.error));
+              callbacksMap.delete(event.data.id);
+            } else {
+              // Initial response with headers, status, etc.
+              callback.resolve({
+                status: event.data.status,
+                statusText: event.data.statusText,
+                headers: event.data.headers
+              });
+              // Don't delete the callback yet if streaming
+              if (!event.data.body) {
+                callbacksMap.delete(event.data.id);
+              }
+            }
+          } else if (event.data.type === 'proxyFetchStream') {
+            // Handle streaming data chunks
+            const controller = streamControllers.get(event.data.channelId);
+            if (controller) {
+              if (event.data.error) {
+                controller.error(new Error(event.data.error));
+                streamControllers.delete(event.data.channelId);
+              } else if (event.data.done) {
+                controller.close();
+                streamControllers.delete(event.data.channelId);
+                // Clean up the callback
+                const callback = Array.from(callbacksMap.entries()).find(
+                  ([_, value]) => value.channelId === event.data.channelId
+                );
+                if (callback) {
+                  callbacksMap.delete(callback[0]);
+                }
+              } else if (event.data.chunk) {
+                controller.enqueue(new Uint8Array(event.data.chunk));
+              }
+            }
+          } else if (event.data.type === 'storageGet') {
+            const callback = callbacksMap.get(event.data.id);
+            if (!callback) return;
+            if (event.data.error) {
+              callback.reject(new Error(event.data.error));
+            } else {
+              callback.resolve(event.data.result);
+            }
+            callbacksMap.delete(event.data.id);
+          } else if (event.data.type === 'storageSet') {
+            const callback = callbacksMap.get(event.data.id);
+            if (!callback) return;
+            if (event.data.error) {
+              callback.reject(new Error(event.data.error));
+            } else {
+              callback.resolve(event.data.result);
+            }
+            callbacksMap.delete(event.data.id);
+          } else if (event.data.type === 'storageDelete') {
+            const callback = callbacksMap.get(event.data.id);
+            if (!callback) return;
+            if (event.data.error) {
+              callback.reject(new Error(event.data.error));
+            } else {
+              callback.resolve(event.data.result);
+            }
+            callbacksMap.delete(event.data.id);
+          } else if (event.data.type === 'storageList') {
+            const callback = callbacksMap.get(event.data.id);
+            if (!callback) return;
+            if (event.data.error) {
+              callback.reject(new Error(event.data.error));
+            } else {
+              callback.resolve(event.data.result);
+            }
+            callbacksMap.delete(event.data.id);
+          }
+        });
+
+        window.addEventListener('click', (event) => {
+          const isEl = event.target instanceof HTMLElement;
+          if (!isEl) return;
+    
+          // find ancestor links
+          const linkEl = event.target.closest("a");
+          if (!linkEl || !linkEl.href) return;
+    
+          event.preventDefault();
+          event.stopImmediatePropagation();
+    
+          if (linkEl.href.startsWith("blob-request:")) {
+            const blob = getBlobFromURL(linkEl.href);
+            if (!blob) return;
+            void blob.arrayBuffer().then((data) => {
+              realParent.postMessage({
+                type: "downloadFile",
+                filename: linkEl.download,
+                data,
+                mimeType: blob.type || "application/octet-stream",
+              });
+            });
+          } else if (linkEl.href.startsWith("data:")) {
+            const [header, base64Data] = linkEl.href.split(",");
+            const mimeMatch = header.match(/data:([^;]+)/);
+            const mimeType = mimeMatch ? mimeMatch[1] : "application/octet-stream";
+            const binaryString = atob(base64Data);
+            const data = Uint8Array.from(binaryString, (c) =>
+              c.charCodeAt(0),
+            ).buffer;
+            realParent.postMessage({
+              type: "downloadFile",
+              filename: linkEl.download,
+              data,
+              mimeType,
+            });
+          } else {
+            let linkUrl;
+            try {
+              linkUrl = new URL(linkEl.href);
+            } catch (error) {
+              return;
+            }
+    
+            if (linkUrl.hostname === window.location.hostname) return;
+      
+            realParent.postMessage({
+              type: 'openExternal',
+              href: linkEl.href,
+            }, '*');
+          }
+      });
+
+        const originalOpen = window.open;
+        window.open = function (url) {
+          realParent.postMessage({
+            type: "openExternal",
+            href: url,
+          }, "*");
+        };
+
+        window.addEventListener('error', (event) => {
+          realParent.postMessage({ type: 'console', message: 'Uncaught Error: ' + event.message }, '*');
+        });
+      })();
+    </script>
+  
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wildpath Refuge — Packing List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&amp;family=Inter:wght@400;500;600&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --spruce:#1b2e25;
+    --spruce-2:#27433537;
+    --bark:#2b2722;
+    --paper:#edefe8;
+    --card:#f6f7f2;
+    --mist:#d7dccf;
+    --sage:#7e8d75;
+    --moss:#4d6b3e;
+    --ember:#b8432a;
+    --ember-soft:#c75b3914;
+    --amber:#caa24a;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--bark);
+    font-family:"Inter",system-ui,sans-serif;
+    font-size:16px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:0 20px 80px}
+
+  /* ---------- Header ---------- */
+  header{
+    position:relative;
+    background:var(--spruce);
+    color:#eef1ea;
+    overflow:hidden;
+    border-bottom:4px solid var(--ember);
+  }
+  header .contours{
+    position:absolute;inset:0;width:100%;height:100%;
+    opacity:.28;pointer-events:none;
+  }
+  .head-inner{position:relative;max-width:880px;margin:0 auto;padding:38px 20px 30px}
+  .eyebrow{
+    font-family:"Space Mono",monospace;
+    font-size:12px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--amber);margin:0 0 10px;
+  }
+  h1{
+    font-family:"Bricolage Grotesque",sans-serif;
+    font-weight:800;font-size:clamp(30px,6vw,50px);
+    line-height:1.02;margin:0 0 14px;letter-spacing:-.02em;
+  }
+  .facts{
+    font-family:"Space Mono",monospace;font-size:13px;
+    color:#cdd6c6;display:flex;flex-wrap:wrap;gap:6px 14px;margin:0;
+  }
+  .facts span{white-space:nowrap}
+  .facts b{color:#eef1ea;font-weight:700}
+
+  /* ---------- Toolbar ---------- */
+  .toolbar{
+    position:sticky;top:0;z-index:20;
+    background:var(--paper);
+    border-bottom:1px solid var(--mist);
+    margin:0 -20px 26px;padding:12px 20px;
+    display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+  }
+  .progress{
+    font-family:"Space Mono",monospace;font-size:13px;font-weight:700;
+    color:var(--spruce);margin-right:auto;display:flex;align-items:center;gap:10px;
+  }
+  .bar{width:120px;height:7px;border-radius:99px;background:var(--mist);overflow:hidden}
+  .bar i{display:block;height:100%;width:0;background:var(--moss);transition:width .25s ease}
+  button.tool{
+    font-family:"Space Mono",monospace;font-size:12px;letter-spacing:.04em;
+    text-transform:uppercase;cursor:pointer;
+    background:var(--card);color:var(--bark);
+    border:1px solid var(--mist);border-radius:8px;padding:8px 12px;
+    transition:background .15s,border-color .15s,color .15s;
+  }
+  button.tool:hover{border-color:var(--sage);background:#fff}
+  button.tool.danger:hover{border-color:var(--ember);color:var(--ember)}
+
+  /* ---------- Read-first callout ---------- */
+  .brief{
+    background:var(--spruce);color:#e9ede4;border-radius:14px;
+    padding:22px 24px;margin-bottom:30px;
+  }
+  .brief h2{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:700;
+    font-size:19px;margin:0 0 4px;color:#fff;
+  }
+  .brief .sub{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--amber);margin:0 0 14px}
+  .brief ul{margin:0;padding:0;list-style:none;display:grid;gap:11px}
+  .brief li{padding-left:20px;position:relative;font-size:14.5px;line-height:1.45;color:#dde3d6}
+  .brief li::before{content:"";position:absolute;left:0;top:8px;width:8px;height:8px;
+    border-radius:2px;background:var(--ember);transform:rotate(45deg)}
+  .brief b{color:#fff;font-weight:600}
+
+  /* ---------- Sections ---------- */
+  .section{
+    background:var(--card);border:1px solid var(--mist);border-radius:14px;
+    margin-bottom:18px;overflow:hidden;
+  }
+  .sec-head{
+    display:flex;align-items:center;gap:12px;
+    padding:16px 18px;border-bottom:1px solid var(--mist);
+    background:linear-gradient(0deg,#0000,#fff6);
+  }
+  .sec-title{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:19px;
+    color:var(--spruce);outline:none;border-radius:4px;flex:1;letter-spacing:-.01em;
+  }
+  .sec-title:focus{box-shadow:0 0 0 2px var(--ember-soft)}
+  .zone{
+    font-family:"Space Mono",monospace;font-size:10.5px;font-weight:700;
+    letter-spacing:.1em;text-transform:uppercase;color:var(--spruce);
+    border:1px solid var(--sage);border-radius:99px;padding:3px 9px;white-space:nowrap;
+  }
+  .count{font-family:"Space Mono",monospace;font-size:12px;color:var(--sage);min-width:42px;text-align:right}
+  .sec-x{
+    border:none;background:none;cursor:pointer;color:var(--sage);font-size:18px;
+    line-height:1;padding:2px 4px;border-radius:6px;opacity:.55;
+  }
+  .sec-x:hover{opacity:1;color:var(--ember);background:var(--ember-soft)}
+
+  ul.items{list-style:none;margin:0;padding:6px 6px 10px}
+  li.item{
+    display:flex;align-items:flex-start;gap:11px;
+    padding:8px 12px;border-radius:9px;
+  }
+  li.item:hover{background:#fff}
+  /* custom checkbox */
+  li.item label.box{
+    position:relative;flex:0 0 auto;width:21px;height:21px;margin-top:1px;cursor:pointer;
+  }
+  li.item input{position:absolute;opacity:0;width:100%;height:100%;margin:0;cursor:pointer}
+  li.item .tick{
+    position:absolute;inset:0;border:2px solid var(--sage);border-radius:6px;
+    transition:background .15s,border-color .15s;
+  }
+  li.item .tick::after{
+    content:"";position:absolute;left:6px;top:2px;width:5px;height:10px;
+    border:solid #fff;border-width:0 2.5px 2.5px 0;transform:rotate(45deg) scale(0);
+    transition:transform .15s;
+  }
+  li.item input:checked ~ .tick{background:var(--moss);border-color:var(--moss)}
+  li.item input:checked ~ .tick::after{transform:rotate(45deg) scale(1)}
+  li.item input:focus-visible ~ .tick{box-shadow:0 0 0 3px var(--ember-soft)}
+  li.item .txt{
+    flex:1;outline:none;border-radius:4px;padding:1px 3px;font-size:15px;line-height:1.4;
+    min-height:1.4em;
+  }
+  li.item .txt:focus{box-shadow:0 0 0 2px var(--ember-soft)}
+  li.item.packed .txt{text-decoration:line-through;color:var(--sage)}
+  li.item .rm{
+    border:none;background:none;cursor:pointer;color:var(--mist);font-size:16px;
+    line-height:1;padding:2px 5px;border-radius:6px;opacity:0;transition:opacity .12s,color .12s;
+  }
+  li.item:hover .rm{opacity:1}
+  li.item .rm:hover{color:var(--ember)}
+  .add-item{
+    font-family:"Space Mono",monospace;font-size:12px;letter-spacing:.04em;
+    margin:2px 12px 4px;background:none;border:none;color:var(--sage);cursor:pointer;
+    padding:6px 4px;border-radius:6px;
+  }
+  .add-item:hover{color:var(--ember)}
+
+  /* ---------- Confirm-with-host block ---------- */
+  .ask{
+    background:var(--ember-soft);border:1px solid #d8a08f66;border-left:4px solid var(--ember);
+    border-radius:12px;padding:20px 22px;margin:30px 0 10px;
+  }
+  .ask h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:19px;
+    margin:0 0 3px;color:var(--spruce)}
+  .ask .sub{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--ember);margin:0 0 13px}
+  .ask ol{margin:0;padding-left:20px;display:grid;gap:8px}
+  .ask li{font-size:14.5px;line-height:1.45}
+
+  /* ---------- Footer priority ---------- */
+  .priority{
+    text-align:center;margin-top:34px;padding-top:26px;border-top:1px solid var(--mist);
+  }
+  .priority .lab{font-family:"Space Mono",monospace;font-size:11px;letter-spacing:.16em;
+    text-transform:uppercase;color:var(--sage);margin-bottom:12px}
+  .priority p{
+    font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:clamp(18px,3.4vw,24px);
+    color:var(--spruce);margin:0;line-height:1.3;letter-spacing:-.01em;
+  }
+  .priority p .em{color:var(--ember)}
+  .note{font-size:12.5px;color:var(--sage);text-align:center;margin-top:30px;font-family:"Space Mono",monospace}
+
+  @media (max-width:520px){
+    .zone{display:none}
+    .toolbar{gap:8px}
+    .progress{width:100%;margin-bottom:2px}
+  }
+
+  /* ---------- Print ---------- */
+  @media print{
+    body{background:#fff;font-size:12px}
+    .toolbar,.add-item,.rm,.sec-x,.note{display:none!important}
+    header{border-bottom:2px solid #000;color:#000;background:#fff}
+    header .contours{display:none}
+    .eyebrow,.facts{color:#333}
+    .brief{background:#fff;color:#000;border:1px solid #000}
+    .brief h2,.brief b,.brief li{color:#000}
+    .brief .sub{color:#000}
+    .section{break-inside:avoid;border:1px solid #999}
+    .priority p{color:#000}
+    .priority p .em{color:#000}
+    li.item .tick{border-color:#000}
+  }
+</style>
+<style>.hide-packed li.item.packed{display:none}</style></head>
+<body id="artifacts-component-root-html">
+
+<header>
+  <svg class="contours" viewBox="0 0 880 240" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <g fill="none" stroke="#a9c3a0" stroke-width="1.1">
+      <path d="M-20,40 C140,10 260,90 440,60 C620,30 740,110 900,80"></path>
+      <path d="M-20,80 C140,52 270,130 440,100 C610,72 745,150 900,120"></path>
+      <path d="M-20,124 C150,96 270,172 440,142 C610,114 745,190 900,160"></path>
+      <path d="M-20,168 C150,142 280,214 440,186 C600,158 745,232 900,204"></path>
+      <path d="M-20,212 C160,188 280,252 440,228 C600,206 750,268 900,244"></path>
+    </g>
+    <g fill="none" stroke="#a9c3a0" stroke-width="0.7" opacity="0.6">
+      <path d="M-20,60 C150,34 260,108 440,80 C620,52 740,128 900,100"></path>
+      <path d="M-20,146 C150,120 280,192 440,164 C600,136 745,210 900,182"></path>
+    </g>
+  </svg>
+  <div class="head-inner">
+    <p class="eyebrow">Oak Point · Manitoba · Off-grid walk-in cabin</p>
+    <h1>Wildpath Refuge<br>Packing List</h1>
+    <p class="facts">
+      <span><b>2</b> people</span>
+      <span><b>2</b> nights</span>
+      <span><b>700 m</b> trail walk-in</span>
+      <span><b>No</b> fridge</span>
+      <span><b>Solar</b> power only</span>
+      <span>Rain Sat–Sun · 14–22°C</span>
+    </p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="toolbar">
+    <div class="progress">
+      <span id="progTxt">1 / 69 packed</span>
+      <span class="bar"><i id="progBar" style="width: 1.44928%;"></i></span>
+    </div>
+    <button class="tool" id="btnHide">Hide packed</button>
+    <button class="tool" id="btnAddSec">+ Section</button>
+    <button class="tool" id="btnSave">Save a copy</button>
+    <button class="tool" id="btnPrint">Print</button>
+    <button class="tool danger" id="btnReset">Reset</button>
+  </div>
+
+  <div class="brief">
+    <h2>Read this first</h2>
+    <p class="sub">What the host's message settles</p>
+    <ul>
+      <li><b>Water is sorted.</b> The host supplies jugs of filtered water for drinking and cooking, and will bring refills if you text. No need to haul water — just bring personal bottles (a non-metal one for the sauna). One less heavy thing for the 700 m walk.</li>
+      <li><b>The kitchen is stocked.</b> Cookware, dishes, utensils, a French press, plus spices, oil, herbal teas, honey, and free organic oats for porridge. Bring only the extras you actually want: your own ground coffee, a sharp knife, maybe a cast-iron pan.</li>
+      <li><b>Skip the plug-in cooler.</b> It runs off the solar system and the host warns it can drain the battery on overcast days — and your forecast is rain both days. Bring a normal cooler with block ice.</li>
+      <li><b>Charge at the sauna, not the cabin.</b> Cabin power is tight (run lights at 25%, never draw below 20% — press "B" on the panel to check). There's a proper electrical plug at the sauna for devices and high-use items; charge your phone and the hearing-aid case there. Bring one power bank as backup.</li>
+      <li><b>Firewood is provided.</b> A bin by the stove, more stacked outside. The first firepit crate each day is included; extra crates are $5 on the honour system, so bring a little cash or e-transfer.</li>
+      <li><b>Mind the bake oven on a warm day.</b> It's great for pizza or biscuits but takes an hour-plus to heat and roasts the cabin. Use the propane deck stove for quick meals and morning coffee.</li>
+    </ul>
+  </div>
+
+  <div id="list"><div class="section"><div class="sec-head"><div class="sec-title" contenteditable="true">Carry &amp; rain protection</div><span class="zone">Cart</span><span class="count">0/4</span><button class="sec-x" title="Remove section">×</button></div><ul class="items"><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Cart</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Daypack for each person</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Ziplocks, hearing-aid gear, meds, matches</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Spare garbage bags&nbsp;</div><button class="rm" title="Remove">×</button></li></ul><button class="add-item">+ add item</button></div><div class="section"><div class="sec-head"><div class="sec-title" contenteditable="true">Power &amp; charging</div><span class="zone">Pack</span><span class="count">0/5</span><button class="sec-x" title="Remove section">×</button></div><ul class="items"><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">power bank</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Hearing-aid charger and cables</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">charged ipad</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Headlamp and lamps; spare batteries</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Pre-download maps, directions, music, podcasts (weak signal likely)</div><button class="rm" title="Remove">×</button></li></ul><button class="add-item">+ add item</button></div><div class="section"><div class="sec-head"><div class="sec-title" contenteditable="true">Water &amp; drinks</div><span class="zone">Pack</span><span class="count">0/3</span><button class="sec-x" title="Remove section">×</button></div><ul class="items"><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">2 jugs, 1 with filtered water</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">water bottle</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">coffee : grind 22 g x 3, espro, funnel</div><button class="rm" title="Remove">×</button></li></ul><button class="add-item">+ add item</button></div><div class="section"><div class="sec-head"><div class="sec-title" contenteditable="true">Bugs, ticks &amp; poison ivy</div><span class="zone">Pack</span><span class="count">1/5</span><button class="sec-x" title="Remove section">×</button></div><ul class="items"><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Bug spray</div><button class="rm" title="Remove">×</button></li><li class="item packed"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">mosquito machine + refills</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">tweezers</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Long pants for the trails</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Do a tick check before bed</div><button class="rm" title="Remove">×</button></li></ul><button class="add-item">+ add item</button></div><div class="section"><div class="sec-head"><div class="sec-title" contenteditable="true">Clothing (per person)</div><span class="zone">Pack</span><span class="count">0/12</span><button class="sec-x" title="Remove section">×</button></div><ul class="items"><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Rain jacket</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Warm clothes</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">2 T-shirts</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">1 long-sleeve shirt</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">1 pair long pants</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">3 pairs socks + warm sleeping socks</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">2–3 underwear</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Sleep clothes</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">hiking shoes</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Sandals for sauna, house slippers</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Hat</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">bag for dirty clothes</div><button class="rm" title="Remove">×</button></li></ul><button class="add-item">+ add item</button></div><div class="section"><div class="sec-head"><div class="sec-title" contenteditable="true">Sauna &amp; swimming</div><span class="zone">Pack</span><span class="count">0/3</span><button class="sec-x" title="Remove section">×</button></div><ul class="items"><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">2 large towels, 2 hand towels, 4 face towels</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Swimsuit</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Text the host before using sauna to coordinate use</div><button class="rm" title="Remove">×</button></li></ul><button class="add-item">+ add item</button></div><div class="section"><div class="sec-head"><div class="sec-title" contenteditable="true">Food (2 bf, 1 lunch, 1 supper)</div><span class="zone">Cooler</span><span class="count">0/5</span><button class="sec-x" title="Remove section">×</button></div><ul class="items"><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">snacks &amp; drinks&nbsp;</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">breakfast 1 : 4 eggs and toasts, bring butter</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">lunch : ??? meats and stuff for wraps???</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">supper : ???&nbsp;</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">breakfast 2 : prepared grilled cheese</div><button class="rm" title="Remove">×</button></li></ul><button class="add-item">+ add item</button></div><div class="section"><div class="sec-head"><div class="sec-title" contenteditable="true">Kitchen extras (cabin is stocked)</div><span class="zone">Cart</span><span class="count">0/4</span><button class="sec-x" title="Remove section">×</button></div><ul class="items"><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">bring butter, spices as use is planned, spatula, cook spoon</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Lighter + matches</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Aluminum foil</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">dish soap &amp; sponge</div><button class="rm" title="Remove">×</button></li></ul><button class="add-item">+ add item</button></div><div class="section"><div class="sec-head"><div class="sec-title" contenteditable="true">Fire &amp; cabin comfort</div><span class="zone">Cart</span><span class="count">0/2</span><button class="sec-x" title="Remove section">×</button></div><ul class="items"><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Book / cards</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">folding chair and table</div><button class="rm" title="Remove">×</button></li></ul><button class="add-item">+ add item</button></div><div class="section"><div class="sec-head"><div class="sec-title" contenteditable="true">Toiletries &amp; health</div><span class="zone">Pack</span><span class="count">0/6</span><button class="sec-x" title="Remove section">×</button></div><ul class="items"><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Toothbrushes / toothpaste</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Medications</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Hand sanitizer, wet wipes</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">toilet roll</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">my toiletry kit: hair brush, deodorant, qtips</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">shampoo, soap bar</div><button class="rm" title="Remove">×</button></li></ul><button class="add-item">+ add item</button></div><div class="section"><div class="sec-head"><div class="sec-title" contenteditable="true">Sleep (bedding provided)</div><span class="zone">Pack</span><span class="count">0/3</span><button class="sec-x" title="Remove section">×</button></div><ul class="items"><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Own pillows</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Eye masks</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">wool socks</div><button class="rm" title="Remove">×</button></li></ul><button class="add-item">+ add item</button></div><div class="section"><div class="sec-head"><div class="sec-title" contenteditable="true">Arrival, animals &amp; checkout</div><span class="zone">Pack</span><span class="count">0/7</span><button class="sec-x" title="Remove section">×</button></div><ul class="items"><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Save the host's directions offline + Adagio Acres on Google Maps (weak signal)</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Park at the lot off Hwy 229; 10-min trail walk to the cabin</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">checkout before 11 am</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Birch the farm dog (white, brown spots)</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Don't touch the sheep fence — the mesh and wire are electrified</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Stay on mowed trails; don't pass gates or go through fences</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Checkout: wash dishes onto the rack under the sink, and turn the propane tank off</div><button class="rm" title="Remove">×</button></li></ul><button class="add-item">+ add item</button></div><div class="section"><div class="sec-head"><div class="sec-title" contenteditable="true">Andie</div><span class="count">0/6</span><button class="sec-x" title="Remove section">×</button></div><ul class="items"><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">Clothesline cord + clips</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">usb speaker, charged</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">large cooler, ice packs</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">bug spray</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">warm clothes, long pants to prevent ticks, rain jacket</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">swimsuit and sandals for sauna</div><button class="rm" title="Remove">×</button></li></ul><button class="add-item">+ add item</button></div><div class="section"><div class="sec-head"><div class="sec-title" contenteditable="true">to do</div><span class="count">0/3</span><button class="sec-x" title="Remove section">×</button></div><ul class="items"><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">charge power bank</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">charge ipad, load music</div><button class="rm" title="Remove">×</button></li><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true">walmart order</div><button class="rm" title="Remove">×</button></li></ul><button class="add-item">+ add item</button></div><div class="section"><div class="sec-head"><div class="sec-title" contenteditable="true">New section</div><span class="count">0/1</span><button class="sec-x" title="Remove section">×</button></div><ul class="items"><li class="item"><label class="box"><input type="checkbox"><span class="tick"></span></label><div class="txt" contenteditable="true"></div><button class="rm" title="Remove">×</button></li></ul><button class="add-item">+ add item</button></div></div>
+
+  <div class="ask">
+    <h2>Still worth a quick text</h2>
+    <p class="sub">The host answered most of it — only these are open</p>
+    <ol>
+      <li>Is the 700 m trail cart-friendly after rain, or better to backpack it in?</li>
+      <li>Is there a lockbox or entry code, or is the cabin open when we arrive?</li>
+      <li>Roughly how much water will be waiting, so we know whether we'll need a refill?</li>
+      <li>(Reminders, already on the list: text before sauna use; cash for any extra firepit wood.)</li>
+    </ol>
+  </div>
+
+  <div class="priority">
+    <div class="lab">Packing priority</div>
+    <p>Keep things <span class="em">dry</span>. Keep food <span class="em">cold</span>. Plan for almost <span class="em">no power</span>. Don't underestimate the 700 m walk in the rain.</p>
+  </div>
+
+  <p class="note">Edits and checkmarks auto-save in this browser only. To keep a portable copy with your changes baked in, use Save a copy (downloads an HTML file) or Print (saves a PDF).</p>
+
+</div>
+
+<script>
+const DEFAULTS = [
+  {
+    "title": "Carry & rain protection",
+    "zone": "Cart",
+    "items": [
+      {
+        "text": "Cart",
+        "checked": false
+      },
+      {
+        "text": "Daypack for each person",
+        "checked": false
+      },
+      {
+        "text": "Ziplocks, hearing-aid gear, meds, matches",
+        "checked": false
+      },
+      {
+        "text": "Spare garbage bags ",
+        "checked": false
+      }
+    ]
+  },
+  {
+    "title": "Power & charging",
+    "zone": "Pack",
+    "items": [
+      {
+        "text": "power bank",
+        "checked": false
+      },
+      {
+        "text": "Hearing-aid charger and cables",
+        "checked": false
+      },
+      {
+        "text": "charged ipad",
+        "checked": false
+      },
+      {
+        "text": "Headlamp and lamps; spare batteries",
+        "checked": false
+      },
+      {
+        "text": "Pre-download maps, directions, music, podcasts (weak signal likely)",
+        "checked": false
+      }
+    ]
+  },
+  {
+    "title": "Water & drinks",
+    "zone": "Pack",
+    "items": [
+      {
+        "text": "2 jugs, 1 with filtered water",
+        "checked": false
+      },
+      {
+        "text": "water bottle",
+        "checked": false
+      },
+      {
+        "text": "coffee : grind 22 g x 3, espro, funnel",
+        "checked": false
+      }
+    ]
+  },
+  {
+    "title": "Bugs, ticks & poison ivy",
+    "zone": "Pack",
+    "items": [
+      {
+        "text": "Bug spray",
+        "checked": false
+      },
+      {
+        "text": "mosquito machine + refills",
+        "checked": true
+      },
+      {
+        "text": "tweezers",
+        "checked": false
+      },
+      {
+        "text": "Long pants for the trails",
+        "checked": false
+      },
+      {
+        "text": "Do a tick check before bed",
+        "checked": false
+      }
+    ]
+  },
+  {
+    "title": "Clothing (per person)",
+    "zone": "Pack",
+    "items": [
+      {
+        "text": "Rain jacket",
+        "checked": false
+      },
+      {
+        "text": "Warm clothes",
+        "checked": false
+      },
+      {
+        "text": "2 T-shirts",
+        "checked": false
+      },
+      {
+        "text": "1 long-sleeve shirt",
+        "checked": false
+      },
+      {
+        "text": "1 pair long pants",
+        "checked": false
+      },
+      {
+        "text": "3 pairs socks + warm sleeping socks",
+        "checked": false
+      },
+      {
+        "text": "2–3 underwear",
+        "checked": false
+      },
+      {
+        "text": "Sleep clothes",
+        "checked": false
+      },
+      {
+        "text": "hiking shoes",
+        "checked": false
+      },
+      {
+        "text": "Sandals for sauna, house slippers",
+        "checked": false
+      },
+      {
+        "text": "Hat",
+        "checked": false
+      },
+      {
+        "text": "bag for dirty clothes",
+        "checked": false
+      }
+    ]
+  },
+  {
+    "title": "Sauna & swimming",
+    "zone": "Pack",
+    "items": [
+      {
+        "text": "2 large towels, 2 hand towels, 4 face towels",
+        "checked": false
+      },
+      {
+        "text": "Swimsuit",
+        "checked": false
+      },
+      {
+        "text": "Text the host before using sauna to coordinate use",
+        "checked": false
+      }
+    ]
+  },
+  {
+    "title": "Food (2 bf, 1 lunch, 1 supper)",
+    "zone": "Cooler",
+    "items": [
+      {
+        "text": "snacks & drinks ",
+        "checked": false
+      },
+      {
+        "text": "breakfast 1 : 4 eggs and toasts, bring butter",
+        "checked": false
+      },
+      {
+        "text": "lunch : ??? meats and stuff for wraps???",
+        "checked": false
+      },
+      {
+        "text": "supper : ??? ",
+        "checked": false
+      },
+      {
+        "text": "breakfast 2 : prepared grilled cheese",
+        "checked": false
+      }
+    ]
+  },
+  {
+    "title": "Kitchen extras (cabin is stocked)",
+    "zone": "Cart",
+    "items": [
+      {
+        "text": "bring butter, spices as use is planned, spatula, cook spoon",
+        "checked": false
+      },
+      {
+        "text": "Lighter + matches",
+        "checked": false
+      },
+      {
+        "text": "Aluminum foil",
+        "checked": false
+      },
+      {
+        "text": "dish soap & sponge",
+        "checked": false
+      }
+    ]
+  },
+  {
+    "title": "Fire & cabin comfort",
+    "zone": "Cart",
+    "items": [
+      {
+        "text": "Book / cards",
+        "checked": false
+      },
+      {
+        "text": "folding chair and table",
+        "checked": false
+      }
+    ]
+  },
+  {
+    "title": "Toiletries & health",
+    "zone": "Pack",
+    "items": [
+      {
+        "text": "Toothbrushes / toothpaste",
+        "checked": false
+      },
+      {
+        "text": "Medications",
+        "checked": false
+      },
+      {
+        "text": "Hand sanitizer, wet wipes",
+        "checked": false
+      },
+      {
+        "text": "toilet roll",
+        "checked": false
+      },
+      {
+        "text": "my toiletry kit: hair brush, deodorant, qtips",
+        "checked": false
+      },
+      {
+        "text": "shampoo, soap bar",
+        "checked": false
+      }
+    ]
+  },
+  {
+    "title": "Sleep (bedding provided)",
+    "zone": "Pack",
+    "items": [
+      {
+        "text": "Own pillows",
+        "checked": false
+      },
+      {
+        "text": "Eye masks",
+        "checked": false
+      },
+      {
+        "text": "wool socks",
+        "checked": false
+      }
+    ]
+  },
+  {
+    "title": "Arrival, animals & checkout",
+    "zone": "Pack",
+    "items": [
+      {
+        "text": "Save the host's directions offline + Adagio Acres on Google Maps (weak signal)",
+        "checked": false
+      },
+      {
+        "text": "Park at the lot off Hwy 229; 10-min trail walk to the cabin",
+        "checked": false
+      },
+      {
+        "text": "checkout before 11 am",
+        "checked": false
+      },
+      {
+        "text": "Birch the farm dog (white, brown spots)",
+        "checked": false
+      },
+      {
+        "text": "Don't touch the sheep fence — the mesh and wire are electrified",
+        "checked": false
+      },
+      {
+        "text": "Stay on mowed trails; don't pass gates or go through fences",
+        "checked": false
+      },
+      {
+        "text": "Checkout: wash dishes onto the rack under the sink, and turn the propane tank off",
+        "checked": false
+      }
+    ]
+  },
+  {
+    "title": "Andie",
+    "zone": "",
+    "items": [
+      {
+        "text": "Clothesline cord + clips",
+        "checked": false
+      },
+      {
+        "text": "usb speaker, charged",
+        "checked": false
+      },
+      {
+        "text": "large cooler, ice packs",
+        "checked": false
+      },
+      {
+        "text": "bug spray",
+        "checked": false
+      },
+      {
+        "text": "warm clothes, long pants to prevent ticks, rain jacket",
+        "checked": false
+      },
+      {
+        "text": "swimsuit and sandals for sauna",
+        "checked": false
+      }
+    ]
+  },
+  {
+    "title": "to do",
+    "zone": "",
+    "items": [
+      {
+        "text": "charge power bank",
+        "checked": false
+      },
+      {
+        "text": "charge ipad, load music",
+        "checked": false
+      },
+      {
+        "text": "walmart order",
+        "checked": false
+      }
+    ]
+  },
+  {
+    "title": "New section",
+    "zone": "",
+    "items": [
+      {
+        "text": "",
+        "checked": false
+      }
+    ]
+  }
+];
+
+const KEY = "wildpath-packing-1782390462707";
+let model;
+
+function load(){
+  try{ const raw = localStorage.getItem(KEY); if(raw){ return JSON.parse(raw); } }catch(e){}
+  return DEFAULTS.map(s=>({title:s.title,zone:s.zone,items:s.items.map(t=> typeof t==="string" ? {text:t,checked:false} : {text:t.text,checked:!!t.checked} )}));
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(model)); }catch(e){}
+}
+
+const listEl = document.getElementById("list");
+
+function render(){
+  listEl.innerHTML="";
+  model.forEach((sec,si)=>{
+    const sd=document.createElement("div"); sd.className="section";
+
+    const head=document.createElement("div"); head.className="sec-head";
+    const title=document.createElement("div");
+    title.className="sec-title"; title.contentEditable="true"; title.textContent=sec.title;
+    title.addEventListener("input",()=>{sec.title=title.textContent;save();});
+    head.appendChild(title);
+
+    if(sec.zone){
+      const z=document.createElement("span"); z.className="zone"; z.textContent=sec.zone;
+      head.appendChild(z);
+    }
+    const cnt=document.createElement("span"); cnt.className="count"; head.appendChild(cnt);
+    const sx=document.createElement("button");
+    sx.className="sec-x"; sx.title="Remove section"; sx.textContent="×";
+    sx.addEventListener("click",()=>{ if(confirm("Remove this whole section?")){ model.splice(si,1); save(); render(); }});
+    head.appendChild(sx);
+    sd.appendChild(head);
+
+    const ul=document.createElement("ul"); ul.className="items";
+    sec.items.forEach((it,ii)=>ul.appendChild(makeRow(sec,it,cnt)));
+    sd.appendChild(ul);
+
+    const add=document.createElement("button");
+    add.className="add-item"; add.textContent="+ add item";
+    add.addEventListener("click",()=>{
+      const it={text:"",checked:false}; sec.items.push(it);
+      const row=makeRow(sec,it,cnt); ul.appendChild(row); save(); updateCount(sec,cnt); updateProgress();
+      row.querySelector(".txt").focus();
+    });
+    sd.appendChild(add);
+
+    listEl.appendChild(sd);
+    updateCount(sec,cnt);
+  });
+  updateProgress();
+}
+
+function makeRow(sec,it,cnt){
+  const li=document.createElement("li"); li.className="item"+(it.checked?" packed":"");
+
+  const lab=document.createElement("label"); lab.className="box";
+  const cb=document.createElement("input"); cb.type="checkbox"; cb.checked=!!it.checked;
+  const tick=document.createElement("span"); tick.className="tick";
+  cb.addEventListener("change",()=>{
+    it.checked=cb.checked; li.classList.toggle("packed",cb.checked);
+    save(); updateCount(sec,cnt); updateProgress();
+  });
+  lab.appendChild(cb); lab.appendChild(tick); li.appendChild(lab);
+
+  const txt=document.createElement("div");
+  txt.className="txt"; txt.contentEditable="true"; txt.textContent=it.text;
+  txt.addEventListener("input",()=>{it.text=txt.textContent;save();});
+  txt.addEventListener("keydown",e=>{ if(e.key==="Enter"){e.preventDefault();txt.blur();} });
+  li.appendChild(txt);
+
+  const rm=document.createElement("button");
+  rm.className="rm"; rm.title="Remove"; rm.textContent="×";
+  rm.addEventListener("click",()=>{
+    const idx=sec.items.indexOf(it); if(idx>-1) sec.items.splice(idx,1);
+    li.remove(); save(); updateCount(sec,cnt); updateProgress();
+  });
+  li.appendChild(rm);
+  return li;
+}
+
+function updateCount(sec,cnt){
+  const done=sec.items.filter(i=>i.checked).length;
+  cnt.textContent=done+"/"+sec.items.length;
+}
+function updateProgress(){
+  let total=0,done=0;
+  model.forEach(s=>s.items.forEach(i=>{total++; if(i.checked)done++;}));
+  document.getElementById("progTxt").textContent=done+" / "+total+" packed";
+  document.getElementById("progBar").style.width=(total?(done/total*100):0)+"%";
+}
+
+document.getElementById("btnPrint").addEventListener("click",()=>window.print());
+
+document.getElementById("btnSave").addEventListener("click",function(){
+  const literal = JSON.stringify(model, null, 2);
+  let src = "<!DOCTYPE html>\n" + document.documentElement.outerHTML;
+  src = src.replace(/const DEFAULTS = [\s\S]*?\];/, function(){ return "const DEFAULTS = " + literal + ";"; });
+  src = src.replace(/const KEY = "[^"]*";/, function(){ return 'const KEY = "wildpath-packing-' + Date.now() + '";'; });
+  const blob = new Blob([src], {type:"text/html"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "wildpath-refuge-packing-list.html";
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+  const b = this, t = b.textContent;
+  b.textContent = "Saved"; setTimeout(()=>{b.textContent = t;}, 1600);
+});
+document.getElementById("btnHide").addEventListener("click",e=>{
+  document.body.classList.toggle("hide-packed");
+  e.target.textContent=document.body.classList.contains("hide-packed")?"Show all":"Hide packed";
+});
+document.getElementById("btnAddSec").addEventListener("click",()=>{
+  model.push({title:"New section",zone:"",items:[{text:"",checked:false}]});
+  save(); render();
+  const titles=document.querySelectorAll(".sec-title");
+  titles[titles.length-1].focus();
+});
+document.getElementById("btnReset").addEventListener("click",()=>{
+  if(confirm("Reset to the original list? This clears all your edits and checkmarks.")){
+    try{localStorage.removeItem(KEY);}catch(e){}
+    model=load(); render();
+  }
+});
+
+const style=document.createElement("style");
+style.textContent=".hide-packed li.item.packed{display:none}";
+document.head.appendChild(style);
+
+model=load();
+render();
+</script>
+
+
+</body></html>

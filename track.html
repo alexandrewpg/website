@@ -142,6 +142,7 @@
   .month.is-current .mfocus{color:var(--cinnabar-deep);}
   .mgram{font-size:15px;line-height:1.66;color:var(--ink-soft);margin-top:7px;max-width:52ch;}
   .mgram .ko-g{font-family:var(--serif-ko);font-weight:600;color:var(--ink);font-size:16.5px;}
+  .mlesson{display:inline-block;margin-top:12px;font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--celadon);background:var(--celadon-soft);border-radius:3px;padding:3px 10px;font-family:var(--sans);}
   .pill{font-size:9.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:2px 8px;border-radius:2px;}
   .pill.now{background:var(--cinnabar);color:var(--paper);} .pill.cons{background:var(--celadon-soft);color:var(--celadon);} .pill.goal{background:transparent;color:var(--celadon);border:1px solid var(--celadon);}
   .now-on{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-size:13.5px;color:var(--ink-soft);font-weight:500;flex-wrap:wrap;}
@@ -352,9 +353,9 @@
       {n:3, cal:"Aug ’26", focus:"Realization & resolve", gram:"<span class='ko-g'>−(으)ㄴ/ㄹ 줄 알다/모르다</span>; <span class='ko-g'>−기로 하다</span> in live speech."}
     ]},
     { letter:"B", eyebrow:"Sep – Nov 2026", title:"Reporting & retrospect", target:"→ B1+", vocab:"≈ 2,500", months:[
-      {n:4, cal:"Sep ’26", focus:"Indirect speech, part one", gram:"<span class='ko-g'>−다고 / −(이)라고 / −냐고 하다</span> — reporting statements and questions."},
-      {n:5, cal:"Oct ’26", focus:"Indirect speech, part two", gram:"<span class='ko-g'>−(으)라고 / −자고 하다</span>; embedded <span class='ko-g'>−다고 생각하다 / 듣다</span>."},
-      {n:6, cal:"Nov ’26", focus:"Looking back, and wishing", gram:"<span class='ko-g'>−더라 / −던</span>; <span class='ko-g'>−았/었으면 좋겠다</span>."}
+      {n:4, cal:"Sep ’26", focus:"Indirect speech, part one", gram:"<span class='ko-g'>−다고 / −(이)라고 / −냐고 하다</span> — reporting statements and questions.", lesson:"18 · Asking Around the Neighbourhood"},
+      {n:5, cal:"Oct ’26", focus:"Indirect speech, part two", gram:"<span class='ko-g'>−(으)라고 / −자고 하다</span>; embedded <span class='ko-g'>−다고 생각하다 / 듣다</span>.", lesson:"19 · Planning a Trip with a Friend"},
+      {n:6, cal:"Nov ’26", focus:"Looking back, and wishing", gram:"<span class='ko-g'>−더라 / −던</span>; <span class='ko-g'>−았/었으면 좋겠다</span>.", lesson:"20 · Remembering an Old Café  ·  21 review"}
     ]},
     { letter:"C", eyebrow:"Dec 2026 – Apr 2027", title:"Voice, cause & nuance", target:"→ B2−", vocab:"≈ 3,500", months:[
       {n:7,  cal:"Dec ’26", focus:"Passive voice", gram:"<span class='ko-g'>피동</span> — −이/히/리/기, <span class='ko-g'>−아/어지다</span>, <span class='ko-g'>−게 되다</span>."},
@@ -486,8 +487,8 @@
             + (b.vocab ? '<div class="b-vocab">'+esc(b.vocab)+' words</div>' : '');
       if(b.lessonChip){
         html += '<div class="now-on">Currently on Lesson <select id="cur-lesson" aria-label="Current lesson">'
-              + ['11','12','13','14','15','16'].map(function(x){return '<option'+(x===state.currentLesson?' selected':'')+'>'+x+'</option>';}).join('')
-              + '</select><span class="now-cap">· wrapping 11–16 by end of June</span></div>';
+              + ['11','12','13','14','15','16','17','18','19','20','21'].map(function(x){return '<option'+(x===state.currentLesson?' selected':'')+'>'+x+'</option>';}).join('')
+              + '</select><span class="now-cap">· 11–16 wrapping; 17–21 built ahead</span></div>';
       }
       html += '</div>';
       b.months.forEach(function(m){
@@ -500,7 +501,9 @@
         html += '<div class="month node spine '+cls+'"'+id+'><div class="mnode">'+m.n+'</div><div class="mwrap">'
               + '<div class="mlabel">'+esc(m.cal)+pill+'</div>'
               + '<div class="mfocus">'+esc(m.focus)+'</div>'
-              + '<div class="mgram">'+m.gram+'</div></div></div>';
+              + '<div class="mgram">'+m.gram+'</div>'
+              + (m.lesson ? '<div class="mlesson">Lesson '+esc(m.lesson)+'</div>' : '')
+              + '</div></div>';
       });
       html += '</div>';
     });

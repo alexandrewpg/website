@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gap-Fix Lesson — Month 2 Errors</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #faf6ee;
+    --paper-alt: #f3ede0;
+    --ink: #2b2723;
+    --ink-soft: #5c554c;
+    --teal: #2f6e6a;
+    --teal-soft: #e4efee;
+    --terracotta: #bf5b3f;
+    --terracotta-soft: #f7e6df;
+    --sage: #7c8a63;
+    --sage-soft: #edf1e6;
+    --line: #ddd3bf;
+    --gold: #b08d4f;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.6;
+    font-size: 17px;
+    padding-bottom: 80px;
+  }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+
+  header {
+    padding: 40px 20px 28px;
+    background: linear-gradient(180deg, var(--paper-alt), var(--paper));
+    border-bottom: 1px solid var(--line);
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 30px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    color: var(--ink);
+  }
+
+  .subtitle { color: var(--ink-soft); font-size: 15px; max-width: 480px; margin: 0 auto; }
+
+  .stamp {
+    display: inline-block;
+    margin-top: 16px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 13px;
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    border-radius: 4px;
+    padding: 3px 10px;
+    letter-spacing: 0.05em;
+  }
+
+  section { margin: 36px 0; }
+
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .section-num {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: var(--teal);
+    font-weight: 600;
+  }
+
+  .section-title {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 21px;
+    font-weight: 600;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 14px;
+  }
+
+  .error-card {
+    background: var(--terracotta-soft);
+    border: 1px solid #e3bda9;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+  }
+
+  .error-you {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    color: #8a3f2a;
+    text-decoration: line-through;
+    text-decoration-color: #c98a72;
+  }
+
+  .error-fix {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 17px;
+    color: var(--teal);
+    font-weight: 600;
+    margin-top: 4px;
+  }
+
+  .error-note {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+  }
+
+  .kr {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .ipa {
+    font-size: 13px;
+    color: var(--ink-soft);
+    font-style: italic;
+    margin-top: 2px;
+  }
+
+  .en {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+    display: none;
+  }
+  .en.shown { display: block; }
+
+  .toggle-en {
+    font-size: 12px;
+    color: var(--teal);
+    background: var(--teal-soft);
+    border: none;
+    border-radius: 6px;
+    padding: 3px 10px;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+
+  .rule-box {
+    background: var(--sage-soft);
+    border-left: 3px solid var(--sage);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 15px;
+  }
+
+  .rule-box .kr { font-size: 17px; }
+
+  table.conj {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 15px;
+  }
+  table.conj th, table.conj td {
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  table.conj th {
+    color: var(--ink-soft);
+    font-weight: 600;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  table.conj td.kr { font-family: 'Noto Serif KR', serif; color: var(--teal); font-weight: 600; }
+
+  .drill-item {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+  }
+
+  .drill-en {
+    font-size: 15px;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+
+  .drill-input {
+    width: 100%;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 16px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--paper-alt);
+    color: var(--ink);
+  }
+  .drill-input:focus { outline: 2px solid var(--teal); border-color: var(--teal); }
+
+  .reveal-btn {
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--terracotta);
+    background: var(--terracotta-soft);
+    border: none;
+    border-radius: 6px;
+    padding: 5px 12px;
+    cursor: pointer;
+  }
+
+  .answer-box {
+    display: none;
+    margin-top: 10px;
+    padding: 12px 14px;
+    background: var(--sage-soft);
+    border-radius: 8px;
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    color: var(--teal);
+  }
+  .answer-box.shown { display: block; }
+  .answer-box .note { font-family: 'Inter', sans-serif; font-size: 13px; color: var(--ink-soft); margin-top: 6px; font-weight: 400; }
+
+  .mc-options {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+  }
+  .mc-btn {
+    font-family: 'Noto Serif KR', serif;
+    font-size: 15px;
+    padding: 8px 16px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    color: var(--ink);
+  }
+  .mc-btn.correct { background: var(--sage-soft); border-color: var(--sage); color: #3d5228; }
+  .mc-btn.wrong { background: var(--terracotta-soft); border-color: #d99a80; color: #8a3f2a; }
+  .mc-feedback {
+    margin-top: 10px;
+    font-size: 14px;
+    color: var(--ink-soft);
+    display: none;
+  }
+  .mc-feedback.shown { display: block; }
+
+  .divider {
+    height: 1px;
+    background: var(--line);
+    margin: 32px 0;
+  }
+
+  .progress-note {
+    text-align: center;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-top: 40px;
+    padding: 16px;
+    border-top: 1px solid var(--line);
+  }
+
+  .footer-stamp {
+    text-align: center;
+    font-family: 'Noto Serif KR', serif;
+    color: var(--gold);
+    font-size: 14px;
+    margin-top: 8px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Gap-Fix Lesson · Month 2</div>
+  <h1>정리하기 <span style="font-weight:400;">— Tidying Up</span></h1>
+  <p class="subtitle">Six errors from your Month 2 evaluation, isolated and drilled. Small lesson, targeted fixes.</p>
+  <div class="stamp">복습 · Review</div>
+</header>
+
+<div class="wrap">
+
+  <!-- SECTION 1: THE ERRORS -->
+  <section>
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <span class="section-title">What came up</span>
+    </div>
+
+    <div class="error-card">
+      <div class="error-you">긑내서 / 긑났도</div>
+      <div class="error-fix">끝내서 / 끝냈지만</div>
+      <div class="error-note">Spelling: the syllable is 끝 (final consonant ㅌ), not 긑. This isn't a valid Korean syllable block.</div>
+    </div>
+
+    <div class="error-card">
+      <div class="error-you">몰으갰어요</div>
+      <div class="error-fix">모르겠어요 / 몰랐어요</div>
+      <div class="error-note">모르다 is a 르-irregular verb. Its forms don't follow the regular pattern — worth memorizing as a set (drilled below).</div>
+    </div>
+
+    <div class="error-card">
+      <div class="error-you">할려고 했어요 <span style="font-weight:400; font-family:'Inter',sans-serif; font-size:13px;">(for "decided")</span></div>
+      <div class="error-fix">하기로 했어요</div>
+      <div class="error-note">-려고 하다 = intend to. -기로 하다 = decided to. When the English says "decided," reach for -기로 하다.</div>
+    </div>
+
+    <div class="error-card">
+      <div class="error-you">크로즈 했어요</div>
+      <div class="error-fix">문을 닫았어요</div>
+      <div class="error-note">"Close (a shop)" is 문을 닫다 (lit. "close the door") — not an English loanword.</div>
+    </div>
+
+    <div class="error-card">
+      <div class="error-you">결정 했어요 <span style="font-weight:400; font-family:'Inter',sans-serif; font-size:13px;">(for "felt worried")</span></div>
+      <div class="error-fix">걱정이 됐어요</div>
+      <div class="error-note">걱정이 되다 = to become worried. 결정하다 means "to decide" — different word entirely.</div>
+    </div>
+
+    <div class="error-card">
+      <div class="error-you">나는 말한것을</div>
+      <div class="error-fix">내가 한 말을</div>
+      <div class="error-note">Inside a relative clause, the embedded subject usually takes 이/가, not 는. "What I said" = 내가 한 말 (the words that I said).</div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 2: 모르다 CONJUGATION DRILL -->
+  <section>
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <span class="section-title">모르다 — the irregular verb</span>
+    </div>
+
+    <div class="rule-box">
+      <p style="margin:0 0 8px;">모르다 drops 르 and adds ㄹㄹ before a vowel ending. This happens to all 르-irregular verbs (다르다, 빠르다, 부르다...).</p>
+    </div>
+
+    <table class="conj">
+      <tr><th>Form</th><th>Korean</th><th>Meaning</th></tr>
+      <tr><td>Present</td><td class="kr">몰라요</td><td>don't know</td></tr>
+      <tr><td>Past</td><td class="kr">몰랐어요</td><td>didn't know</td></tr>
+      <tr><td>Present (formal tone)</td><td class="kr">모르겠어요</td><td>I'm not sure / I don't know</td></tr>
+      <tr><td>+ 줄 (embedded)</td><td class="kr">-는 줄 몰랐어요</td><td>didn't know that...</td></tr>
+    </table>
+
+    <div class="rule-box" style="margin-top:16px;">
+      <p class="kr" style="margin:0;">알다 (to know) is regular but drops ㄹ before ㅂ, 는, ㅅ — compare: 알아요 / 알았어요 / 아는 (not 알는).</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 3: -기로 하다 vs -려고 하다 -->
+  <section>
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <span class="section-title">결정 vs 의도 — Decision vs Intention</span>
+    </div>
+
+    <div class="rule-box">
+      <p class="kr" style="margin:0 0 6px;">-기로 하다 <span style="font-family:'Inter',sans-serif; font-weight:400; color:var(--ink-soft);">→ a firm decision, often with an outcome</span></p>
+      <p class="kr" style="margin:0;">-(으)려고 하다 <span style="font-family:'Inter',sans-serif; font-weight:400; color:var(--ink-soft);">→ a plan or intention, may or may not happen</span></p>
+    </div>
+
+    <div class="card">
+      <p class="kr">그만두<b style="color:var(--terracotta);">기로 했어요</b>. <span style="font-family:'Inter',sans-serif; font-size:14px; color:var(--ink-soft);">— I decided to quit. (done deal)</span></p>
+      <p class="kr" style="margin-top:8px;">그만두<b style="color:var(--teal);">려고 해요</b>. <span style="font-family:'Inter',sans-serif; font-size:14px; color:var(--ink-soft);">— I'm thinking of quitting. (still forming)</span></p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 4: TRANSLATION DRILL -->
+  <section>
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <span class="section-title">Translation drill</span>
+    </div>
+    <p style="font-size:14px; color:var(--ink-soft); margin-top:-6px;">Write your answer, then reveal to check. Every sentence recycles today's six errors.</p>
+
+    <div class="drill-item">
+      <div class="drill-en">1. I decided to quit smoking.</div>
+      <input class="drill-input" type="text" placeholder="한국어로 써 보세요">
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('shown')">Show answer</button>
+      <div class="answer-box">담배를 끊기로 했어요.
+        <div class="note">끊다 = to quit (habits); 기로 했어요 = decided</div>
+      </div>
+    </div>
+
+    <div class="drill-item">
+      <div class="drill-en">2. I'm not sure if the museum is closed today.</div>
+      <input class="drill-input" type="text" placeholder="한국어로 써 보세요">
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('shown')">Show answer</button>
+      <div class="answer-box">오늘 박물관이 문을 닫았는지 잘 모르겠어요.
+        <div class="note">문을 닫다 = to close (a place); 모르겠어요 = I'm not sure</div>
+      </div>
+    </div>
+
+    <div class="drill-item">
+      <div class="drill-en">3. Even though I finished my homework, I still felt worried about the test.</div>
+      <input class="drill-input" type="text" placeholder="한국어로 써 보세요">
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('shown')">Show answer</button>
+      <div class="answer-box">숙제를 끝냈지만 시험 때문에 그래도 걱정이 됐어요.
+        <div class="note">끝냈지만 (transitive + contrast); 걱정이 됐어요 (became worried)</div>
+      </div>
+    </div>
+
+    <div class="drill-item">
+      <div class="drill-en">4. I didn't know she had already left the company.</div>
+      <input class="drill-input" type="text" placeholder="한국어로 써 보세요">
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('shown')">Show answer</button>
+      <div class="answer-box">그녀가 벌써 회사를 그만둔 줄 몰랐어요.
+        <div class="note">벌써 (already) not 아직; 그만두다 = to quit (a job)</div>
+      </div>
+    </div>
+
+    <div class="drill-item">
+      <div class="drill-en">5. What I decided was to travel alone.</div>
+      <input class="drill-input" type="text" placeholder="한국어로 써 보세요">
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('shown')">Show answer</button>
+      <div class="answer-box">제가 결정한 것은 혼자 여행하는 거예요.
+        <div class="note">Note: 결정하다 IS correct here — this sentence is actually about deciding, not worrying. Contrast with error #5 above.</div>
+      </div>
+    </div>
+
+    <div class="drill-item">
+      <div class="drill-en">6. I don't remember what she said yesterday.</div>
+      <input class="drill-input" type="text" placeholder="한국어로 써 보세요">
+      <button class="reveal-btn" onclick="this.nextElementSibling.classList.toggle('shown')">Show answer</button>
+      <div class="answer-box">어제 그녀가 한 말이 기억이 안 나요.
+        <div class="note">그녀가 한 말 = the words she said (relative clause, 가 not 는 inside)</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- SECTION 5: QUICK RECOGNITION CHECK -->
+  <section>
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <span class="section-title">Quick check</span>
+    </div>
+
+    <div class="drill-item">
+      <div class="drill-en">1. 가게가 벌써 ___ 몰랐어요. (I didn't know the store had already closed.)</div>
+      <div class="mc-options">
+        <button class="mc-btn" onclick="checkMC(this, false)">닫는지</button>
+        <button class="mc-btn" onclick="checkMC(this, true)">닫은 줄</button>
+        <button class="mc-btn" onclick="checkMC(this, false)">닫으려고</button>
+      </div>
+      <div class="mc-feedback">닫은 줄 몰랐어요 — past completed action + 줄 모르다.</div>
+    </div>
+
+    <div class="drill-item">
+      <div class="drill-en">2. 내일 여행을 ___ 했어요. (I decided to travel tomorrow.)</div>
+      <div class="mc-options">
+        <button class="mc-btn" onclick="checkMC(this, false)">가려고</button>
+        <button class="mc-btn" onclick="checkMC(this, true)">가기로</button>
+        <button class="mc-btn" onclick="checkMC(this, false)">가고 싶다고</button>
+      </div>
+      <div class="mc-feedback">가기로 했어요 — a firm decision, not just an intention.</div>
+    </div>
+
+    <div class="drill-item">
+      <div class="drill-en">3. 어제 ___ 말이 정말 도움이 됐어요. (The words she said yesterday really helped.)</div>
+      <div class="mc-options">
+        <button class="mc-btn" onclick="checkMC(this, false)">그녀는 한</button>
+        <button class="mc-btn" onclick="checkMC(this, true)">그녀가 한</button>
+        <button class="mc-btn" onclick="checkMC(this, false)">그녀를 한</button>
+      </div>
+      <div class="mc-feedback">그녀가 한 말 — subject inside a relative clause takes 이/가.</div>
+    </div>
+
+    <div class="drill-item">
+      <div class="drill-en">4. 숙제를 ___ 지만 기분이 안 좋았어요. (Even though I finished my homework, I didn't feel good.)</div>
+      <div class="mc-options">
+        <button class="mc-btn" onclick="checkMC(this, false)">끝났</button>
+        <button class="mc-btn" onclick="checkMC(this, true)">끝냈</button>
+        <button class="mc-btn" onclick="checkMC(this, false)">끝나</button>
+      </div>
+      <div class="mc-feedback">끝냈지만 — 숙제를 has an object marker, so the transitive verb 끝내다 is needed.</div>
+    </div>
+  </section>
+
+  <div class="progress-note">
+    Six errors, addressed. Next: Month 3 evaluation will re-test 모르다 conjugation, -기로 하다 in free production, and relative-clause subject marking.
+  </div>
+  <div class="footer-stamp">화이팅 🇰🇷</div>
+
+</div>
+
+<script>
+  function checkMC(btn, isCorrect) {
+    const group = btn.parentElement;
+    const buttons = group.querySelectorAll('.mc-btn');
+    buttons.forEach(b => { b.disabled = true; });
+    if (isCorrect) {
+      btn.classList.add('correct');
+    } else {
+      btn.classList.add('wrong');
+      buttons.forEach(b => {
+        // find and mark the correct one visually is not tracked per-button here,
+        // so we rely on feedback text instead
+      });
+    }
+    const feedback = group.parentElement.querySelector('.mc-feedback');
+    feedback.classList.add('shown');
+  }
+</script>
+
+</body>
+</html>

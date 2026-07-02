@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>한국어 — The Road to B2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF6EC; --paper-sunk:#F4EFE0; --ink:#23201A; --ink-soft:#5A5446; --ink-faint:#8A8270;
+    --cinnabar:#A33729; --cinnabar-deep:#86291D; --cinnabar-soft:rgba(163,55,41,.10);
+    --celadon:#5C7167; --celadon-soft:rgba(92,113,103,.15);
+    --line:rgba(35,32,26,.15); --line-soft:rgba(35,32,26,.08);
+    --serif:"Cormorant Garamond","Noto Serif KR",Georgia,serif;
+    --serif-ko:"Noto Serif KR","Cormorant Garamond",serif;
+    --sans:"Inter","Noto Sans KR",system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+  body{
+    margin:0;color:var(--ink);font-family:var(--sans);line-height:1.55;
+    background:linear-gradient(180deg,#FCF9F1 0%, var(--paper) 30%, var(--paper) 100%) fixed;
+    padding:clamp(24px,5vw,64px) clamp(20px,5vw,52px);
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.035;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .wrap{max-width:680px;margin:0 auto;position:relative;z-index:1;animation:rise .8s cubic-bezier(.2,.7,.3,1) both;}
+  @keyframes rise{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:none;}}
+  :focus-visible{outline:2px solid var(--cinnabar);outline-offset:3px;border-radius:2px;}
+  .acc{width:28px;height:2px;background:var(--cinnabar);margin:0 0 16px;}
+
+  /* masthead */
+  .hero{position:relative;overflow:hidden;padding:6px 0 28px;margin-bottom:6px;}
+  .hero .glyph{position:absolute;top:-46px;right:-14px;font-family:var(--serif-ko);font-weight:700;font-size:clamp(170px,42vw,260px);line-height:1;color:var(--ink);opacity:.045;pointer-events:none;user-select:none;z-index:0;}
+  .hero > *{position:relative;z-index:1;}
+  .eyebrow{font-size:11.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--cinnabar);font-weight:600;margin:0 0 20px;}
+  h1{font-family:var(--serif-ko);font-weight:700;font-size:clamp(44px,11vw,76px);line-height:.98;margin:0;letter-spacing:-.015em;}
+  .sub{font-family:var(--serif);font-style:italic;font-weight:500;font-size:clamp(21px,5vw,28px);color:var(--ink-soft);margin:16px 0 0;}
+  .lead{font-size:16px;color:var(--ink-soft);margin:22px 0 0;max-width:48ch;line-height:1.62;}
+  .lead b{color:var(--ink);font-weight:600;}
+  .seal{position:absolute;bottom:24px;right:2px;width:64px;height:64px;border:2px solid var(--cinnabar);border-radius:6px;display:flex;align-items:center;justify-content:center;transform:rotate(-3.5deg);color:var(--cinnabar);font-family:var(--serif-ko);font-weight:700;font-size:37px;line-height:1;z-index:2;box-shadow:inset 0 0 0 4px var(--paper),inset 0 0 0 5px rgba(163,55,41,.34);}
+  @media(max-width:560px){.seal{width:54px;height:54px;font-size:31px;bottom:auto;top:0;}}
+
+  /* tabs */
+  .tabs{display:flex;border-bottom:1px solid var(--line);margin:14px 0 38px;}
+  .tab{font-family:var(--sans);font-weight:600;font-size:14.5px;letter-spacing:.02em;color:var(--ink-faint);background:none;border:none;padding:0 2px 13px;margin-right:30px;cursor:pointer;position:relative;}
+  .tab.is-active{color:var(--ink);}
+  .tab.is-active::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--cinnabar);}
+  .tab:hover{color:var(--ink-soft);}
+  .panel[hidden]{display:none !important;}
+
+  /* stat row */
+  .stats{display:flex;border-bottom:1px solid var(--line);margin-bottom:54px;}
+  .stat{flex:1;padding:20px 6px 19px;text-align:center;border-right:1px solid var(--line-soft);}
+  .stat:last-child{border-right:none;}
+  .stat .k{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;}
+  .stat .v{font-family:var(--serif);font-weight:600;font-size:clamp(24px,6vw,32px);margin-top:7px;line-height:1;}
+  .stat .v.now{color:var(--cinnabar);} .stat .v.goal{color:var(--celadon);}
+
+  /* meters (CEFR + vocab) */
+  .meter{margin-bottom:56px;}
+  .slabel{font-size:11.5px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;margin:0;}
+  .scale{position:relative;height:2px;background:var(--line);margin:42px 3px 0;}
+  .scale .fill{position:absolute;left:0;top:0;bottom:0;background:var(--ink);transition:width .8s cubic-bezier(.2,.7,.3,1);}
+  .scale .gtick{position:absolute;top:-3px;width:1px;height:9px;background:var(--ink);opacity:.35;transform:translateX(-50%);}
+  .scale .glabel{position:absolute;top:15px;font-size:11.5px;font-weight:600;letter-spacing:.1em;color:var(--ink-faint);text-transform:uppercase;}
+  .scale .goalend{position:absolute;right:0;top:50%;width:9px;height:9px;border:2px solid var(--celadon);border-radius:50%;background:var(--paper);transform:translate(50%,-50%);}
+  .scale .vband{position:absolute;top:0;bottom:0;background:var(--celadon-soft);}
+  .marker{position:absolute;top:50%;left:33%;transform:translate(-50%,-50%);transition:left .8s cubic-bezier(.2,.7,.3,1);}
+  .marker .dot{width:12px;height:12px;border-radius:50%;background:var(--cinnabar);box-shadow:0 0 0 4px var(--paper),0 0 0 5px var(--cinnabar-soft);}
+  .marker .lab{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:var(--serif);font-weight:600;font-size:18px;color:var(--cinnabar);text-align:center;}
+  .marker .lab small{display:block;font-family:var(--sans);font-weight:500;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);margin-top:0;}
+  .rmarker{position:absolute;top:50%;left:65%;transform:translate(-50%,-50%);transition:left .8s cubic-bezier(.2,.7,.3,1);}
+  .rmarker .ring{width:11px;height:11px;border-radius:50%;background:var(--paper);border:2px solid var(--celadon);box-shadow:0 0 0 3px var(--paper);}
+  .rmarker .rlab{position:absolute;top:15px;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:var(--serif);font-weight:600;font-size:15px;color:var(--celadon);text-align:center;}
+  .rmarker .rlab small{display:block;font-family:var(--sans);font-weight:500;font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);}
+  .meter-foot{font-size:13px;color:var(--ink-soft);margin-top:46px;font-style:italic;font-family:var(--serif);line-height:1.5;}
+  .meter-foot b{color:var(--ink);font-style:normal;font-weight:600;font-family:var(--sans);font-size:12.5px;}
+  .vocab-edit{display:flex;align-items:center;gap:13px;margin-top:18px;flex-wrap:wrap;}
+  .ve-label{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;}
+  .vocab-edit input{font-family:var(--sans);font-size:14px;padding:8px 6px;border:none;border-bottom:1.5px solid var(--line);background:transparent;color:var(--ink);width:96px;border-radius:0;}
+  .vocab-edit input:focus{outline:none;border-bottom-color:var(--cinnabar);}
+
+  /* eval log */
+  .log{background:var(--paper-sunk);border:1px solid var(--line-soft);border-radius:4px;padding:26px 26px 22px;margin-bottom:58px;}
+  .log h2{font-family:var(--sans);font-weight:600;font-size:23px;letter-spacing:-.015em;margin:0 0 4px;}
+  .log .sub2{font-size:14px;color:var(--ink-soft);margin:0 0 20px;max-width:52ch;line-height:1.55;}
+  .log .sub2 b{color:var(--ink);font-weight:600;}
+  ul.evs{list-style:none;margin:0 0 20px;padding:0;}
+  ul.evs li{display:flex;align-items:center;gap:14px;font-size:14.5px;padding:12px 2px;border-bottom:1px solid var(--line-soft);}
+  ul.evs li:first-child{border-top:1px solid var(--line-soft);}
+  .ev-month{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;flex:none;min-width:48px;}
+  .ev-level{font-family:var(--serif);font-weight:600;font-size:20px;color:var(--celadon);flex:none;min-width:44px;}
+  .ev-note{color:var(--ink-soft);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-style:italic;}
+  .ev-del{flex:none;border:none;background:transparent;color:var(--ink-faint);font-size:17px;line-height:1;cursor:pointer;padding:3px 5px;}
+  .ev-del:hover{color:var(--cinnabar);}
+  .addform{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;}
+  .addform input{font-family:var(--sans);font-size:14px;padding:9px 6px;border:none;border-bottom:1.5px solid var(--line);background:transparent;color:var(--ink);min-width:0;border-radius:0;}
+  .addform input::placeholder{color:var(--ink-faint);}
+  .addform input:focus{outline:none;border-bottom-color:var(--cinnabar);}
+  .add{font-family:var(--sans);background:var(--ink);color:var(--paper);border:none;font-weight:600;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;padding:11px 18px;border-radius:3px;cursor:pointer;white-space:nowrap;}
+  .add:hover{background:var(--cinnabar-deep);}
+  @media(max-width:520px){.addform{grid-template-columns:1fr 1fr;}.addform .ev-note-in,.addform .add{grid-column:1/3;}}
+
+  /* section head + legend */
+  .section-row{display:flex;align-items:baseline;justify-content:space-between;gap:14px;margin-bottom:8px;}
+  .section-h{font-family:var(--sans);font-weight:600;font-size:29px;letter-spacing:-.02em;margin:0;}
+  .jump{font-size:12.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--cinnabar);text-decoration:none;white-space:nowrap;}
+  .jump:hover{text-decoration:underline;text-underline-offset:3px;}
+  .legend{display:flex;flex-wrap:wrap;gap:18px;margin:0 0 46px;font-size:12px;color:var(--ink-soft);}
+  .legend span{display:inline-flex;align-items:center;gap:8px;}
+  .swatch{width:9px;height:9px;border-radius:50%;flex:none;}
+  .sw-celadon{background:var(--celadon);} .sw-cinnabar{background:var(--cinnabar);} .sw-ahead{background:transparent;border:1.5px solid var(--ink-faint);}
+
+  /* timeline */
+  .timeline{position:relative;}
+  .spine::before{content:"";position:absolute;left:16px;top:6px;bottom:-6px;width:1px;background:var(--line);}
+  .timeline > .band:last-child .month:last-child.spine::before{display:none;}
+  .band{margin-bottom:6px;}
+  .band-head{position:relative;padding:0 0 22px 50px;margin-top:46px;}
+  .band:first-child .band-head{margin-top:0;}
+  .bmark{position:absolute;left:0;top:-3px;width:33px;height:33px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600;font-size:17px;z-index:1;background:var(--paper);border:1.5px solid var(--ink-faint);color:var(--ink-soft);}
+  .band.is-past .bmark{background:var(--celadon);border-color:var(--celadon);color:var(--paper);}
+  .band.is-current .bmark{background:var(--cinnabar);border-color:var(--cinnabar);color:var(--paper);}
+  .b-eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;}
+  .b-title{font-family:var(--sans);font-weight:600;font-size:25px;letter-spacing:-.02em;margin:6px 0 0;line-height:1.12;}
+  .b-target{font-family:var(--sans);font-weight:600;font-size:11.5px;letter-spacing:.04em;color:var(--ink-faint);margin-left:11px;vertical-align:3px;}
+  .band.is-current .b-target{color:var(--cinnabar);} .band.is-past .b-target{color:var(--celadon);}
+  .b-vocab{font-family:var(--sans);font-weight:500;font-size:12.5px;letter-spacing:.02em;color:var(--ink-faint);margin-top:6px;}
+  .band.is-current .b-vocab{color:var(--ink-soft);}
+  .month{position:relative;padding:0 0 30px 50px;}
+  .mnode{position:absolute;left:1px;top:3px;width:31px;height:31px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-weight:600;font-size:15px;z-index:1;background:var(--paper);border:1px solid var(--ink-faint);color:var(--ink-faint);}
+  .month.is-past .mnode{background:var(--celadon);border-color:var(--celadon);color:var(--paper);}
+  .month.is-current .mnode{background:var(--cinnabar);border-color:var(--cinnabar);color:var(--paper);box-shadow:0 0 0 4px var(--cinnabar-soft);}
+  .month.is-past .mwrap{opacity:.5;}
+  .mlabel{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;margin-bottom:6px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .mfocus{font-family:var(--sans);font-weight:600;font-size:21px;letter-spacing:-.015em;line-height:1.2;color:var(--ink);}
+  .month.is-current .mfocus{color:var(--cinnabar-deep);}
+  .mgram{font-size:15px;line-height:1.66;color:var(--ink-soft);margin-top:7px;max-width:52ch;}
+  .mgram .ko-g{font-family:var(--serif-ko);font-weight:600;color:var(--ink);font-size:16.5px;}
+  .mlesson{display:inline-block;margin-top:12px;font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--celadon);background:var(--celadon-soft);border-radius:3px;padding:3px 10px;font-family:var(--sans);}
+  .pill{font-size:9.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;padding:2px 8px;border-radius:2px;}
+  .pill.now{background:var(--cinnabar);color:var(--paper);} .pill.cons{background:var(--celadon-soft);color:var(--celadon);} .pill.goal{background:transparent;color:var(--celadon);border:1px solid var(--celadon);}
+  .now-on{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-size:13.5px;color:var(--ink-soft);font-weight:500;flex-wrap:wrap;}
+  .now-on select{font-family:var(--serif);font-weight:600;font-size:19px;color:var(--cinnabar);background:transparent;border:none;border-bottom:1.5px solid var(--cinnabar-soft);padding:1px 3px;cursor:pointer;}
+  .now-cap{font-size:12.5px;color:var(--ink-faint);font-style:italic;font-family:var(--serif);font-weight:500;}
+
+  /* foundations */
+  .found{margin-top:50px;border-top:1px solid var(--line);padding-top:30px;}
+  .found h4{margin:0 0 10px;font-family:var(--sans);font-weight:600;font-size:20px;letter-spacing:-.015em;}
+  .found p{margin:0 0 14px;font-size:14.5px;color:var(--ink-soft);max-width:56ch;line-height:1.55;}
+  .found .pats{font-family:var(--serif-ko);font-weight:600;font-size:18px;color:var(--celadon);line-height:2;}
+  .found .pats .sep{color:var(--ink-faint);margin:0 6px;font-weight:400;}
+
+  /* skills tab */
+  .chart{margin-top:26px;}
+  .axis{position:relative;height:16px;margin:0 2px 16px;}
+  .axis .al{position:absolute;top:0;font-size:11px;font-weight:600;letter-spacing:.1em;color:var(--ink-faint);}
+  .srow{margin:0 0 30px;}
+  .shead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:11px;}
+  .sname{font-family:var(--sans);font-weight:600;font-size:17px;letter-spacing:-.01em;}
+  .sname .ko{font-family:var(--serif-ko);font-weight:600;color:var(--ink-soft);margin-right:9px;}
+  .slevel-sel{font-family:var(--serif);font-weight:600;font-size:19px;color:var(--cinnabar);background:transparent;border:none;border-bottom:1.5px solid var(--cinnabar-soft);padding:1px 4px;cursor:pointer;}
+  .srow.done .slevel-sel{color:var(--celadon);border-bottom-color:var(--celadon-soft);}
+  .strack{position:relative;height:8px;border-radius:5px;background:var(--paper-sunk);}
+  .strack .gl{position:absolute;top:-5px;bottom:-5px;width:1px;background:var(--ink);opacity:.13;}
+  .strack .gl.b2{background:var(--celadon);opacity:.55;}
+  .sfill{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--cinnabar);transition:width .7s cubic-bezier(.2,.7,.3,1);}
+  .srow.done .sfill{background:var(--celadon);}
+  .smark{position:absolute;top:50%;width:14px;height:14px;border-radius:50%;background:var(--paper);border:2.5px solid var(--cinnabar);transform:translate(-50%,-50%);transition:left .7s cubic-bezier(.2,.7,.3,1);z-index:2;}
+  .srow.done .smark{border-color:var(--celadon);background:var(--celadon);}
+  .b2ring{position:absolute;right:0;top:50%;width:11px;height:11px;border:2px solid var(--celadon);border-radius:50%;background:var(--paper);transform:translate(50%,-50%);}
+  .sgap{font-size:13px;color:var(--ink-faint);margin-top:10px;letter-spacing:.02em;font-style:italic;font-family:var(--serif);}
+  .srow.done .sgap{color:var(--celadon);}
+  .allround{margin:34px 0 0;background:var(--paper-sunk);border:1px solid var(--line-soft);border-left:4px solid var(--cinnabar);border-radius:4px;padding:20px 22px;}
+  .allround.is-b2{border-left-color:var(--celadon);}
+  .allround .k{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-faint);font-weight:600;}
+  .allround .v{font-family:var(--serif);font-weight:600;font-size:27px;margin:5px 0 8px;line-height:1.05;}
+  .allround .v .lv{color:var(--cinnabar);} .allround.is-b2 .v .lv{color:var(--celadon);}
+  .allround p{margin:0;font-size:13.5px;color:var(--ink-soft);line-height:1.55;}
+  .allround p b{color:var(--ink);font-weight:600;}
+  .note{margin-top:34px;border-top:1px solid var(--line);padding-top:26px;font-size:14.5px;color:var(--ink-soft);line-height:1.62;max-width:58ch;}
+  .note b{color:var(--ink);font-weight:600;}
+  .note h4{margin:0 0 10px;font-family:var(--sans);font-weight:600;font-size:18px;letter-spacing:-.015em;color:var(--ink);}
+
+  .foot{display:flex;justify-content:space-between;align-items:center;margin-top:36px;border-top:1px solid var(--line);padding-top:18px;font-size:11.5px;color:var(--ink-faint);letter-spacing:.03em;}
+  .reset{background:none;border:none;color:var(--ink-faint);text-decoration:underline;text-underline-offset:2px;cursor:pointer;font-size:11.5px;font-family:var(--sans);}
+  .reset:hover{color:var(--cinnabar);}
+  footer{margin-top:30px;text-align:center;font-size:12px;color:var(--ink-faint);letter-spacing:.05em;font-family:var(--serif);font-style:italic;}
+
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}.wrap{animation:none;}.fill,.marker,.rmarker,.sfill,.smark{transition:none;}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="glyph" aria-hidden="true">길</div>
+    <div class="seal" title="길 — the road">길</div>
+    <p class="eyebrow">한국어 · road to B2</p>
+    <h1>B2까지<br>가는 길</h1>
+    <p class="sub">The grammar path & the four skills</p>
+    <p class="lead">From where you stand now to <b>all-around B2</b> by <b>December 2027</b> — the month-by-month plan and the four skills, in one place and kept in step.</p>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab is-active" id="tab-roadmap" data-tab="roadmap" role="tab">Roadmap</button>
+    <button class="tab" id="tab-skills" data-tab="skills" role="tab">Skills</button>
+  </nav>
+
+  <!-- ============ ROADMAP ============ -->
+  <div class="panel" id="panel-roadmap" role="tabpanel">
+
+    <div class="stats">
+      <div class="stat"><div class="k">All-around</div><div class="v now" id="stat-now">A2</div></div>
+      <div class="stat"><div class="k">Goal</div><div class="v goal">B2</div></div>
+      <div class="stat"><div class="k">To go</div><div class="v" id="stat-togo">18 mo</div></div>
+      <div class="stat"><div class="k">Pace</div><div class="v">5–7 h</div></div>
+    </div>
+
+    <section class="meter">
+      <div class="acc"></div>
+      <p class="slabel">CEFR position · all-around</p>
+      <div class="scale">
+        <div class="fill" id="fill"></div>
+        <div class="gtick" style="left:0"></div><div class="gtick" style="left:20%"></div><div class="gtick" style="left:60%"></div><div class="gtick" style="left:100%"></div>
+        <div class="glabel" style="left:0">A1</div>
+        <div class="glabel" style="left:20%;transform:translateX(-50%)">A2</div>
+        <div class="glabel" style="left:60%;transform:translateX(-50%)">B1</div>
+        <div class="glabel" style="left:100%;transform:translateX(-100%)">B2</div>
+        <div class="goalend"></div>
+        <div class="marker" id="marker"><div class="lab" id="marker-lab">A2<small>all-around</small></div><div class="dot"></div></div>
+      </div>
+      <p class="meter-foot" id="cefr-floor"></p>
+    </section>
+
+    <section class="meter">
+      <div class="acc"></div>
+      <p class="slabel">Vocabulary · active vs recognised</p>
+      <div class="scale">
+        <div class="fill" id="vfill"></div>
+        <div class="vband" id="vband"></div>
+        <div class="gtick" style="left:36%"></div><div class="gtick" style="left:50%"></div><div class="gtick" style="left:70%"></div>
+        <div class="glabel" style="left:0">0</div>
+        <div class="glabel" style="left:100%;transform:translateX(-100%)">5,000 · B2</div>
+        <div class="goalend"></div>
+        <div class="rmarker" id="rmarker"><div class="ring"></div><div class="rlab" id="rlab">3,250<small>recognised</small></div></div>
+        <div class="marker" id="vmarker"><div class="lab" id="vmarker-lab">1,200<small>active</small></div><div class="dot"></div></div>
+      </div>
+      <p class="meter-foot">The fastest gains aren't new words — they're pulling the ones you already recognise (the shaded band) into active speech. Genuine new acquisition matters most past B2−.</p>
+      <div class="vocab-edit">
+        <span class="ve-label">Active</span>
+        <input id="in-vocab" type="number" min="0" inputmode="numeric" aria-label="Active word count">
+        <span class="ve-label">Recognised</span>
+        <input id="in-recog" type="number" min="0" inputmode="numeric" aria-label="Recognised word count">
+        <button class="add" id="btn-vocab">Save</button>
+      </div>
+    </section>
+
+    <section class="log">
+      <div class="acc"></div>
+      <h2>Evaluation log</h2>
+      <p class="sub2">After each <b>“monthly evaluation, month N”</b>, update your skills, then record the month here — it snapshots your all-around level and advances the timeline. Kept in this browser.</p>
+      <ul class="evs" id="evs"></ul>
+      <div class="addform">
+        <input id="in-month" type="number" min="0" inputmode="numeric" placeholder="Mo." aria-label="Month number">
+        <input id="in-note" class="ev-note-in" type="text" placeholder="Note (optional)" aria-label="Note">
+        <button class="add" id="btn-add">Record</button>
+      </div>
+    </section>
+
+    <div class="acc"></div>
+    <div class="section-row">
+      <h2 class="section-h">Month by month</h2>
+      <a class="jump" href="#current-focus">↓ now</a>
+    </div>
+    <div class="legend">
+      <span><i class="swatch sw-celadon"></i>Done</span>
+      <span><i class="swatch sw-cinnabar"></i>Current step</span>
+      <span><i class="swatch sw-ahead"></i>Ahead</span>
+    </div>
+
+    <div class="timeline" id="timeline"></div>
+
+    <section class="found">
+      <h4>Foundations in place</h4>
+      <p>Confirmed and quietly load-bearing — everything above is built on these:</p>
+      <div class="pats" id="pats"></div>
+    </section>
+  </div>
+
+  <!-- ============ SKILLS ============ -->
+  <div class="panel" id="panel-skills" role="tabpanel" hidden>
+    <div class="acc"></div>
+    <p class="slabel">All-around B2 · tap a level to update</p>
+    <p class="lead" style="margin-top:14px">All-around B2 isn't an average — it's a <b>floor</b>. Your level is whatever your weakest skill is, and the goal is to lift all four to the line.</p>
+
+    <div class="chart">
+      <div class="axis">
+        <span class="al" style="left:0">A1</span>
+        <span class="al" style="left:20%;transform:translateX(-50%)">A2</span>
+        <span class="al" style="left:60%;transform:translateX(-50%)">B1</span>
+        <span class="al" style="left:100%;transform:translateX(-100%)">B2</span>
+      </div>
+      <div id="rows"></div>
+    </div>
+
+    <div class="allround" id="allround">
+      <div class="k">All-around level</div>
+      <div class="v" id="ar-v"></div>
+      <p id="ar-p"></p>
+    </div>
+
+    <section class="note">
+      <h4>Where the effort goes</h4>
+      <p>Your receptive skills — <b>reading</b> especially — are nearly there and will reach B2 with little extra; that's your translator's edge. The whole game is production. <b>Speaking is the floor</b>, and all-around B2 is measured by it. So weight your hours toward output and, crucially, <b>live conversation</b> — a tutor or exchange, not just self-talk. That single bar decides whether all-around B2 lands in December 2027 or a little past it. Updating these levels also moves the roadmap's overall position.</p>
+    </section>
+  </div>
+
+  <div class="foot">
+    <span id="updated">—</span>
+    <button class="reset" id="btn-reset">Reset to defaults</button>
+  </div>
+
+  <footer>한 걸음씩 · one step at a time — lift the lowest bar first</footer>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var KEY = "kr_b2_v8";
+  var GOAL_MONTH = 19;
+  var VOCAB_TARGET = 5000;
+  var LEVELS = ["A2","A2+","B1−","B1","B1+","B2−","B2"];
+  var LEVEL_PCT = {"A2":20,"A2+":33,"B1−":47,"B1":60,"B1+":73,"B2−":87,"B2":100};
+  var MAXI = LEVELS.length - 1;
+
+  var SKILLS = [
+    {key:"reading",   label:"Reading",   ko:"읽기"},
+    {key:"listening", label:"Listening", ko:"듣기"},
+    {key:"writing",   label:"Writing",   ko:"쓰기"},
+    {key:"speaking",  label:"Speaking",  ko:"말하기"}
+  ];
+
+  var BANDS = [
+    { letter:"A", eyebrow:"Now – Aug 2026", title:"Lock in B1", target:"→ B1 solid", vocab:"≈ 1,800", lessonChip:true, months:[
+      {n:2, cal:"Jul ’26", focus:"Relative clauses, head-on", gram:"<span class='ko-g'>관형형</span> in every tense (−는 / −(으)ㄴ / −(으)ㄹ) with embedded subjects — and bed down <span class='ko-g'>−아/어야겠다</span>, <span class='ko-g'>−게 되다</span> from the just-finished 11–16 set."},
+      {n:3, cal:"Aug ’26", focus:"Realization & resolve", gram:"<span class='ko-g'>−(으)ㄴ/ㄹ 줄 알다/모르다</span>; <span class='ko-g'>−기로 하다</span> in live speech."}
+    ]},
+    { letter:"B", eyebrow:"Sep – Nov 2026", title:"Reporting & retrospect", target:"→ B1+", vocab:"≈ 2,500", months:[
+      {n:4, cal:"Sep ’26", focus:"Indirect speech, part one", gram:"<span class='ko-g'>−다고 / −(이)라고 / −냐고 하다</span> — reporting statements and questions.", lesson:"18 · Asking Around the Neighbourhood"},
+      {n:5, cal:"Oct ’26", focus:"Indirect speech, part two", gram:"<span class='ko-g'>−(으)라고 / −자고 하다</span>; embedded <span class='ko-g'>−다고 생각하다 / 듣다</span>.", lesson:"19 · Planning a Trip with a Friend"},
+      {n:6, cal:"Nov ’26", focus:"Looking back, and wishing", gram:"<span class='ko-g'>−더라 / −던</span>; <span class='ko-g'>−았/었으면 좋겠다</span>.", lesson:"20 · Remembering an Old Café  ·  21 review"}
+    ]},
+    { letter:"C", eyebrow:"Dec 2026 – Apr 2027", title:"Voice, cause & nuance", target:"→ B2−", vocab:"≈ 3,500", months:[
+      {n:7,  cal:"Dec ’26", focus:"Passive voice", gram:"<span class='ko-g'>피동</span> — −이/히/리/기, <span class='ko-g'>−아/어지다</span>, <span class='ko-g'>−게 되다</span>."},
+      {n:8,  cal:"Jan ’27", focus:"Causative voice", gram:"<span class='ko-g'>사동</span> — −이/히/리/기/우, <span class='ko-g'>−게 하다</span>; untangle it from the passive."},
+      {n:9,  cal:"Feb ’27", focus:"Cause & result", gram:"<span class='ko-g'>−느라고</span>, <span class='ko-g'>−는 바람에</span>, <span class='ko-g'>−(으)ㄴ/는 탓에</span> against <span class='ko-g'>덕분에</span>."},
+      {n:10, cal:"Mar ’27", focus:"Concession & degree", gram:"<span class='ko-g'>−더라도</span>, <span class='ko-g'>−는데도</span>, <span class='ko-g'>−(으)ㄹ수록</span>; <span class='ko-g'>−(으)ㄹ 뻔하다</span>."},
+      {n:11, cal:"Apr ’27", focus:"Approximation & tendency", gram:"<span class='ko-g'>−(으)ㄴ/는 셈이다</span>, <span class='ko-g'>−(으)ㄴ/는 편이다</span>."}
+    ]},
+    { letter:"D", eyebrow:"May – Dec 2027", title:"Discourse, register & fluency", target:"→ B2", vocab:"≈ 4,800", months:[
+      {n:12, cal:"May ’27", focus:"Discourse particles", gram:"<span class='ko-g'>−거든요</span>, <span class='ko-g'>−잖아요</span> — the texture of natural exchange."},
+      {n:13, cal:"Jun ’27", focus:"Written register", gram:"Nominalization <span class='ko-g'>−(으)ㅁ / −기</span>; <span class='ko-g'>문어체</span> against <span class='ko-g'>구어체</span> — turning your reading strength into output."},
+      {n:14, cal:"Jul ’27", focus:"Advanced connectors", gram:"<span class='ko-g'>−기는커녕</span>, <span class='ko-g'>−는 대신에</span>, <span class='ko-g'>−(으)ㄴ/는 데다가</span>, <span class='ko-g'>−는 한</span>."},
+      {n:15, cal:"Aug ’27", focus:"Evidential nuance", gram:"The <span class='ko-g'>−더-</span> family deepened; <span class='ko-g'>−나 보다</span>, <span class='ko-g'>−는 모양이다</span>, <span class='ko-g'>−(으)ㄹ 텐데</span>. New grammar ends here."},
+      {n:16, cal:"Sep ’27", focus:"Integration, part one", gram:"Register and honorific shifting in real time; sustained narration.", tag:"cons"},
+      {n:17, cal:"Oct ’27", focus:"Integration, part two", gram:"Spontaneous production across every domain; holding an opinion and arguing it.", tag:"cons"},
+      {n:18, cal:"Nov ’27", focus:"Integration, part three", gram:"A full mock B2; polish the weak spots in writing and speech.", tag:"cons"},
+      {n:19, cal:"Dec ’27", focus:"B2 — the goal", gram:"Final evaluation and consolidation. An independent user across daily life, travel and culture.", tag:"goal"}
+    ]}
+  ];
+
+  var FOUNDATIONS = ["−지만","−니까","−아서","−면서","−(으)려고 하다","−(으)ㄹ지 모르다"];
+
+  var DEFAULTS = {
+    skills:{ reading:"B1−", listening:"A2+", writing:"A2+", speaking:"A2" },
+    evals:[
+      {month:0, level:"A2+", note:"Baseline (A2+/B1−)"},
+      {month:1, level:"B1−", note:"First −줄 몰랐어요, relative-clause attempts"},
+      {month:2, level:"B1−", note:"Grammar 4/4, reading 3.5/4, listening 1.5/4; production & recall lag — 기로 하다, 르-irregular"}
+    ],
+    currentLesson:"16",
+    vocab:1200, vocabRecog:3250,
+    activeTab:"roadmap",
+    updated:null
+  };
+
+  function clone(o){ return JSON.parse(JSON.stringify(o)); }
+  function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  function idx(l){ var i = LEVELS.indexOf(l); return i < 0 ? 0 : i; }
+  function load(){
+    try{
+      var raw = localStorage.getItem(KEY);
+      if(!raw) return clone(DEFAULTS);
+      var s = JSON.parse(raw);
+      if(!s.skills) s.skills = clone(DEFAULTS.skills);
+      SKILLS.forEach(function(sk){ if(!s.skills[sk.key]) s.skills[sk.key] = DEFAULTS.skills[sk.key]; });
+      if(!s.evals || !s.evals.length) s.evals = clone(DEFAULTS.evals);
+      if(!s.currentLesson) s.currentLesson = "14";
+      if(typeof s.vocab !== "number") s.vocab = 1200;
+      if(typeof s.vocabRecog !== "number") s.vocabRecog = 3250;
+      if(!s.activeTab) s.activeTab = "roadmap";
+      return s;
+    }catch(e){ return clone(DEFAULTS); }
+  }
+  function save(){
+    state.updated = new Date().toISOString();
+    try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+    renderUpdated();
+  }
+
+  var state = load();
+
+  var $ = function(id){ return document.getElementById(id); };
+  var fill=$("fill"), marker=$("marker"), markerLab=$("marker-lab"), floorEl=$("cefr-floor"),
+      statNow=$("stat-now"), statTogo=$("stat-togo"),
+      vfill=$("vfill"), vband=$("vband"), vmarker=$("vmarker"), vmarkerLab=$("vmarker-lab"),
+      rmarker=$("rmarker"), rlab=$("rlab"), vIn=$("in-vocab"), rIn=$("in-recog"),
+      evsEl=$("evs"), updatedEl=$("updated"), timelineEl=$("timeline"),
+      rowsEl=$("rows"), arEl=$("allround"), arV=$("ar-v"), arP=$("ar-p");
+
+  function allroundInfo(){
+    var minI = 99, maxI = -1, weak = [], strong = null;
+    SKILLS.forEach(function(sk){
+      var i = idx(state.skills[sk.key]);
+      if(i < minI){ minI = i; weak = [sk.label]; } else if(i === minI){ weak.push(sk.label); }
+      if(i > maxI){ maxI = i; strong = sk.label; }
+    });
+    return { level:LEVELS[minI], minI:minI, weak:weak, maxLevel:LEVELS[maxI], maxLabel:strong };
+  }
+  function latest(){
+    var best = state.evals[0], bm = -Infinity;
+    state.evals.forEach(function(e){ if(e.month >= bm){ bm = e.month; best = e; } });
+    return best || {level:"A2", month:1};
+  }
+  function joinNames(arr){ return arr.length > 1 ? arr.slice(0,-1).join(", ")+" & "+arr[arr.length-1] : arr[0]; }
+
+  function renderCEFR(){
+    var info = allroundInfo();
+    var p = LEVEL_PCT[info.level]; if(p === undefined) p = 0;
+    fill.style.width = p + "%";
+    marker.style.left = p + "%";
+    markerLab.innerHTML = esc(info.level) + "<small>all-around</small>";
+    statNow.textContent = info.level;
+    statTogo.textContent = Math.max(0, GOAL_MONTH - latest().month) + " mo";
+    if(info.minI >= MAXI){
+      floorEl.innerHTML = "All four skills at B2 — all-around B2 reached.";
+    } else {
+      floorEl.innerHTML = "Across skills you run " + esc(info.level) + " (" + esc(joinNames(info.weak)) + ") up to " + esc(info.maxLevel) + " (" + esc(info.maxLabel) + "). All-around is the floor — set it in the <b>Skills</b> tab.";
+    }
+  }
+
+  function renderVocab(){
+    var a = (typeof state.vocab === "number") ? state.vocab : 1200;
+    var r = (typeof state.vocabRecog === "number") ? state.vocabRecog : 3250;
+    if(r < a) r = a;
+    var pa = Math.max(2, Math.min(100, a / VOCAB_TARGET * 100));
+    var pr = Math.max(pa, Math.min(100, r / VOCAB_TARGET * 100));
+    vfill.style.width = pa + "%";
+    vband.style.left = pa + "%"; vband.style.width = (pr - pa) + "%";
+    vmarker.style.left = pa + "%"; rmarker.style.left = pr + "%";
+    vmarkerLab.innerHTML = a.toLocaleString() + "<small>active</small>";
+    rlab.innerHTML = r.toLocaleString() + "<small>recognised</small>";
+    if(vIn && document.activeElement !== vIn) vIn.value = a;
+    if(rIn && document.activeElement !== rIn) rIn.value = r;
+  }
+
+  function currentFocusMonth(){
+    var lm = latest().month, cf = null;
+    BANDS.forEach(function(b){ b.months.forEach(function(m){ if(m.n > lm && (cf === null || m.n < cf)) cf = m.n; }); });
+    return cf;
+  }
+  function renderTimeline(){
+    var lm = latest().month, cf = currentFocusMonth(), html = "";
+    BANDS.forEach(function(b){
+      var bandPast = b.months.every(function(m){ return m.n <= lm; });
+      var bandCurrent = b.months.some(function(m){ return m.n === cf; });
+      html += '<div class="band '+(bandPast?"is-past":(bandCurrent?"is-current":"is-ahead"))+'">';
+      html += '<div class="band-head node spine"><div class="bmark">'+b.letter+'</div>'
+            + '<div class="b-eyebrow">'+esc(b.eyebrow)+'</div>'
+            + '<div class="b-title">'+esc(b.title)+'<span class="b-target">'+esc(b.target)+'</span></div>'
+            + (b.vocab ? '<div class="b-vocab">'+esc(b.vocab)+' words</div>' : '');
+      if(b.lessonChip){
+        html += '<div class="now-on">Currently on Lesson <select id="cur-lesson" aria-label="Current lesson">'
+              + ['11','12','13','14','15','16','17','18','19','20','21'].map(function(x){return '<option'+(x===state.currentLesson?' selected':'')+'>'+x+'</option>';}).join('')
+              + '</select><span class="now-cap">· 11–16 wrapping; 17–21 built ahead</span></div>';
+      }
+      html += '</div>';
+      b.months.forEach(function(m){
+        var cls = m.n <= lm ? "is-past" : (m.n === cf ? "is-current" : "is-ahead");
+        var id = (m.n === cf) ? ' id="current-focus"' : '';
+        var pill = "";
+        if(m.n === cf) pill = ' <span class="pill now">now</span>';
+        else if(m.tag === "cons") pill = ' <span class="pill cons">consolidate</span>';
+        else if(m.tag === "goal") pill = ' <span class="pill goal">goal</span>';
+        html += '<div class="month node spine '+cls+'"'+id+'><div class="mnode">'+m.n+'</div><div class="mwrap">'
+              + '<div class="mlabel">'+esc(m.cal)+pill+'</div>'
+              + '<div class="mfocus">'+esc(m.focus)+'</div>'
+              + '<div class="mgram">'+m.gram+'</div>'
+              + (m.lesson ? '<div class="mlesson">Lesson '+esc(m.lesson)+'</div>' : '')
+              + '</div></div>';
+      });
+      html += '</div>';
+    });
+    timelineEl.innerHTML = html;
+    var sel = $("cur-lesson");
+    if(sel) sel.addEventListener("change", function(){ state.currentLesson = sel.value; save(); });
+  }
+
+  function renderEvs(){
+    var sorted = state.evals.slice().sort(function(a,b){return a.month - b.month;});
+    evsEl.innerHTML = sorted.map(function(e){
+      var i = state.evals.indexOf(e);
+      return '<li><span class="ev-month">Mo '+esc(e.month)+'</span>'
+        + '<span class="ev-level">'+esc(e.level||"")+'</span>'
+        + '<span class="ev-note">'+esc(e.note||"")+'</span>'
+        + '<button class="ev-del" data-i="'+i+'" aria-label="Remove this entry">×</button></li>';
+    }).join("");
+    Array.prototype.forEach.call(evsEl.querySelectorAll(".ev-del"), function(btn){
+      btn.addEventListener("click", function(){
+        if(state.evals.length <= 1) return;
+        state.evals.splice(parseInt(btn.getAttribute("data-i"),10),1);
+        save(); renderAll();
+      });
+    });
+  }
+
+  function gapText(lv){
+    var steps = MAXI - idx(lv);
+    if(steps <= 0) return "At B2 ✓";
+    return steps + (steps === 1 ? " step" : " steps") + " to B2";
+  }
+  function renderSkills(){
+    rowsEl.innerHTML = SKILLS.map(function(sk){
+      var lv = state.skills[sk.key];
+      var p = LEVEL_PCT[lv]; if(p === undefined) p = 0;
+      var done = lv === "B2";
+      var opts = LEVELS.map(function(L){ return '<option'+(L===lv?' selected':'')+'>'+L+'</option>'; }).join('');
+      return '<div class="srow'+(done?' done':'')+'" data-key="'+sk.key+'">'
+        + '<div class="shead"><div class="sname"><span class="ko">'+sk.ko+'</span>'+esc(sk.label)+'</div>'
+        + '<select class="slevel-sel" aria-label="'+esc(sk.label)+' level">'+opts+'</select></div>'
+        + '<div class="strack"><div class="gl" style="left:20%"></div><div class="gl" style="left:60%"></div><div class="gl b2" style="left:100%"></div>'
+        + '<div class="sfill" style="width:'+p+'%"></div><div class="smark" style="left:'+p+'%"></div><div class="b2ring"></div></div>'
+        + '<div class="sgap">'+gapText(lv)+'</div></div>';
+    }).join("");
+    Array.prototype.forEach.call(rowsEl.querySelectorAll(".srow"), function(row){
+      var key = row.getAttribute("data-key");
+      row.querySelector(".slevel-sel").addEventListener("change", function(e){
+        state.skills[key] = e.target.value;
+        save(); renderSkills(); renderAllround(); renderCEFR();
+      });
+    });
+  }
+  function renderAllround(){
+    var info = allroundInfo();
+    var isB2 = info.minI >= MAXI;
+    arEl.classList.toggle("is-b2", isB2);
+    arV.innerHTML = isB2 ? 'All-around <span class="lv">B2</span> — reached' : '<span class="lv">'+esc(info.level)+'</span>';
+    if(isB2){
+      arP.textContent = "Every skill is at B2. That's all-around B2 — the real one.";
+    } else {
+      arP.innerHTML = "Held here by <b>"+esc(joinNames(info.weak))+"</b>. Lift the lowest bar and the whole figure moves — the others are ahead and will hold.";
+    }
+  }
+
+  function renderUpdated(){
+    if(!state.updated){ updatedEl.textContent = "Estimates — adjust as you measure"; return; }
+    var d = new Date(state.updated);
+    updatedEl.textContent = "Updated " + d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"});
+  }
+  function renderPats(){ $("pats").innerHTML = FOUNDATIONS.map(function(p){return esc(p);}).join('<span class="sep">·</span>'); }
+
+  function setTab(tab){
+    state.activeTab = tab;
+    $("panel-roadmap").hidden = (tab !== "roadmap");
+    $("panel-skills").hidden = (tab !== "skills");
+    $("tab-roadmap").classList.toggle("is-active", tab === "roadmap");
+    $("tab-skills").classList.toggle("is-active", tab === "skills");
+  }
+  $("tab-roadmap").addEventListener("click", function(){ setTab("roadmap"); save(); });
+  $("tab-skills").addEventListener("click", function(){ setTab("skills"); save(); });
+
+  $("btn-add").addEventListener("click", function(){
+    var m = $("in-month").value;
+    if(m === "" || isNaN(parseInt(m,10))){ $("in-month").focus(); return; }
+    state.evals.push({ month:parseInt(m,10), level:allroundInfo().level, note:$("in-note").value.trim() });
+    $("in-month").value = ""; $("in-note").value = "";
+    save(); renderAll();
+  });
+  $("btn-vocab").addEventListener("click", function(){
+    var a = parseInt(vIn.value, 10), r = parseInt(rIn.value, 10);
+    if(!isNaN(a) && a >= 0) state.vocab = a;
+    if(!isNaN(r) && r >= 0) state.vocabRecog = r;
+    save(); renderVocab();
+  });
+  $("btn-reset").addEventListener("click", function(){
+    if(!confirm("Reset everything to the starting estimates? Logged evaluations and counts will be cleared.")) return;
+    state = clone(DEFAULTS);
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    setTab(state.activeTab); renderAll();
+  });
+
+  function renderAll(){ renderCEFR(); renderVocab(); renderTimeline(); renderEvs(); renderSkills(); renderAllround(); renderUpdated(); }
+  setTab(state.activeTab);
+  renderPats();
+  renderAll();
+})();
+</script>
+</body>
+</html>

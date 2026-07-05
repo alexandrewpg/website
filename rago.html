@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Korean — Reported Speech</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#FAF8F4;--sur:#FFFFFF;--ink:#1A1714;--mid:#6A6259;--sub:#A09488;
+  --rule:#E8E2DA;--acc:#B85C38;--acc-lt:#FAEEE8;--acc-mid:#D4785A;
+  --gold:#C9963A;--sage:#5D7A60;--sage-lt:#EBF2EC;
+  --sh:0 2px 16px rgba(60,40,20,0.07);--sh-hover:0 4px 24px rgba(60,40,20,0.12);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;padding:0 0 7rem;-webkit-font-smoothing:antialiased;}
+.nav{position:sticky;top:0;z-index:100;background:rgba(237,232,225,0.97);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--rule);padding:0.7rem 1.25rem;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.nav-label{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);padding-right:10px;border-right:1px solid var(--rule);margin-right:2px;white-space:nowrap;}
+.np{font-family:'Inter',sans-serif;font-size:13px;font-weight:500;color:var(--mid);background:none;border:none;border-radius:20px;padding:6px 14px;cursor:pointer;transition:all .2s;white-space:nowrap;position:relative;}
+.np:hover{background:var(--sur);color:var(--ink);box-shadow:var(--sh);}
+.np.on{background:var(--sur);color:var(--ink);font-weight:600;box-shadow:var(--sh);}
+.np.on::after{content:'';position:absolute;bottom:-1px;left:50%;transform:translateX(-50%);width:20px;height:2px;background:var(--gold);border-radius:1px;}
+.np .pip{position:absolute;top:2px;right:4px;width:14px;height:14px;border-radius:50%;background:var(--acc);color:#fff;font-size:8px;font-weight:700;display:none;align-items:center;justify-content:center;line-height:1;}
+.np .pip.show{display:flex;}
+.page{max-width:760px;margin:0 auto;padding:2.5rem 1.25rem;}
+.lesson{display:none;}.lesson.on{display:block;}
+.lsn-header{position:relative;overflow:hidden;padding:2.5rem 2.5rem 2.25rem;margin-bottom:2.25rem;background:var(--sur);border-radius:20px;box-shadow:var(--sh);}
+.lsn-watermark{position:absolute;right:-12px;top:-28px;font-family:'Cormorant Garamond',serif;font-size:220px;font-weight:300;color:rgba(184,92,56,0.09);line-height:1;pointer-events:none;user-select:none;letter-spacing:-.02em;}
+.lsn-eyebrow{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);margin-bottom:.6rem;}
+.lsn-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--ink);line-height:1.18;margin-bottom:.5rem;}
+.lsn-sub{font-size:14.5px;color:var(--mid);line-height:1.7;margin-bottom:1.1rem;max-width:520px;font-style:italic;}
+.new-pill{display:inline-flex;align-items:center;gap:10px;background:var(--acc-lt);border-radius:16px;padding:9px 16px;}
+.new-pill-label{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);flex-shrink:0;}
+.new-pill-pat{font-family:'Noto Sans KR',sans-serif;font-size:16px;font-weight:700;color:var(--ink);}
+.new-pill-mean{font-size:12.5px;color:var(--mid);}
+.sec-label{font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--sage);margin-bottom:.85rem;}
+.reading-card{background:var(--sur);border-radius:16px;box-shadow:var(--sh);padding:1.75rem 2rem;margin-bottom:2rem;}
+.reading-kr{font-family:'Noto Sans KR',sans-serif;font-size:18px;line-height:2.4;color:var(--ink);margin-bottom:1.25rem;}
+.dlg{display:flex;gap:14px;margin-bottom:.75rem;align-items:flex-start;}
+.dlg-who{font-size:12px;font-weight:700;min-width:42px;padding-top:5px;flex-shrink:0;color:var(--sage);letter-spacing:.02em;text-transform:uppercase;}
+.dlg-ipa{font-family:'Inter',sans-serif;font-size:12px;color:var(--sub);font-style:italic;line-height:1.5;margin-top:3px;letter-spacing:.01em;}
+.vc-hanja{font-family:'Noto Sans KR',serif;font-size:11px;color:var(--sage);font-weight:500;line-height:1.3;margin-top:1px;letter-spacing:.04em;}
+.vc-ipa{font-family:'Inter',sans-serif;font-size:10px;color:var(--sub);font-style:italic;line-height:1.3;margin-top:1px;}
+.dlg-txt{font-family:'Noto Sans KR',sans-serif;font-size:17px;line-height:2;color:var(--ink);}
+.ctrl-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:1.1rem;margin-bottom:.85rem;}
+.lbtn{display:inline-flex;align-items:center;gap:7px;background:var(--acc);color:#fff;border:none;border-radius:24px;padding:9px 18px;font-size:13.5px;font-weight:500;font-family:'Inter',sans-serif;cursor:pointer;transition:all .2s;box-shadow:0 2px 8px rgba(184,92,56,0.25);}
+.lbtn:hover{transform:translateY(-1px);background:var(--acc-mid);box-shadow:0 4px 12px rgba(184,92,56,0.3);}
+.lbtn svg{width:10px;height:10px;flex-shrink:0;}
+.spd{font-family:'Inter',sans-serif;font-size:13px;padding:8px 12px;border:1px solid var(--rule);border-radius:24px;background:var(--bg);color:var(--mid);cursor:pointer;}
+.tl-btn{font-family:'Inter',sans-serif;font-size:13px;border:1px solid var(--rule);border-radius:24px;padding:8px 14px;cursor:pointer;transition:all .2s;background:transparent;color:var(--mid);}
+.tl-btn:hover{background:var(--acc-lt);border-color:var(--acc-mid);color:var(--acc);}
+.tl-box{font-size:14px;color:var(--mid);line-height:1.85;border-radius:10px;padding:1rem 1.25rem;display:none;margin-top:.5rem;background:var(--bg);border-left:3px solid var(--acc-mid);}
+.tl-box.on{display:block;}
+.reading-ipa{font-family:'Inter',sans-serif;font-size:12.5px;color:var(--sub);font-style:italic;line-height:1.7;margin:-0.4rem 0 1.1rem;letter-spacing:.01em;}
+.tts-note{font-size:12px;color:var(--sub);font-style:italic;margin-top:.85rem;}
+.gram-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:2rem;}
+@media(max-width:520px){.gram-grid{grid-template-columns:1fr;}}
+.gc{background:var(--sur);border-radius:14px;box-shadow:var(--sh);padding:1.35rem 1.4rem;transition:box-shadow .2s;}
+.gc:hover{box-shadow:var(--sh-hover);}
+.gc.new-card{background:var(--acc-lt);box-shadow:0 2px 16px rgba(184,92,56,0.1);}
+.gc.new-card:hover{box-shadow:0 4px 24px rgba(184,92,56,0.18);}
+.new-star{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);margin-bottom:.45rem;display:block;}
+.gc-pat{font-family:'Noto Sans KR',sans-serif;font-size:17.5px;font-weight:700;color:var(--ink);margin-bottom:2px;}
+.gc-mean{font-size:12px;font-weight:600;letter-spacing:.03em;color:var(--mid);margin-bottom:.75rem;}
+.gc-ex{font-family:'Noto Sans KR',sans-serif;font-size:14px;line-height:1.7;background:var(--bg);border-radius:8px;padding:8px 11px;cursor:pointer;margin-bottom:6px;border:none;width:100%;text-align:left;color:var(--ink);transition:background .15s;}
+.gc-ex:hover{background:var(--rule);}
+.gc-en{font-size:12px;font-style:italic;color:var(--mid);}
+.gc-note{font-size:11.5px;color:var(--sub);margin-top:.6rem;line-height:1.55;}
+.vocab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:8px;margin-bottom:2rem;}
+.vc{display:flex;align-items:center;gap:10px;background:var(--sur);border-radius:12px;padding:10px 13px;cursor:pointer;box-shadow:var(--sh);transition:all .2s;}
+.vc:hover{transform:translateY(-2px);box-shadow:var(--sh-hover);}
+.vc-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;background:var(--bg);}
+.vc-kr{font-family:'Noto Sans KR',sans-serif;font-size:14.5px;font-weight:700;color:var(--ink);margin-bottom:1px;}
+.vc-en{font-size:12px;color:var(--mid);line-height:1.35;}
+.sent-list{display:flex;flex-direction:column;gap:8px;margin-bottom:2rem;}
+.sent-row{display:flex;align-items:flex-start;gap:12px;background:var(--sur);border-radius:12px;padding:14px 16px;box-shadow:var(--sh);transition:box-shadow .2s;}
+.sent-row:hover{box-shadow:var(--sh-hover);}
+.snum{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11.5px;font-weight:700;margin-top:2px;background:var(--sage-lt);color:var(--sage);}
+.sent-body{flex:1;}
+.sent-kr{font-family:'Noto Sans KR',sans-serif;font-size:16.5px;color:var(--ink);line-height:1.85;}
+.sent-en{font-size:13.5px;color:var(--mid);font-style:italic;display:none;margin-top:6px;padding-top:6px;border-top:1px solid var(--rule);}
+.sent-en.on{display:block;}
+.stl{font-size:12px;background:none;border:none;cursor:pointer;font-family:'Inter',sans-serif;padding:2px 0;color:var(--sage);text-decoration:underline;text-underline-offset:3px;margin-top:4px;display:block;}
+.sbtn{border:1px solid var(--rule);border-radius:20px;padding:5px 13px;font-size:12.5px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;flex-shrink:0;background:var(--bg);color:var(--mid);transition:all .15s;}
+.sbtn:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
+.ex-sec{background:var(--sur);border-radius:16px;box-shadow:var(--sh);padding:1.5rem 1.75rem;margin-bottom:1.1rem;}
+.ex-head{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.ex-badge{width:24px;height:24px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;flex-shrink:0;background:var(--acc);color:#fff;}
+.ex-title{font-size:14.5px;font-weight:600;color:var(--ink);}
+.ex-sub{font-size:12px;color:var(--sub);margin-top:1px;}
+.ex-item{margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid var(--rule);}
+.ex-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.ex-q{font-family:'Noto Sans KR',sans-serif;font-size:15.5px;color:var(--ink);line-height:1.9;margin-bottom:4px;}
+.ex-q-en{font-size:13px;color:var(--mid);margin-bottom:7px;font-style:italic;}
+.c-en{font-size:15px;font-weight:500;margin-bottom:8px;color:var(--ink);}
+.blank{display:inline-block;min-width:50px;border-bottom:2px solid var(--acc-mid);font-weight:600;padding:0 3px;color:var(--acc);}
+.at{font-family:'Inter',sans-serif;font-size:12.5px;border:1px solid var(--rule);border-radius:20px;padding:5px 13px;cursor:pointer;transition:all .15s;margin-right:4px;background:var(--bg);color:var(--mid);}
+.at:hover{background:var(--acc-lt);border-color:var(--acc-mid);color:var(--acc);}
+.ans-box{display:none;margin-top:8px;border-radius:12px;overflow:hidden;}
+.ans-box.on{display:block;}
+.ans-main{padding:10px 14px;background:var(--acc-lt);}
+.ans-kr{font-family:'Noto Sans KR',sans-serif;font-size:15.5px;font-weight:600;margin-bottom:3px;color:var(--ink);}
+.ans-kr strong{text-decoration:underline;text-decoration-color:var(--acc);text-underline-offset:3px;text-decoration-thickness:2px;color:var(--acc);}
+.ans-note{font-size:12.5px;color:var(--mid);line-height:1.6;}
+.ans-alt{background:var(--bg);padding:8px 14px;border-top:1px solid rgba(184,92,56,0.15);}
+.al{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);margin-bottom:2px;}
+.ak{font-family:'Noto Sans KR',sans-serif;font-size:13.5px;color:var(--mid);}
+.row-btns{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:7px;}
+.px{display:inline-flex;align-items:center;gap:4px;background:var(--acc);color:#fff;border:none;border-radius:20px;padding:5px 11px;font-size:12.5px;font-weight:500;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s;}
+.px:hover{background:var(--acc-mid);transform:translateY(-1px);}
+.px svg{width:8px;height:8px;}
+.divider{border:none;border-top:1px solid var(--rule);margin:1.75rem 0;}
+.sb{margin-bottom:2rem;}
+.mark-done-row{display:flex;justify-content:flex-end;margin-top:1.1rem;padding-top:.9rem;border-top:1px solid var(--rule);}
+.mdbtn{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;border:1.5px solid;border-radius:20px;padding:8px 18px;cursor:pointer;transition:all .2s;letter-spacing:.01em;}
+.mdbtn.undone{color:var(--ink);background:var(--sur);border-color:var(--mid);box-shadow:0 1px 4px rgba(60,40,20,0.08);}
+.mdbtn.undone:hover{border-color:var(--acc);color:var(--acc);background:var(--acc-lt);box-shadow:0 2px 8px rgba(184,92,56,0.15);}
+.mdbtn.done-state{color:#fff;background:var(--acc);border-color:var(--acc);box-shadow:0 2px 8px rgba(184,92,56,0.3);}
+.mdbtn.done-state:hover{background:var(--acc-mid);}
+#lesson-kb{padding:1rem 0;}
+.kb-header{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--rule);}
+.kb-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;color:var(--ink);margin-bottom:.35rem;}
+.kb-sub{font-size:14px;color:var(--mid);line-height:1.65;}
+.kb-reset{font-family:'Inter',sans-serif;font-size:12.5px;font-weight:500;border:1px solid var(--rule);background:none;color:var(--sub);border-radius:20px;padding:6px 14px;cursor:pointer;margin-top:.9rem;transition:all .15s;}
+.kb-reset:hover{border-color:var(--mid);color:var(--ink);}
+.kb-lesson{background:var(--sur);border-radius:16px;box-shadow:var(--sh);padding:1.25rem 1.5rem;margin-bottom:1rem;}
+.kb-lesson-title{font-size:13.5px;font-weight:600;color:var(--ink);margin-bottom:.85rem;display:flex;align-items:center;gap:8px;}
+.kb-dot{width:7px;height:7px;border-radius:50%;background:var(--sage);flex-shrink:0;}
+.kb-progress{font-size:12px;color:var(--sub);margin-left:auto;}
+.kb-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.kb-col-label{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);margin-bottom:6px;}
+.kb-col-cards{display:flex;flex-direction:column;gap:5px;min-height:36px;}
+.kb-card{background:var(--bg);border:1px solid var(--rule);border-radius:10px;padding:9px 13px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;transition:all .15s;user-select:none;}
+.kb-card:hover{border-color:var(--acc-mid);background:var(--acc-lt);}
+.kb-card.done{background:var(--acc-lt);border-color:var(--acc-mid);border-left:3px solid var(--acc);}
+.kb-card-text{font-size:13.5px;color:var(--ink);}
+.kb-card.done .kb-card-text{color:var(--acc);}
+.kb-card-arrow{font-size:14px;color:var(--sub);flex-shrink:0;}
+.kb-card.done .kb-card-arrow{color:var(--acc);}
+.kb-empty{font-size:12.5px;color:var(--sub);font-style:italic;padding:5px 0;}
+
+.speak-sec{background:var(--sur);border-radius:16px;box-shadow:var(--sh);padding:1.5rem 1.75rem;margin-bottom:1.1rem;}
+.speak-intro{font-size:13px;color:var(--mid);font-style:italic;line-height:1.6;margin-bottom:1.1rem;padding-bottom:.9rem;border-bottom:1px solid var(--rule);}
+.speak-item{margin-bottom:1.1rem;padding-bottom:1.1rem;border-bottom:1px solid var(--rule);}
+.speak-item:last-child{margin-bottom:0;padding-bottom:0;border-bottom:none;}
+.speak-tag{display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);background:var(--sage-lt);border-radius:5px;padding:3px 8px;margin-bottom:.55rem;}
+.speak-tag.role{color:var(--acc);background:var(--acc-lt);}
+.speak-prompt-kr{font-family:'Noto Sans KR',sans-serif;font-size:15.5px;color:var(--ink);line-height:1.85;margin-bottom:3px;}
+.speak-prompt-en{font-size:12.5px;color:var(--mid);font-style:italic;line-height:1.5;margin-bottom:.6rem;}
+.speak-hint{font-family:'Noto Sans KR',sans-serif;font-size:13px;color:var(--sage);background:var(--sage-lt);border-radius:8px;padding:7px 11px;margin-bottom:.5rem;display:inline-block;}
+.speak-hint-label{font-family:'Inter',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--sage);margin-right:6px;}
+.speak-model{display:none;margin-top:.5rem;border-radius:10px;overflow:hidden;border:1px solid var(--rule);}
+.speak-model.on{display:block;}
+.speak-model-kr{font-family:'Noto Sans KR',sans-serif;font-size:14.5px;font-weight:500;color:var(--ink);background:var(--acc-lt);padding:10px 13px;line-height:1.8;}
+.speak-model-label{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--acc);margin-bottom:3px;display:block;}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <span class="nav-label">Topic</span>
+  <button class="np on" id="np-rs" onclick="sw('rs')">Reported Speech<span class="pip" id="pip-rs"></span></button>
+  <button class="np"    id="np-kb"  onclick="sw('kb')">Progress</button>
+</div>
+
+<div class="page">
+
+<div class="lesson on" id="lesson-rs">
+  <div class="lsn-header">
+    <div class="lsn-watermark" style="font-size:150px;">말</div>
+    <div class="lsn-eyebrow">Topic lesson · Grammar reference</div>
+    <div class="lsn-title">Reported Speech — A Full Review</div>
+    <div class="lsn-sub">Every reported-speech ending in one place: statement, question, suggestion, and command</div>
+    <div class="new-pill">
+      <span class="new-pill-label">Consolidating</span>
+      <span class="new-pill-pat">-다고 · -(이)라고 · -냐고 · -자고 · -(으)라고</span>
+    </div>
+  </div>
+  <div class="sec-label">Reading text — dialogue</div>
+  <div class="reading-card">
+    <div style="margin-bottom:.7rem;font-size:12px;color:var(--sub);">나 — you · 지민 — your friend</div>
+    <div class="dlg"><span class="dlg-who">나</span><span class="dlg-txt">오랜만이야! 요즘 다들 어떻게 지내는지 들었어?<div class="dlg-ipa">[o.ɾɛn.ma.ni.ja | jo.dʑɯm ta.dɯl ʌ.t͈ʌ.kʰe tɕi.nɛ.nɯn.dʑi tɯ.ɾʌ.s͈ʌ]</div></span></div>
+    <div class="dlg"><span class="dlg-who">지민</span><span class="dlg-txt">어, 수진이가 다음 달에 결혼한다고 하더라.<div class="dlg-ipa">[ʌ | su.dʑi.ni ta.ɯm da.ɾe kjʌl.hon.ɦan.da.ɡo ha.dʌ.ɾa]</div></span></div>
+    <div class="dlg"><span class="dlg-who">나</span><span class="dlg-txt">진짜? 나한테는 아직 남자친구도 없다고 했었는데.<div class="dlg-ipa">[tɕin.t͈ɕa | na.ɦan.tʰe.nɯn a.dʑik̚ nam.dʑa.tɕʰin.ɡu.do ʌp̚.t͈a.ɡo hɛs̚.s͈ʌn.nɯn.de]</div></span></div>
+    <div class="dlg"><span class="dlg-who">지민</span><span class="dlg-txt">그리고 민호가 너 요즘 바쁘냐고 물어봤어. 한번 연락해 보라고 했어.<div class="dlg-ipa">[kɯ.ɾi.ɡo min.ɦo.ɡa nʌ jo.dʑɯm ba.p͈ɯ.nja.ɡo mu.ɾʌ.bwa.s͈ʌ | han.bʌn jʌl.lak̚.hɛ bo.ɾa.ɡo hɛ.s͈ʌ]</div></span></div>
+    <div class="dlg"><span class="dlg-who">나</span><span class="dlg-txt">고마워. 참, 다음 주에 다 같이 저녁 먹자고 할까?<div class="dlg-ipa">[ko.ma.wʌ | tɕʰam ta.ɯm dʑu.e ta ka.tʰi tɕʌ.njʌk̚ mʌk̚.t͈ɕa.ɡo hal.k͈a]</div></span></div>
+    <div class="dlg"><span class="dlg-who">지민</span><span class="dlg-txt">좋아! 근데 정민이는 요즘 바빠서 못 올 거라고 들었어. 그래도 물어는 보자.<div class="dlg-ipa">[tɕo.a | kɯn.de tɕʌŋ.mi.nɯn jo.dʑɯm ba.p͈a.sʌ mot̚ ol k͈ʌ.ɾa.ɡo tɯ.ɾʌ.s͈ʌ | kɯ.ɾɛ.do mu.ɾʌ.nɯn bo.dʑa]</div></span></div>
+    <div class="ctrl-row">
+      <button class="lbtn" id="mb-rs" onclick="spkMain('rs')"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg> Listen</button>
+      <select class="spd" id="ms-rs"><option value="0.75" selected>Slow</option><option value="1">Normal</option></select>
+      <button class="tl-btn" id="tlbtn-rs" onclick="togTl('rs')">Show translation</button>
+    </div>
+    <div class="tl-box" id="tlb-rs">Me: Long time no see! Have you heard how everyone's doing these days? / Jimin: Oh, Sujin said she's getting married next month. / Me: Really? She told me she didn't even have a boyfriend yet. / Jimin: And Minho asked whether you're busy these days. He told me to tell you to get in touch. / Me: Thanks. Oh, should I suggest we all get dinner together next week? / Jimin: Good idea! But I heard Jungmin is busy these days and won't be able to come. Still, let's ask.</div>
+    <div class="tts-note">Audio uses your browser's Korean TTS — quality varies by device</div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-rs-0" onclick="mdToggle('rs',0)">Mark done ✓</button></div>
+  </div>
+  <hr class="divider">
+  <div class="sb">
+    <div class="sec-label">Grammar — all five forms, tap to hear</div>
+    <div class="gram-grid">
+      <div class="gc">
+        <div class="gc-pat">-다고 하다</div>
+        <div class="gc-mean">Statement — verb / adjective</div>
+        <button class="gc-ex" onclick="spkRaw('수진이가 결혼한다고 했어요.',this)">수진이가 결혼한다고 했어요.</button>
+        <div class="gc-en">Sujin said she's getting married</div>
+        <div class="gc-note">Verb/adjective plain form + -다고. Present 한다고, past 했다고, future -(으)ㄹ 거라고.</div>
+      </div>
+      <div class="gc">
+        <div class="gc-pat">-(이)라고 하다</div>
+        <div class="gc-mean">Statement — noun predicate (이다)</div>
+        <button class="gc-ex" onclick="spkRaw('남자친구가 아직 학생이라고 했어요.',this)">남자친구가 아직 학생이라고 했어요.</button>
+        <div class="gc-en">She said her boyfriend is still a student</div>
+        <div class="gc-note">이다 → (이)라고, not 다고. 학생이다 → 학생이라고. This is the one most learners mix up.</div>
+      </div>
+      <div class="gc">
+        <div class="gc-pat">-냐고 하다 / 묻다</div>
+        <div class="gc-mean">Question</div>
+        <button class="gc-ex" onclick="spkRaw('바쁘냐고 물어봤어요.',this)">바쁘냐고 물어봤어요.</button>
+        <div class="gc-en">He asked whether I'm busy</div>
+        <div class="gc-note">Verb/adjective + -냐고 (or -(으)냐고). Reports any yes/no or wh- question.</div>
+      </div>
+      <div class="gc">
+        <div class="gc-pat">-자고 하다</div>
+        <div class="gc-mean">Suggestion — "let's…"</div>
+        <button class="gc-ex" onclick="spkRaw('다 같이 저녁 먹자고 했어요.',this)">다 같이 저녁 먹자고 했어요.</button>
+        <div class="gc-en">I suggested we all eat dinner together</div>
+        <div class="gc-note">Verb stem + -자고. Only for suggestions involving the listener, never adjectives.</div>
+      </div>
+      <div class="gc">
+        <div class="gc-pat">-(으)라고 하다</div>
+        <div class="gc-mean">Command — affirmative</div>
+        <button class="gc-ex" onclick="spkRaw('연락해 보라고 했어요.',this)">연락해 보라고 했어요.</button>
+        <div class="gc-en">He told me to try getting in touch</div>
+        <div class="gc-note">Verb stem + -(으)라고. 하다 verbs often appear as 해 보라고, 조심하라고.</div>
+      </div>
+      <div class="gc">
+        <div class="gc-pat">-지 말라고 하다</div>
+        <div class="gc-mean">Command — negative</div>
+        <button class="gc-ex" onclick="spkRaw('사진 찍지 말라고 했어요.',this)">사진 찍지 말라고 했어요.</button>
+        <div class="gc-en">They told us not to take photos</div>
+        <div class="gc-note">Negative of -(으)라고: -지 말다 + -라고. Never conjugate 말다 itself — always 말라고.</div>
+      </div>
+    </div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-rs-2" onclick="mdToggle('rs',2)">Mark done ✓</button></div>
+  </div>
+  <hr class="divider">
+  <div class="sb"><div class="sec-label">Vocabulary</div><div class="vocab-grid" id="vg-rs"></div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-rs-3" onclick="mdToggle('rs',3)">Mark done ✓</button></div></div>
+  <hr class="divider">
+  <div class="sb"><div class="sec-label">Key sentences — one per pattern</div><div class="sent-list" id="sl-rs"></div>
+    <div class="mark-done-row"><button class="mdbtn undone" id="md-rs-4" onclick="mdToggle('rs',4)">Mark done ✓</button></div></div>
+  <hr class="divider">
+  <div class="sb">
+    <div class="sec-label">Exercises</div>
+    <div class="ex-sec">
+      <div class="ex-head"><div class="ex-badge">A</div><div><div class="ex-title">Fill in the blanks</div><div class="ex-sub">Translation given; complete, then reveal</div></div></div>
+      <div class="ex-item">
+        <div class="ex-q">친구가 이사 간<span class="blank">___</span> 했어요.</div>
+        <div class="ex-q-en">My friend said she's moving.</div>
+        <div class="row-btns"><button class="at" onclick="togA('rsa1')">Show answer</button></div>
+        <div class="ans-box" id="rsa1"><div class="ans-main"><div class="ans-kr">친구가 이사 간<strong>다고</strong> 했어요.</div><div class="ans-note">-다고 하다 = reported statement (verb). 가다 → 간다고 (present plain, ㄴ inserted).</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('친구가 이사 간다고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">그 사람이 의사<span class="blank">___</span> 했어요.</div>
+        <div class="ex-q-en">They said that person is a doctor.</div>
+        <div class="row-btns"><button class="at" onclick="togA('rsa2')">Show answer</button></div>
+        <div class="ans-box" id="rsa2"><div class="ans-main"><div class="ans-kr">그 사람이 의사<strong>라고</strong> 했어요.</div><div class="ans-note">-(이)라고 하다 = statement with a noun predicate. 의사(이)다 → 의사라고.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('그 사람이 의사라고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">저한테 요즘 뭐 하<span class="blank">___</span> 물어봤어요.</div>
+        <div class="ex-q-en">They asked me what I'm doing these days.</div>
+        <div class="row-btns"><button class="at" onclick="togA('rsa3')">Show answer</button></div>
+        <div class="ans-box" id="rsa3"><div class="ans-main"><div class="ans-kr">저한테 요즘 뭐 하<strong>냐고</strong> 물어봤어요.</div><div class="ans-note">-냐고 하다 = reported question. 하다 → 하냐고.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('저한테 요즘 뭐 하냐고 물어봤어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">이번 주말에 등산 가<span class="blank">___</span> 했어요.</div>
+        <div class="ex-q-en">I suggested we go hiking this weekend.</div>
+        <div class="row-btns"><button class="at" onclick="togA('rsa4')">Show answer</button></div>
+        <div class="ans-box" id="rsa4"><div class="ans-main"><div class="ans-kr">이번 주말에 등산 가<strong>자고</strong> 했어요.</div><div class="ans-note">-자고 하다 = reported suggestion. 가다 → 가자고.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('이번 주말에 등산 가자고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">의사가 푹 쉬<span class="blank">___</span> 했어요.</div>
+        <div class="ex-q-en">The doctor told me to rest well.</div>
+        <div class="row-btns"><button class="at" onclick="togA('rsa5')">Show answer</button></div>
+        <div class="ans-box" id="rsa5"><div class="ans-main"><div class="ans-kr">의사가 푹 쉬<strong>라고</strong> 했어요.</div><div class="ans-note">-(으)라고 하다 = reported command. 쉬다 → 쉬라고.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('의사가 푹 쉬라고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">여기서는 뛰지 말<span class="blank">___</span> 했어요.</div>
+        <div class="ex-q-en">They told us not to run here.</div>
+        <div class="row-btns"><button class="at" onclick="togA('rsa6')">Show answer</button></div>
+        <div class="ans-box" id="rsa6"><div class="ans-main"><div class="ans-kr">여기서는 뛰지 말<strong>라고</strong> 했어요.</div><div class="ans-note">-지 말라고 하다 = negative command. 말다 always becomes 말라고, never 말으라고.</div></div><div class="ans-alt"><div class="row-btns"><button class="px" onclick="spkSm('여기서는 뛰지 말라고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-rs-5" onclick="mdToggle('rs',5)">Mark done ✓</button></div>
+    </div>
+    <div class="ex-sec">
+      <div class="ex-head"><div class="ex-badge">B</div><div><div class="ex-title">Questions about the dialogue</div><div class="ex-sub">Answer before revealing</div></div></div>
+      <div class="ex-item">
+        <div class="ex-q">수진이는 지민이에게 뭐라고 했어요?</div>
+        <div class="ex-q-en">What did Sujin tell Jimin?</div>
+        <div class="row-btns"><button class="px" onclick="spkSm('수진이는 지민이에게 뭐라고 했어요?',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Hear</button><button class="at" onclick="togA('rsb1')">Show answer</button></div>
+        <div class="ans-box" id="rsb1"><div class="ans-main"><div class="ans-kr">다음 달에 결혼한다고 했어요.</div><div class="ans-note">-다고 하다 = statement. Recall: verb plain form, not polite form, inside the quote.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">곧 결혼할 거라고 했어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('다음 달에 결혼한다고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="ex-q">민호는 나에게 뭐라고 했어요, 그리고 뭐라고 시켰어요?</div>
+        <div class="ex-q-en">What did Minho ask, and what did he tell the speaker to do?</div>
+        <div class="row-btns"><button class="px" onclick="spkSm('민호는 나에게 뭐라고 했어요, 그리고 뭐라고 시켰어요?',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Hear</button><button class="at" onclick="togA('rsb2')">Show answer</button></div>
+        <div class="ans-box" id="rsb2"><div class="ans-main"><div class="ans-kr">바쁘냐고 물어봤고, 연락해 보라고 했어요.</div><div class="ans-note">Question (-냐고) + command (-(으)라고) in the same exchange — a common combination.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">바쁜지 물어보고 연락하라고 했어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('바쁘냐고 물어봤고, 연락해 보라고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-rs-6" onclick="mdToggle('rs',6)">Mark done ✓</button></div>
+    </div>
+    <div class="ex-sec">
+      <div class="ex-head"><div class="ex-badge">C</div><div><div class="ex-title">Translation</div><div class="ex-sub">Six sentences — all five forms</div></div></div>
+      <div class="ex-item">
+        <div class="c-en">1. My mother told me to eat breakfast.</div>
+        <div class="row-btns"><button class="at" onclick="togA('rsc1')">Show answer</button></div>
+        <div class="ans-box" id="rsc1"><div class="ans-main"><div class="ans-kr">엄마가 아침을 먹으라고 했어요.</div><div class="ans-note">-(으)라고 하다 = command. 먹다 → 먹으라고.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">엄마가 아침 챙겨 먹으라고 하셨어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('엄마가 아침을 먹으라고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">2. He said he was a teacher before.</div>
+        <div class="row-btns"><button class="at" onclick="togA('rsc2')">Show answer</button></div>
+        <div class="ans-box" id="rsc2"><div class="ans-main"><div class="ans-kr">전에는 선생님이었다고 했어요.</div><div class="ans-note">-(이)라고 하다, past: 이었다고. Noun + 이었다고 (was).</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">예전엔 선생님이라고 했어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('전에는 선생님이었다고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">3. She asked me where I live.</div>
+        <div class="row-btns"><button class="at" onclick="togA('rsc3')">Show answer</button></div>
+        <div class="ans-box" id="rsc3"><div class="ans-main"><div class="ans-kr">저한테 어디에 사냐고 물어봤어요.</div><div class="ans-note">-냐고 하다 = reported question. 살다 → 사냐고 (ㄹ drops).</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">어디 사는지 물어봤어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('저한테 어디에 사냐고 물어봤어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">4. I suggested we watch a movie together.</div>
+        <div class="row-btns"><button class="at" onclick="togA('rsc4')">Show answer</button></div>
+        <div class="ans-box" id="rsc4"><div class="ans-main"><div class="ans-kr">같이 영화 보자고 했어요.</div><div class="ans-note">-자고 하다 = suggestion. 보다 → 보자고.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">영화 한 편 보자고 제안했어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('같이 영화 보자고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">5. The teacher told the students not to be late.</div>
+        <div class="row-btns"><button class="at" onclick="togA('rsc5')">Show answer</button></div>
+        <div class="ans-box" id="rsc5"><div class="ans-main"><div class="ans-kr">선생님이 학생들에게 늦지 말라고 했어요.</div><div class="ans-note">-지 말라고 하다 = negative command.</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">선생님이 지각하지 말라고 하셨어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('선생님이 학생들에게 늦지 말라고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="ex-item">
+        <div class="c-en">6. I heard he's not coming today.</div>
+        <div class="row-btns"><button class="at" onclick="togA('rsc6')">Show answer</button></div>
+        <div class="ans-box" id="rsc6"><div class="ans-main"><div class="ans-kr">오늘 안 온다고 들었어요.</div><div class="ans-note">-다고 듣다 = heard that (statement + 듣다 instead of 하다).</div></div><div class="ans-alt"><div class="al">Also acceptable</div><div class="ak">오늘 못 온다고 들었어요.</div><div class="row-btns" style="margin-top:5px;"><button class="px" onclick="spkSm('오늘 안 온다고 들었어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div></div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-rs-7" onclick="mdToggle('rs',7)">Mark done ✓</button></div>
+    </div>
+  </div>
+  <hr class="divider">
+  <div class="sb">
+    <div class="sec-label">Speak — out loud</div>
+    <div class="speak-sec">
+      <div class="speak-intro">Speak aloud. This lesson consolidates every reported-speech ending in one place — notice which one you reach for first, and which still needs work.</div>
+      <div class="speak-item">
+        <span class="speak-tag">Self-talk</span>
+        <div class="speak-prompt-kr">최근에 누가 당신에게 무언가 말했어요, 물어봤어요, 아니면 시켰어요? 그 내용을 전해 보세요.</div>
+        <div class="speak-prompt-en">Recently, did someone tell you something, ask you something, or tell you to do something? Report it.</div>
+        <div class="speak-hint"><span class="speak-hint-label">Vocab</span>-다고 하다, -냐고 하다, -(으)라고 하다</div>
+        <div class="row-btns"><button class="at" onclick="togSpeak('rssp0')">Show model answer</button><button class="px" onclick="spkSm('어제 상사가 저한테 보고서를 내일까지 끝내라고 했어요. 그리고 시간 있냐고 물어봤어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div>
+        <div class="speak-model" id="rssp0"><div class="speak-model-kr"><span class="speak-model-label">Model answer — compare after speaking</span>어제 상사가 저한테 보고서를 내일까지 끝내라고 했어요. 그리고 시간 있냐고 물어봤어요.</div></div>
+      </div>
+      <div class="speak-item">
+        <span class="speak-tag">Scenario</span>
+        <div class="speak-prompt-kr">친구 두 명 사이의 소식을 전달해 보세요. 한 명이 다른 한 명에 대해 무슨 말을 했는지 말해 보세요.</div>
+        <div class="speak-prompt-en">Relay some news between two friends. Say what one said about the other.</div>
+        <div class="speak-hint"><span class="speak-hint-label">Vocab</span>-다고 하다, -(이)라고 하다, -자고 하다</div>
+        <div class="row-btns"><button class="at" onclick="togSpeak('rssp1')">Show model answer</button><button class="px" onclick="spkSm('민수가 그러는데 수진이가 다음 달에 이사 간다고 했어. 그리고 이사하기 전에 한번 만나자고 하더라.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div>
+        <div class="speak-model" id="rssp1"><div class="speak-model-kr"><span class="speak-model-label">Model answer — compare after speaking</span>민수가 그러는데 수진이가 다음 달에 이사 간다고 했어. 그리고 이사하기 전에 한번 만나자고 하더라.</div></div>
+      </div>
+      <div class="speak-item">
+        <span class="speak-tag role">Role-play</span>
+        <div class="speak-prompt-kr">부모님이 되어 자녀에게 규칙을 말해 보세요. (해라/하지 마라 형태를 -(으)라고/-지 말라고로 바꿔서)</div>
+        <div class="speak-prompt-en">Play a parent giving rules to a child. Convert direct commands into reported -(으)라고 / -지 말라고 form.</div>
+        <div class="speak-hint"><span class="speak-hint-label">Vocab</span>-(으)라고 하다, -지 말라고 하다, 숙제, 늦게</div>
+        <div class="row-btns"><button class="at" onclick="togSpeak('rssp2')">Show model answer</button><button class="px" onclick="spkSm('엄마가 숙제부터 하라고 했어요. 그리고 너무 늦게 자지 말라고 했어요.',this)"><svg viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen</button></div>
+        <div class="speak-model" id="rssp2"><div class="speak-model-kr"><span class="speak-model-label">Model answer — compare after speaking</span>엄마가 숙제부터 하라고 했어요. 그리고 너무 늦게 자지 말라고 했어요.</div></div>
+      </div>
+      <div class="mark-done-row"><button class="mdbtn undone" id="md-rs-8" onclick="mdToggle('rs',8)">Mark done ✓</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="lesson" id="lesson-kb">
+  <div class="kb-header">
+    <div class="kb-title">Progress Tracker</div>
+    <div class="kb-sub">Tap any task to move it to Done. Tap again to move it back.</div>
+    <button class="kb-reset" onclick="kbReset()">Reset all</button>
+  </div>
+  <div id="kb-board"></div>
+</div>
+
+</div>
+
+<script>
+var R=0.75,cu=null;
+var V={
+  rs:[
+    {kr:'결혼하다',ipa:'kjʌl.ɦon.ɦa.da',hanja:'結婚',en:'to get married',bg:'#F0EAFA',icon:'💍'},
+    {kr:'남자친구',ipa:'nam.dʑa.tɕʰin.ɡu',hanja:'男子親舊',en:'boyfriend',bg:'#E5F5EE',icon:'💑'},
+    {kr:'연락하다',ipa:'jʌl.lak̚.ɦa.da',hanja:'連絡',en:'to contact / get in touch',bg:'#E6EEF9',icon:'📞'},
+    {kr:'바쁘다',ipa:'ba.p͈ɯ.da',en:'to be busy',bg:'#FBF0E0',icon:'😩'},
+    {kr:'다들',ipa:'ta.dɯl',en:'everyone',bg:'#FBEAF0',icon:'👥'},
+    {kr:'물어보다',ipa:'mu.ɾʌ.bo.da',en:'to ask',bg:'#FDF3E3',icon:'❓'},
+    {kr:'듣다',ipa:'tɯt̚.t͈a',en:'to hear',bg:'#F0EAFA',icon:'👂'},
+    {kr:'말하다',ipa:'mal.ɦa.da',en:'to say / tell',bg:'#E5F5EE',icon:'💬'},
+    {kr:'다음 달',ipa:'ta.ɯm dal',en:'next month',bg:'#E6EEF9',icon:'📅'},
+    {kr:'참',ipa:'tɕʰam',en:'oh (by the way)',bg:'#FBF0E0',icon:'💡'},
+    {kr:'저녁을 먹다',ipa:'tɕʌ.njʌ.ɡɯl mʌk̚.t͈a',en:'to eat dinner',bg:'#FBEAF0',icon:'🍽️'},
+    {kr:'다 같이',ipa:'ta ka.tʰi',en:'all together',bg:'#FDF3E3',icon:'🤝'},
+    {kr:'요즘',ipa:'jo.dʑɯm',en:'these days',bg:'#F0EAFA',icon:'⏰'},
+    {kr:'아직',ipa:'a.dʑik̚',en:'yet / still',bg:'#E5F5EE',icon:'⏳'},
+    {kr:'한번',ipa:'han.bʌn',hanja:'-番',en:'sometime / once',bg:'#E6EEF9',icon:'🔁'},
+    {kr:'그래도',ipa:'kɯ.ɾɛ.do',en:'even so / still',bg:'#FBF0E0',icon:'😌'},
+    {kr:'오랜만',ipa:'o.ɾɛn.man',en:'a long time (since last time)',bg:'#FBEAF0',icon:'👋'},
+    {kr:'못 오다',ipa:'mo.do.da',en:'to be unable to come',bg:'#FDF3E3',icon:'🚫'},
+  ],
+};
+
+
+var S={
+  rs:[
+    {kr:'수진이가 다음 달에 결혼한다고 했어요.',en:'Sujin said she\'s getting married next month.',bg:'#F0EAFA',fg:'#2A1040'},
+    {kr:'남자친구가 아직 학생이라고 했어요.',en:'She said her boyfriend is still a student.',bg:'#FDF3E3',fg:'#4A2A00'},
+    {kr:'민호가 저한테 바쁘냐고 물어봤어요.',en:'Minho asked me whether I\'m busy.',bg:'#E6EEF9',fg:'#0E1F3A'},
+    {kr:'다 같이 저녁 먹자고 했어요.',en:'I suggested we all eat dinner together.',bg:'#FBEAF0',fg:'#72243E'},
+    {kr:'저한테 연락해 보라고 했어요.',en:'He told me to try getting in touch.',bg:'#E5F5EE',fg:'#1A3326'},
+    {kr:'거기서 사진 찍지 말라고 했어요.',en:'They told us not to take photos there.',bg:'#FBF0E0',fg:'#3D2000'},
+  ],
+};
+
+
+var LESSON_IDS=['rs'];
+var LESSON_COLORS={'rs':'#8B5A83'};
+var LESSON_TITLES={'rs':'Reported Speech — Full Review'};
+var KB_TASKS=['Read the text','Listen at 0.75×','Grammar cards','Vocabulary','Key sentences','Section A','Section B','Section C','Speak practice'];
+var KB_KEY='kr_kb_v1';
+function stopAll(){if(cu){window.speechSynthesis.cancel();cu=null;}document.querySelectorAll('.playing').forEach(function(el){el.classList.remove('playing');if(el.classList.contains('lbtn'))el.innerHTML='<svg width="10" height="10" viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg> Listen';if(el.classList.contains('px'))el.innerHTML='<svg width="8" height="8" viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen';if(el.classList.contains('sbtn'))el.textContent='Listen';});}
+function doSpeak(t,rate,oS,oE){if(!window.speechSynthesis)return;stopAll();var u=new SpeechSynthesisUtterance(t);u.lang='ko-KR';u.rate=rate;cu=u;if(oS)oS();u.onend=u.onerror=function(){cu=null;if(oE)oE();};window.speechSynthesis.speak(u);}
+function spkMain(lid){var b=document.getElementById('mb-'+lid);if(b.classList.contains('playing')){stopAll();return;}var rate=parseFloat(document.getElementById('ms-'+lid).value);var txt=document.getElementById('mt-'+lid);var raw=txt?txt.innerText:Array.from(document.querySelectorAll('#lesson-'+lid+' .dlg-txt')).map(function(el){return el.innerText;}).join(' ');doSpeak(raw,rate,function(){b.classList.add('playing');b.innerHTML='<svg width="10" height="10" viewBox="0 0 16 16" fill="white"><rect x="3" y="2" width="3.5" height="10"/><rect x="9.5" y="2" width="3.5" height="10"/></svg> Stop';},function(){b.classList.remove('playing');b.innerHTML='<svg width="10" height="10" viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg> Listen';});}
+function spkRaw(t,el){el.style.opacity='0.5';setTimeout(function(){el.style.opacity='1';},700);doSpeak(t,R,null,null);}
+function spkVC(id){var c=document.getElementById(id);if(!c)return;if(c.classList.contains('playing')){stopAll();return;}doSpeak(c.dataset.kr,R,function(){c.classList.add('playing');},function(){c.classList.remove('playing');});}
+function spkSent(id,t){var b=document.getElementById(id);if(b.classList.contains('playing')){stopAll();return;}doSpeak(t,R,function(){b.classList.add('playing');b.textContent='Stop';},function(){b.classList.remove('playing');b.textContent='Listen';});}
+function spkSm(t,btn){if(btn.classList.contains('playing')){stopAll();return;}doSpeak(t,R,function(){btn.classList.add('playing');btn.innerHTML='<svg width="8" height="8" viewBox="0 0 16 16" fill="white"><rect x="3" y="2" width="3.5" height="10"/><rect x="9.5" y="2" width="3.5" height="10"/></svg>Stop';},function(){btn.classList.remove('playing');btn.innerHTML='<svg width="8" height="8" viewBox="0 0 16 16" fill="white"><polygon points="3,2 14,8 3,14"/></svg>Listen';});}
+function togTl(lid){var b=document.getElementById('tlb-'+lid),btn=document.getElementById('tlbtn-'+lid);if(b.classList.contains('on')){b.classList.remove('on');btn.textContent='Show translation';}else{b.classList.add('on');btn.textContent='Hide translation';}}
+function togSpeak(id){var b=document.getElementById(id);if(!b)return;var btn=b.previousElementSibling;if(b.classList.contains('on')){b.classList.remove('on');if(btn&&btn.classList.contains('at'))btn.textContent='Show model answer';}else{b.classList.add('on');if(btn&&btn.classList.contains('at'))btn.textContent='Hide model answer';}}
+function togA(id){var b=document.getElementById(id);if(!b)return;var prev=b.previousElementSibling;var btn=prev?prev.querySelector('.at'):null;if(b.classList.contains('on')){b.classList.remove('on');if(btn)btn.textContent='Show answer';}else{b.classList.add('on');if(btn)btn.textContent='Hide answer';}}
+function togSE(id){var el=document.getElementById('se-'+id),btn=document.getElementById('st-'+id);if(el.classList.contains('on')){el.classList.remove('on');btn.textContent='show translation';}else{el.classList.add('on');btn.textContent='hide translation';}}
+function sw(lid){document.querySelectorAll('.lesson').forEach(function(l){l.classList.remove('on');});document.querySelectorAll('.np').forEach(function(b){b.classList.remove('on');});document.getElementById('lesson-'+lid).classList.add('on');document.getElementById('np-'+lid).classList.add('on');stopAll();window.scrollTo({top:0,behavior:'smooth'});}
+function kbLoad(){try{return JSON.parse(localStorage.getItem(KB_KEY)||'{}');}catch(e){return {};}}
+function kbSave(d){localStorage.setItem(KB_KEY,JSON.stringify(d));}
+function kbToggle(lid,idx){var d=kbLoad();if(!d[lid])d[lid]=[];d[lid][idx]=!d[lid][idx];kbSave(d);buildKanban();updatePips();}
+function kbReset(){if(!confirm('Reset all progress?'))return;localStorage.removeItem(KB_KEY);buildKanban();updatePips();}
+function buildKanban(){
+  var d=kbLoad();var board=document.getElementById('kb-board');board.innerHTML='';
+  LESSON_IDS.forEach(function(lid){
+    var state=d[lid]||[];var doneCount=state.filter(function(v,i){return v&&i!==1;}).length;
+    var sec=document.createElement('div');sec.className='kb-lesson';
+    var hdr=document.createElement('div');hdr.className='kb-lesson-title';
+    hdr.innerHTML='<div class="kb-dot" style="background:'+LESSON_COLORS[lid]+'"></div><span>'+LESSON_TITLES[lid]+'</span><span class="kb-progress">'+doneCount+' / '+(KB_TASKS.length-1)+'</span>';
+    sec.appendChild(hdr);
+    var cols=document.createElement('div');cols.className='kb-cols';
+    var todoCol=document.createElement('div');var doneCol=document.createElement('div');
+    var todoLbl=document.createElement('div');todoLbl.className='kb-col-label';todoLbl.textContent='To do';
+    var doneLbl=document.createElement('div');doneLbl.className='kb-col-label';doneLbl.textContent='Done ✓';
+    todoCol.appendChild(todoLbl);doneCol.appendChild(doneLbl);
+    var todoCards=document.createElement('div');todoCards.className='kb-col-cards';
+    var doneCards=document.createElement('div');doneCards.className='kb-col-cards';
+    var hasTodo=false,hasDone=false;
+    KB_TASKS.forEach(function(task,idx){
+      if(idx===1)return;
+      var done=!!state[idx];var card=document.createElement('div');
+      card.className='kb-card'+(done?' done':'');
+      card.innerHTML='<span class="kb-card-text">'+task+'</span><span class="kb-card-arrow">'+(done?'↩':'→')+'</span>';
+      card.onclick=(function(l,i){return function(){kbToggle(l,i);};})(lid,idx);
+      if(done){doneCards.appendChild(card);hasDone=true;}else{todoCards.appendChild(card);hasTodo=true;}
+    });
+    if(!hasTodo){var e=document.createElement('div');e.className='kb-empty';e.textContent='All done!';todoCards.appendChild(e);}
+    if(!hasDone){var e2=document.createElement('div');e2.className='kb-empty';e2.textContent='Nothing yet';doneCards.appendChild(e2);}
+    todoCol.appendChild(todoCards);doneCol.appendChild(doneCards);cols.appendChild(todoCol);cols.appendChild(doneCol);sec.appendChild(cols);board.appendChild(sec);
+  });
+}
+function updatePips(){
+  var d=kbLoad();
+  LESSON_IDS.forEach(function(lid){
+    var state=d[lid]||[];var done=state.filter(function(v,i){return v&&i!==1;}).length;var pip=document.getElementById('pip-'+lid);if(!pip)return;
+    if(done>0&&done<(KB_TASKS.length-1)){pip.textContent=done;pip.style.background=LESSON_COLORS[lid];pip.classList.add('show');}
+    else if(done===(KB_TASKS.length-1)){pip.textContent='✓';pip.style.background='#2C6E4F';pip.classList.add('show');}
+    else{pip.classList.remove('show');}
+  });
+}
+function renderVocab(lid){var vg=document.getElementById('vg-'+lid);V[lid].forEach(function(v,i){var id='vc-'+lid+'-'+i,c=document.createElement('div');c.className='vc';c.id=id;c.dataset.kr=v.kr;c.onclick=function(){spkVC(id);};var hj=v.hanja?'<div class="vc-hanja">'+v.hanja+'</div>':'';c.innerHTML='<div class="vc-icon" style="background:'+v.bg+'">'+v.icon+'</div><div><div class="vc-kr">'+v.kr+'</div>'+hj+'<div class="vc-ipa">['+v.ipa+']</div><div class="vc-en">'+v.en+'</div></div>';vg.appendChild(c);});}
+function renderSents(lid){var sl=document.getElementById('sl-'+lid);S[lid].forEach(function(s,i){var sid=lid+'s'+i,r=document.createElement('div');r.className='sent-row';r.innerHTML='<div class="snum" style="background:'+s.bg+';color:'+s.fg+'">'+(i+1)+'</div><div class="sent-body"><div class="sent-kr">'+s.kr+'</div><div class="sent-en" id="se-'+sid+'">'+s.en+'</div><button class="stl" id="st-'+sid+'" onclick="togSE(\''+sid+'\')">show translation</button></div><button class="sbtn" id="ss-'+sid+'" onclick="spkSent(\'ss-'+sid+'\',\''+s.kr.replace(/'/g,"\\'")+'\')">Listen</button>';sl.appendChild(r);});}
+function mdBtn(lid,idx){return document.getElementById('md-'+lid+'-'+idx);}
+function refreshMdBtn(lid,idx){var btn=mdBtn(lid,idx);if(!btn)return;var d=kbLoad();var done=!!(d[lid]&&d[lid][idx]);btn.className='mdbtn '+(done?'done-state':'undone');btn.innerHTML=done?'✓ Done — tap to undo':'Mark done ✓';}
+function mdToggle(lid,idx){var d=kbLoad();if(!d[lid])d[lid]=[];d[lid][idx]=!d[lid][idx];kbSave(d);refreshMdBtn(lid,idx);if(document.getElementById('kb-board').innerHTML!=='')buildKanban();updatePips();}
+function initMdBtns(){['rs'].forEach(function(lid){[0,2,3,4,5,6,7,8].forEach(function(idx){refreshMdBtn(lid,idx);});});}
+['rs'].forEach(function(lid){renderVocab(lid);renderSents(lid);});
+buildKanban();updatePips();initMdBtns();
+</script>
+</body>
+</html>

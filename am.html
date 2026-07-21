@@ -10,7 +10,7 @@
 <style>
 :root{
   --brick:#8C3A2B; --ink:#171310; --plaster:#F4EDE2; --card:#FFFBF4;
-  --ochre:#C2871F; --slate:#2F4858; --line:#E0D3C0; --mute:#6E6257;
+  --ochre:#C2871F; --slate:#2F4858; --line:#E0D3C0; --mute:#6E6257; --teal:#1F6F5C;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -19,7 +19,6 @@ body{margin:0;background:var(--plaster);color:var(--ink);
   -webkit-text-size-adjust:100%}
 .wrap{max-width:840px;margin:0 auto;padding:0 18px 90px}
 
-/* ---- masthead: brick courses ---- */
 header{background:var(--brick);color:#F4EDE2;padding:34px 0 26px;
   background-image:repeating-linear-gradient(0deg,rgba(0,0,0,.10) 0 1px,transparent 1px 13px),
                    repeating-linear-gradient(90deg,rgba(0,0,0,.07) 0 1px,transparent 1px 31px);}
@@ -32,7 +31,6 @@ h1{font-family:'Archivo Black',sans-serif;font-size:clamp(30px,7vw,50px);line-he
 .addr{font-family:'JetBrains Mono',monospace;font-size:12px;margin-top:16px;
   border-top:1px solid rgba(255,255,255,.28);padding-top:12px;color:#EFD3BC}
 
-/* ---- sticky nav ---- */
 nav{position:sticky;top:0;z-index:900;background:var(--ink);
   overflow-x:auto;-webkit-overflow-scrolling:touch;white-space:nowrap;
   box-shadow:0 2px 10px rgba(0,0,0,.18)}
@@ -52,14 +50,12 @@ h3 em{font-family:'JetBrains Mono',monospace;font-style:normal;font-size:11px;
 p{margin:0 0 14px}
 a{color:var(--brick)}
 
-/* ---- alert ---- */
 .alert{background:#2F4858;color:#EAF1F5;border-radius:3px;padding:18px 20px;margin:24px 0;
   border-left:6px solid var(--ochre)}
 .alert h4{font-family:'Archivo Black',sans-serif;margin:0 0 8px;font-size:15px;color:#FFD79A}
 .alert p{margin:0 0 10px;font-size:15.5px} .alert p:last-child{margin:0}
 .alert strong{color:#FFD79A}
 
-/* ---- place cards ---- */
 .grid{display:grid;gap:10px}
 @media(min-width:700px){.grid{grid-template-columns:1fr 1fr}}
 .pl{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--c);
@@ -78,9 +74,8 @@ a{color:var(--brick)}
   border-radius:50%;background:var(--mute)}
 .pl p{margin:0;font-size:14.5px;color:#3D342C;line-height:1.45}
 
-/* ---- map ---- */
-#map{height:440px;border:1px solid var(--line);border-radius:3px;margin:16px 0 10px;
-  background:#E6DCCC}
+#map,#map-routes,#map-haarlem{height:440px;border:1px solid var(--line);border-radius:3px;margin:16px 0 10px;background:#E6DCCC}
+#map-routes,#map-haarlem{height:380px}
 .filters{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
 .filters button{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.05em;
   border:1px solid var(--line);background:var(--card);color:var(--ink);
@@ -91,8 +86,11 @@ a{color:var(--brick)}
 .leaflet-popup-content{font-family:'Source Sans 3',sans-serif;font-size:14px}
 .leaflet-popup-content b{font-size:15px}
 .leaflet-popup-content .d{font-family:'JetBrains Mono',monospace;font-size:11px;color:#6E6257;display:block;margin:3px 0 5px}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:12px;margin:8px 0 4px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.legend i{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;
+  color:#fff;font-weight:700;font-size:10.5px;font-family:'JetBrains Mono',monospace}
 
-/* ---- tables ---- */
 table{width:100%;border-collapse:collapse;margin:16px 0;font-size:15px}
 th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
 th{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;
@@ -100,14 +98,18 @@ th{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;
 td.n{font-family:'JetBrains Mono',monospace;white-space:nowrap;font-size:13.5px}
 .tot td{border-top:2px solid var(--ink);font-weight:700;border-bottom:none}
 
-/* ---- day blocks ---- */
 .day{border-top:3px solid var(--ink);padding:16px 0 6px;margin-top:26px}
 .day .hd{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px}
 .day h3{margin:0}
 .day .tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.08em;
   text-transform:uppercase;background:var(--ochre);color:#231A08;padding:3px 8px;border-radius:2px}
-.day ul{margin:12px 0 0;padding-left:18px}
-.day li{margin-bottom:7px}
+.block{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--brick);
+  border-radius:2px;padding:14px 16px;margin:12px 0}
+.block h4{margin:0 0 6px;font-family:'Archivo Black',sans-serif;font-size:14.5px;
+  display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.block h4 .when{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--mute);font-weight:500}
+.block p{margin:0;font-size:15px}
 .closed{background:#FBE9E7;border:1px solid #E8C4BC;border-radius:2px;padding:10px 12px;
   margin-top:12px;font-size:14px}
 .closed b{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;
@@ -122,521 +124,584 @@ ul.tight li{margin-bottom:6px}
 <header><div class="wrap">
 <p class="eyebrow">Amsterdam West · 31 July – 4 August 2026</p>
 <h1>De Baarsjes</h1>
-<p class="sub">Brick, bikes, and a market street. You are three kilometres and one whole world away from the postcard.</p>
-<p class="addr">BASE · 88 MARCO POLOSTRAAT, 1057 · ALL DISTANCES BELOW MEASURED FROM THIS DOOR</p>
+<p class="sub">Brick, canals, and a slow four days. No must-be-there times — areas and blocks, with room to breathe.</p>
+<p class="addr">BASE · VASCO DA GAMASTRAAT (SOUTH END, BY THE POSTJESWETERING) · 52°22′00.2″N 4°51′20.0″E</p>
 </div></header>
 
 <nav>
-<a href="#pride">WorldPride</a><a href="#map-sec">Map</a><a href="#airport">Airport</a>
-<a href="#hood">The area</a><a href="#eat">Eat &amp; drink</a><a href="#specialties">What to eat</a>
-<a href="#bikes">Bikes</a><a href="#museums">Museums</a><a href="#trips">Day trips</a>
-<a href="#days">The days</a><a href="#money">Money</a><a href="#practical">Practical</a>
+<a href="#airport">Getting there</a><a href="#pride">WorldPride</a><a href="#hood">The area</a>
+<a href="#transport">Getting around</a><a href="#map-sec">Map</a><a href="#days">The days</a>
+<a href="#sights">The sights, in order</a><a href="#rijks">Rijksmuseum</a><a href="#trips">Day trips</a>
+<a href="#eat">Full directory</a><a href="#specialties">What to eat</a><a href="#money">Money</a><a href="#practical">Practical</a>
 </nav>
 
 <div class="wrap">
 
+<h2 id="airport"><span class="num">01 / FIRST THING</span>Getting there — and back</h2>
+<p>You can drop your bags at the apartment on arrival — you just can't take possession (the keys, the flat itself) until <b>15:00</b>. That changes Friday for the better: no lockers, no dragging suitcases around, hands free from the moment you leave the flat again.</p>
+<p><b>Pay with a contactless card.</b> The Netherlands runs <b>OVpay</b> — tap your credit card or phone directly on the reader, on NS trains and GVB trams and buses alike. No ticket machine, no OV-chipkaart. <b>Each person needs their own card.</b> Tap in <em>and</em> tap out, or you're charged the maximum fare. More on how you'll actually get around once you're here, in section 04.</p>
+
+<h3><span class="dot" style="--c:var(--brick)"></span>Friday 31 July — landing 11:00</h3>
+<ul class="tight">
+<li>Out of Schiphol by roughly 12:15. Sprinter to <b>Station Sloterdijk</b> (~11 min), then <b>bus 15</b> to Mercatorplein (~10 min), then a 6-minute walk — <b>drop the bags and get the keys</b>, ahead of the official 15:00 check-in. Roughly €6.70pp, 30–35 minutes door to door. You're in, hands empty, keys in pocket, by about 13:00.</li>
+<li>Straight out again to <b>De Wallen / the medieval core</b> — tram 7 or bus 18 from Jan Evertsenstraat, ~20 min. No need to rush back for anything; see the Friday block below for how much room that actually gives you.</li>
+</ul>
+
+<h3><span class="dot" style="--c:var(--brick)"></span>Tuesday 4 August — flight 12:00</h3>
+<p>Long-haul, non-Schengen: be at Schiphol by <b>09:15</b>. Leave the flat at <b>08:00</b> — <b>bus 15</b> from Mercatorplein to Station Sloterdijk (~10 min), then the Sprinter to Schiphol (11 min, every few minutes). At the terminal by ~08:55. There's a full hour of buffer in that plan. No cooking, no mess to clean the night before — see Sunday's plan below for why that's already handled.</p>
+
 <h2 id="pride"><span class="num">00 / READ FIRST</span>You have booked into WorldPride</h2>
-<div class="alert">
-<h4>WorldPride Amsterdam runs 25 July – 8 August 2026</h4>
-<p>The <strong>Canal Parade sails Saturday 1 August, 12:00–18:00</strong> through the central canal ring, finishing near Westerdok. Street parties run in the centre on <strong>Friday 31 July and Saturday 1 August from 16:00</strong>. Trams will be diverted. The centre will hold several hundred thousand people.</p>
-<p>You are 3 km west of all of it, and De Baarsjes will feel like an ordinary Amsterdam weekend. Three consequences: <strong>don't attempt the Rijksmuseum on Sat or Sun</strong>; <strong>book any restaurant outside your own neighbourhood well ahead</strong>; and <strong>get out of town on Saturday</strong> — see Day trips.</p>
-</div>
+<p><b>WorldPride Amsterdam runs 25 July – 8 August 2026</b> — the first time the city has hosted it, and it coincides with <b>25 years of marriage equality</b>; the Netherlands was the first country in the world to legalise it, in 2001.</p>
 
-<h2 id="map-sec"><span class="num">01</span>Everything, on one map</h2>
-<p>Every place in this guide, colour-coded. Tap a pin for hours and distance. Tap a category below to hide or show it.</p>
-<div class="filters" id="filters"></div>
-<div id="map"></div>
-<p style="font-size:14px;color:var(--mute)"><b>Want this in Google Maps instead?</b> Open <span class="kbd">mymaps.google.com</span> → <em>Create a new map</em> → <em>Import</em> → upload <span class="kbd">amsterdam-de-baarsjes.kml</span>. All 53 pins land in one Google map, organised by category, viewable in the Google Maps app under <em>Saved → Maps</em>. Do this before you fly.</p>
+<h3><span class="dot" style="--c:var(--brick)"></span>Where and when to stay away</h3>
+<table>
+<tr><th>When</th><th>Where</th><th>What's on</th></tr>
+<tr><td class="n"><b>Fri 31 Jul</b><br>from 16:00</td><td><b>City centre, 12+ locations</b> — Reguliersdwarsstraat, Zeedijk, Warmoesstraat, Spuistraat, Westermarkt</td><td><b>Street parties</b> until midnight. Be clear of the centre by ~15:30.</td></tr>
+<tr><td class="n"><b>Sat 1 Aug</b><br>10:00–20:00</td><td><b>The entire canal ring</b> — Prinsengracht (worst, near Westerkerk), the Amstel, Dam, Leidseplein, Centraal</td><td><b>Canal Parade</b>, 12:00–18:00. 250,000+ spectators. Trams diverted. You'll be in Haarlem.</td></tr>
+<tr><td class="n"><b>Sat 1 Aug</b><br>from 16:00</td><td>Same street-party zones</td><td>Street parties resume until midnight.</td></tr>
+<tr><td class="n"><b>Sun 2 Aug</b><br>from 13:00</td><td><b>Dam Square</b> and around it</td><td><b>MainStage Grand Finale</b>, 14:00–23:00, free. Your canal walk finishes near there — don't linger.</td></tr>
+<tr><td class="n"><b>Mon 3 Aug</b></td><td>Museumplein only — mild</td><td>Build-out for Tuesday's Unity Concert. Doesn't affect entering the Rijksmuseum.</td></tr>
+</table>
+<div class="alert"><h4>What is completely unaffected, all four days</h4>
+<p>De Baarsjes · Bos en Lommer · Oud-West · Ten Katemarkt · Westerpark · Station Sloterdijk · Haarlem. Your entire neighbourhood, and almost everything in this guide.</p></div>
 
-<h2 id="airport"><span class="num">02</span>Schiphol, both ways</h2>
-<p><b>Pay with a contactless card.</b> The Netherlands runs <b>OVpay</b>: tap your credit card or phone directly on the reader, on NS trains and on GVB trams and buses alike. No ticket machine, no OV-chipkaart. <b>Each person needs their own card</b> — you cannot tap twice with one. Tap in <em>and</em> tap out, or you're charged the maximum fare.</p>
+<h3><span class="dot" style="--c:var(--ochre)"></span>What you should actually enjoy</h3>
+<p><b>The Homomonument, Westermarkt.</b> Three pink granite triangles set into the pavement, unveiled 1987 — the first monument anywhere to commemorate the persecution of gay people. It sits directly on your Sunday canal walk. Free, fifteen minutes, and it's the part of the fortnight that means something rather than performs something.</p>
+<p><b>The Canal Parade, if you want it.</b> Boats depart 12:00 from the east and reach the Westerdok finish 15:00–18:00 — a three-hour spread, so pick your stretch. <b>Nieuwe Herengracht, 12:00–13:15</b>, is the thinnest crowd, right at the start. But this is Haarlem's day, and that trade still favours Haarlem.</p>
+<div class="closed"><b>Missed by a day and a half</b>The free Open Air Film Festival is on your own square, Mercatorplein, 29–30 July. You land the 31st.</div>
 
-<h3><span class="dot" style="--c:var(--brick)"></span>Arrival — Friday 31 July, landing 11:00, check-in 15:00</h3>
-<p>You'll be out of Schiphol around 12:15 and you can't get into the flat until 15:00. That gap is a gift, not a problem: take the slow way.</p>
-<ul class="tight">
-<li>Train to <b>Amsterdam Centraal</b> (~17 min, ~€5.90). Out the front by 12:45 — the full postcard view.</li>
-<li>Walk 15 minutes into the <b>Jordaan</b>. Lunch there; coffee at <b>Rum Baba</b> on Elandsgracht (closes 16:30). Two carry-ons are entirely manageable on foot.</li>
-<li>Around 14:15, take <b>bus 18</b> (direction Slotervaart) west through De Clercqstraat. Get off at <b>Marco Polostraat</b>. At the door ~14:45.</li>
-</ul>
-<p><b>If it looks chaotic</b> (Pride street parties start at 16:00): fall back to the fast route — Sprinter to <b>Sloterdijk</b> (11 min), then <b>bus 15</b> to Mercatorplein. Door to door in 35 minutes.</p>
-
-<h3><span class="dot" style="--c:var(--brick)"></span>Departure — Tuesday 4 August, flight 12:00</h3>
-<p>Long-haul, non-Schengen: <b>be at Schiphol by 09:15.</b></p>
-<ul class="tight">
-<li><b>Leave the flat at 08:00.</b> Walk 4 min to Mercatorplein.</li>
-<li><b>Bus 15</b> to Station Sloterdijk (~10 min).</li>
-<li><b>Sprinter</b> to Schiphol (11 min, every few minutes). At the terminal ~08:55.</li>
-</ul>
-<p>Normal Tuesday rush hour, no Pride disruption. There is one whole hour of buffer in that plan. Coffee at Zizou or Noi is <em>not</em> possible before you go — the cafés open at 08:00 and you'll already be moving.</p>
-
-<h2 id="hood"><span class="num">03</span>Where you actually are</h2>
-<p>Marco Polostraat sits in <b>De Baarsjes</b>, on the edge of <b>Bos en Lommer</b>. This is planned 1920s Amsterdam: brick, low, residential, built in the <b>Amsterdam School</b> style. No canal boats, no queues. One of the genuinely mixed neighbourhoods in the city — Moroccan and Turkish shops that have been here forty years, next to third-wave coffee bars that arrived in the last ten.</p>
+<h2 id="hood"><span class="num">02</span>Where you actually are</h2>
+<p>Vasco da Gamastraat sits at the southern edge of <b>De Baarsjes</b>, by the Postjeswetering canal. This is planned 1920s Amsterdam, built in the <b>Amsterdam School</b> brick style — low, residential, genuinely mixed: Moroccan and Turkish shops that have been here forty years, next to third-wave coffee bars that arrived in the last ten.</p>
 <table>
 <tr><th>Anchor</th><th>Distance</th><th>What it is</th></tr>
-<tr><td><b>Jan Evertsenstraat</b><br><span style="font-size:13px;color:var(--mute)">"Jan Eef"</span></td><td class="n">0.2 km<br>2′ walk</td><td>The local high street. Most of the food and coffee below sits on it.</td></tr>
-<tr><td><b>Mercatorplein</b></td><td class="n">0.3 km<br>4′ walk</td><td>Berlage-designed square with a tower. Supermarket, terraces, buses.</td></tr>
-<tr><td><b>Erasmuspark</b></td><td class="n">0.5 km<br>6′ walk</td><td>Small, green, no tourists. People swim off the bridge in August.</td></tr>
-<tr><td><b>Ten Katemarkt</b></td><td class="n">1.4 km<br>6′ bike</td><td>The market locals actually use. Mon–Sat.</td></tr>
-<tr><td><b>Rijksmuseum</b></td><td class="n">3.2 km<br>14′ bike</td><td>Through Rembrandtpark and Vondelpark, and you're there.</td></tr>
+<tr><td><b>Postjesweg &amp; the Postjeswetering</b></td><td class="n">0.3 km<br>4′ walk</td><td>Your actual doorstep — a canal with terraces on it. <b>Vanaut</b>, <b>Tweede Thuys</b>, <b>BRONS</b>, plus Aldi and Albert Heijn.</td></tr>
+<tr><td><b>Jan Evertsenstraat</b> <span style="font-size:13px;color:var(--mute)">("Jan Eef")</span></td><td class="n">0.6 km<br>7′ walk</td><td>The local high street — most of the coffee and cheap eats live here.</td></tr>
+<tr><td><b>Mercatorplein</b></td><td class="n">0.5 km<br>6′ walk</td><td>Berlage square with a tower. Dirk supermarket, terraces, bus 15 for the airport.</td></tr>
+<tr><td><b>Rembrandtpark</b></td><td class="n">0.9 km<br>11′ walk</td><td>Your nearest real park, with a mini farm.</td></tr>
+<tr><td><b>Ten Katemarkt</b></td><td class="n">1.0 km<br>12′ walk</td><td>Not on the schedule this trip — worth a wander if an hour opens up.</td></tr>
+<tr><td><b>Rijksmuseum</b></td><td class="n">2.8 km<br>34′ walk</td><td>See Getting Around for how you'll actually reach it Monday morning.</td></tr>
 </table>
 
-<h2 id="eat"><span class="num">04</span>Every place, by category</h2>
-<p>Sorted by distance from your door. Hours verified 13 July 2026 — <b>always re-check on the day</b>, especially the closed-Monday places.</p>
+<h2 id="transport"><span class="num">03</span>Getting around — and the bike question</h2>
+<p>Trams, buses and the metro all run on <b>OVpay</b> — tap in, tap out, one card per person. A single ride is a flat fare (~€1); if you're making several trips a day, a <b>GVB day ticket (~€9, unlimited trams/buses/metro/ferries)</b> is worth doing the maths on at a machine or in the app.</p>
+<div class="alert"><h4>Tram works — check 9292.nl every time, not the week before</h4>
+<p>The <b>Oranje Loper</b> rebuild has <b>Rozengracht</b> dug up, with disruption running into <b>2027</b>. <b>Tram 17 is cut short at Surinameplein from 4 July to 19 August 2026</b> — a shuttle tram 27 covers the rest. Trams 13 and 18, and bus 18, use the same corridor and may also be diverted. <b>Bus 15 from Mercatorplein to Sloterdijk is nowhere near any of it</b> — that's why it's your airport route throughout this guide. For anything else, check <span class="kbd">9292.nl</span> or the Google/Apple Maps transit layer on the day.</p></div>
+<p><b>Ferries</b> across the IJ to Amsterdam Noord are free, frequent (every 15–20 min), and take bikes and pedestrians alike — this is how you'd reach NDSM Werf, see Day trips.</p>
+<div class="alert" style="border-left-color:var(--teal)"><h4>Bikes — parked for now, not off the table</h4>
+<p>Nothing in this guide assumes you're cycling. If the mood strikes later in the trip, <b>Fietspadje</b> (700 m, ~€10/day) is still in the full directory below — walk in, no booking needed, and De Baarsjes is about as gentle a place to try it as exists in this city: flat, quiet, four minutes from a park. No pressure either way.</p></div>
+
+<h2 id="map-sec"><span class="num">04</span>Everything, on one map</h2>
+<p>All 70 places in this guide. Tap a pin for hours and distance from the flat. Tap a category below to hide or show it.</p>
+<div class="filters" id="filters"></div>
+<div id="map"></div>
+<p style="font-size:14px;color:var(--mute)"><b>For Google Maps:</b> open <span class="kbd">mymaps.google.com</span> → <em>Create a new map</em> → <em>Import</em> → the KML file. All 70 pins land in one map, foldered by category, viewable in the Google Maps app under <em>Saved → Maps</em>. Do this before you fly.</p>
+
+<h2 id="days"><span class="num">05</span>The four days, in blocks</h2>
+<p>No clock to watch. Each block names an area and roughly how long it takes — where you start it and how long you linger is entirely up to how the day feels.</p>
+
+<div class="day"><div class="hd"><h3>Friday 31 July</h3><span class="tag">Land · drop bags · one outing out · fold in</span></div>
+
+<div class="block"><h4>De Wallen &amp; the medieval core <span class="when">right after bags (and keys) are dropped, ~13:00</span></h4>
+<p>Keys are already yours, so this isn't a there-and-back against a deadline — go, wander, come home whenever. From <b>Jan Evertsenstraat (tram 7 / bus 18)</b>, ~20 min to Centraal, then on foot: <b>Nieuwmarkt &amp; De Waag</b> → <b>Zeedijk</b> → <b>Oude Kerk</b>, all a few minutes apart. <b>Begijnhof stays on Sunday</b> — it sits more naturally on that walk near Spui, and there's no need to squeeze everything into one afternoon now that you're not racing a clock.</p>
+<p style="margin-top:8px"><b>Worth timing loosely around one thing:</b> Friday's WorldPride street parties start at 16:00, in this exact area — Zeedijk and Warmoesstraat are named locations. Arrive by early-mid afternoon and you'll see it calm; stay past 16:00 and it turns into a lively evening instead. Both are fine — just know which you're choosing.</p></div>
+
+<div class="block"><h4>Dinner &amp; fold in <span class="when">whenever you're back</span></h4>
+<p><b>Usta Kebap</b> or <b>De Indo van Jan Eef</b>, both under 150 m from the door — an easy landing after a long day. Groceries at <b>Aldi</b> or <b>AH Postjesweg</b> (4 min) if you'd rather eat in. Bed early; you'll have been awake a long time.</p></div>
+</div>
+
+<div class="day"><div class="hd"><h3>Saturday 1 August</h3><span class="tag">Haarlem &amp; the coast · all day</span></div>
+<div class="block"><h4>Coffee at home first <span class="when">before you go</span></h4>
+<p><b>Luma Coffee Lunch</b>, four minutes away — plain, quiet, coffee-first. (Vanaut is right there too if you want the canal-terrace version, but it leans more gift shop than coffee bar.)</p></div>
+<div class="block"><h4>Haarlem <span class="when">late morning through the afternoon</span></h4>
+<p>Bus 15 to Sloterdijk, train to Haarlem, ~15 minutes total. <b>Grote Markt market</b> (Saturday is the big day) — fish, cheese, flowers, bread. From there, either <b>Teylers Museum</b> or just keep walking; Haarlem rewards wandering as much as any single sight.</p></div>
+<div class="block"><h4>The coast <span class="when">whenever the day pulls you that way</span></h4>
+<p><b>Zandvoort is one stop past Haarlem, same line</b> — not a separate trip, just a continuation. Dunes, beach pavilions, a drink with your feet more or less in the sand. Water's swimmable if you're Canadian about it.</p></div>
+<div class="block"><h4>Easy supper &amp; a drink, close to home <span class="when">evening, no reservation needed</span></h4>
+<p>After a full day out, come home to it rather than extend it. <b>Toko Bersama West</b> or <b>Usta Kebap</b>, both daily, both under 20 minutes away — a change of register from seafood, since Sunday's cook-in already covers that. Then a drink at <b>Tweede Thuys</b> or <b>BRONS</b>, both on the canal, three minutes from the flat. Nothing to book, nowhere to rush back for.</p></div>
+<p style="margin-top:14px"><b>Haarlem &amp; the coast, on a map:</b></p>
+<div id="map-haarlem"></div>
+</div>
+
+<div class="day"><div class="hd"><h3>Sunday 2 August</h3><span class="tag">Canals · Homomonument · cook at home</span></div>
+<div class="block"><h4>The big canal walk <span class="when">morning, no fixed length</span></h4>
+<p>Tram in toward the centre (check 9292 for what's running), then on foot: <b>Begijnhof</b> (the hidden courtyard, unmarked door off Spui — worth the five minutes) into the <b>Nine Streets</b> — Herengracht, Keizersgracht, Prinsengracht — on to the <b>Homomonument</b> at Westermarkt (stop for fifteen minutes), on into the <b>Jordaan</b>, finishing at <b>Noordermarkt</b> for appeltaart at <b>Winkel 43</b>. Be clear of Dam Square by early afternoon — the free MainStage Grand Finale runs there from 14:00.</p></div>
+<div class="block"><h4>Grocery run <span class="when">afternoon, back near home</span></h4>
+<p><b>AH Postjesweg</b> (4 min, open Sundays, has a fish counter) or <b>Aldi</b> next door. Look for a <em>mosselpakket</em> — a bagged, pre-cleaned mussel kit — if the fish counter has one in season, plus a piece of cod or monkfish for you, bread, wine.</p></div>
+<div class="block"><h4>Cook at home <span class="when">evening</span></h4>
+<p>Zeeland mussels for her, pan-fried white fish for you, at your own table, with whatever wine you picked up. This is deliberately the one dirty-pan night of the trip — it's Sunday precisely so Monday night stays clean before an early Tuesday departure.</p></div>
+</div>
+
+<div class="day"><div class="hd"><h3>Monday 3 August</h3><span class="tag">Rijksmuseum · open afternoon</span></div>
+<div class="block"><h4>Rijksmuseum <span class="when">09:00 slot, booked — until lunchtime</span></h4>
+<p>Full organising notes below in section 06 — worth reading the night before. Short version: straight to the Gallery of Honour, don't backtrack, out whenever you've had enough rather than by the clock.</p></div>
+<div class="block"><h4>Lunch <span class="when">whenever you're done</span></h4>
+<p><b>Usta Kebap</b> or <b>Toko Bersama West</b>, both open daily — an easy, unfussy way back into the afternoon.</p></div>
+<div class="block"><h4>Open afternoon <span class="when">no plan</span></h4>
+<p>This is intentionally blank. Wander De Baarsjes properly, sit somewhere, reconsider the bikes if the mood takes you, or use it as your NDSM Werf window — see Day trips.</p></div>
+<div class="block"><h4>Evening <span class="when">no cooking tonight</span></h4>
+<p>Something easy and out — <b>Nouri's</b>, <b>Rotishop Gieta</b>, or a terrace. Pack tonight; you're up early.</p></div>
+<div class="closed"><b>Closed Monday</b>Abbey · Mossel &amp; Gin · Brut de Mer · De Indo van Jan Eef · Rotishop Gieta · Marco's greengrocer · De Kaashut · Freddy Fryday · Frans Hals Museum.</div>
+</div>
+
+<div class="day"><div class="hd"><h3>Tuesday 4 August</h3><span class="tag">Out</span></div>
+<p style="margin-top:14px">08:00 out the door → bus 15 → Sloterdijk → Sprinter → Schiphol by ~08:55. Flight 12:00.</p></div>
+
+<h2 id="sights"><span class="num">06</span>The sights, in the order you'll meet them</h2>
+<p>Here's the ranking question answered chronologically instead — what you'll actually see, day by day, and what's been deliberately left out.</p>
+<table>
+<tr><th>When</th><th>Sight</th><th>Note</th></tr>
+<tr><td class="n">Fri, ~13:00</td><td><b>De Wallen / medieval core</b><br><span style="font-size:13px;color:var(--mute)">Nieuwmarkt, De Waag, Zeedijk, Oude Kerk</span></td><td>Keys are already in hand — no deadline. Loosely worth beating the 16:00 street parties, not a rule.</td></tr>
+<tr><td class="n">Sun, morning</td><td><b>Begijnhof, Nine Streets, Jordaan, Homomonument</b></td><td>One continuous walk, not separate errands. Stop at the Homomonument — the best fifteen minutes of the fortnight.</td></tr>
+<tr><td class="n">Sun, midday</td><td><b>Noordermarkt / Winkel 43</b></td><td>Appeltaart, at the top of the Jordaan walk.</td></tr>
+<tr><td class="n">Mon, 09:00</td><td><b>Rijksmuseum</b></td><td>Booked. See section 06 for how to run it.</td></tr>
+</table>
+<h3><span class="dot" style="--c:var(--brick)"></span>Deliberately left out</h3>
+<table>
+<tr><th>Sight</th><th>Why not this trip</th></tr>
+<tr><td><b>De Pijp / Albert Cuyp Market</b></td><td>Ten Katemarkt is what Albert Cuyp used to be, and it's already closer than this would be.</td></tr>
+<tr><td><b>Museum Het Schip</b></td><td>Cut — the Rijksmuseum is your one museum this trip.</td></tr>
+<tr><td><b>NDSM Werf / STRAAT Museum</b></td><td>Not scheduled — kept as a loose option. See Day trips.</td></tr>
+<tr><td><b>Anne Frank House</b></td><td>Ruled out earlier — war-related, and needs booking months ahead regardless.</td></tr>
+<tr><td><b>Amstel &amp; Plantage</b></td><td>Not on a trip this length.</td></tr>
+<tr><td><b>Dam Square, Bloemenmarkt, Leidseplein, Rembrandtplein, Damrak</b></td><td>Pass through, don't plan around — Damrak especially is purely functional, the walk from Centraal to Dam.</td></tr>
+<tr><td><b>Antwerp</b></td><td>Genuinely wonderful, wrong trip — 1h23 each way from Amsterdam Zuid, ~€150 for two, and it costs you a day you don't have. Save it for a trip with two nights to give it.</td></tr>
+</table>
+
+<h3><span class="dot" style="--c:var(--brick)"></span>Friday and Sunday, on a map</h3>
+<div class="legend">
+<span><i style="background:#8C3A2B">F</i> Friday — medieval core</span>
+<span><i style="background:#1F6F5C">S</i> Sunday — canals &amp; Homomonument</span>
+</div>
+<div id="map-routes"></div>
+
+<h2 id="rijks"><span class="num">07</span>Organising the Rijksmuseum visit</h2>
+<p>Your slot is booked: Monday, 09:00, staying until lunchtime. A few things worth knowing before you go, gathered from people who go often.</p>
+<ul class="tight">
+<li><b>Arrive 10 minutes early.</b> There's a brief bag check at the door — anything larger than an A4 sheet goes into the free cloakroom, so don't bring a day pack you're attached to.</li>
+<li><b>Go straight up to the second floor — the Gallery of Honour — and skip the early-medieval rooms near the entrance for now.</b> That's where the crowds build first later in the morning; at 09:00 you can stand nearly alone in front of the Vermeers.</li>
+<li><b>Route: Gallery of Honour → the Night Watch at its end → the surrounding 17th-century Golden Age rooms.</b> That's the two-to-three-hour visit most people actually have time for, and it comfortably fits "until lunchtime."</li>
+<li><b>No exit time limit</b> — your ticket only fixes your entry, so once you're in you can stay as long as you like, right up to close if the morning runs long.</li>
+<li><b>Photography is fine</b> in the permanent galleries — no flash, no tripod.</li>
+<li><b>The free Rijksmuseum app</b> has an offline audio tour with about 14 highlight stops, worth downloading over the flat's wifi the night before.</li>
+<li><b>If you want more after the Golden Age rooms and still have time</b>: the Asian Pavilion and the gardens are usually near-empty even when the second floor is packed — a good pressure valve if one of you wants a slower half hour.</li>
+<li><b>Getting there Monday morning:</b> trams 2 and 12 stop at "Rijksmuseum" from the Centraal side, but from De Baarsjes the route depends on what's running around the Oranje Loper works — check <span class="kbd">9292.nl</span> that morning rather than assume a line number. On foot it's about 34 minutes through Rembrandtpark and Vondelpark, entirely pleasant if the morning is dry and you'd rather not deal with transit at all.</li>
+</ul>
+
+<h2 id="trips"><span class="num">08</span>Day trips</h2>
+
+<h3><span class="dot" style="--c:var(--ochre)"></span>Haarlem &amp; Zandvoort — Saturday, all day</h3>
+<p>Covered in full in Saturday's block above. Bus 15 → Sloterdijk → train, ~15 minutes each way, and Zandvoort is a further stop on the same line rather than a second trip. Supper's back in De Baarsjes, not in Haarlem — one less reservation to think about. <b>Fishbar Monk</b> and <b>PRAKM</b> are still there if the day runs differently than planned and staying for dinner ends up appealing.</p>
+
+<h3><span class="dot" style="--c:var(--teal)"></span>NDSM Werf — an option, not a plan</h3>
+<p>Free ferry from behind Centraal — look for <b>F4</b> or ferry <b>906</b>, marked NDSM-Werf, departing every 15–20 minutes, roughly a 13-minute crossing. It takes bikes and pedestrians, runs until close to midnight, and costs nothing.</p>
+<p>What's there: a former shipyard turned street-art quarter — <b>STRAAT Museum</b> (graffiti and street art in an 8,000 m² warehouse, ~€18–21 per adult, book online in peak season), plus a run of repurposed-container bars and restaurants — <b>Pllek</b>, <b>IJver</b>, <b>Noorderlicht</b> — good for a coffee or a sundowner rather than a full meal.</p>
+<p><b>Things to weigh:</b> it's genuinely across the city from De Baarsjes — allow half a day round trip if you include STRAAT, or a couple of hours if you're just there for the walk and a drink. It's an open industrial site with little shelter, so it's a fair-weather idea, not a rainy-day one. And it competes directly with your open Monday afternoon — there's no obligation to use that slot for this rather than just resting.</p>
+
+<h2 id="eat"><span class="num">09</span>Everything, by category</h2>
+<p>The full directory — every place in this guide, sorted by distance from the door. Hours verified 13 July 2026; re-check on the day, especially anything closed Monday.</p>
 <section class="cat" id="cat-coffee" style="--c:#6D4AB8">
-<h3><span class="dot"></span>Coffee <em>11</em></h3>
+<h3><span class="dot"></span>Coffee <em>12</em></h3>
 <div class="grid"><article class="pl">
-<div class="pl-h"><h4>White Label Coffee</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=White%20Label%20Coffee%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.2 km</b><span>2′ walk</span><span>1′ bike</span></div>
-<p>Daily 07:30–17:30 (Sat/Sun 08:00). Roaster. Medium house profile.</p></article>
-<article class="pl">
-<div class="pl-h"><h4>Noi Coffee &amp; Eatery</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Noi%20Coffee%20%26%20Eatery%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.2 km</b><span>2′ walk</span><span>1′ bike</span></div>
-<p>Daily 08:00–17:30. Best bakery counter on Jan Eef. No toilet.</p></article>
-<article class="pl">
-<div class="pl-h"><h4>Pudu Cafe</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Pudu%20Cafe%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.39 km</b><span>5′ walk</span><span>2′ bike</span></div>
-<p>Mon 07:00–17:00, Tue–Sun 08:00–14:30. Greek pastries — bougatsa.</p></article>
-<article class="pl">
 <div class="pl-h"><h4>Luma Coffee Lunch</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Luma%20Coffee%20Lunch%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.96 km</b><span>11′ walk</span><span>4′ bike</span></div>
-<p>Daily 08:00–17:00, later Fri–Sun. Quiet canal corner.</p></article>
+<div class="dist"><b>0.31 km</b><span>4′ walk</span><span>1′ bike</span></div>
+<p>Daily 08:00–17:00, later Fri–Sun. Quiet canal corner, close to home.</p></article>
 <article class="pl">
-<div class="pl-h"><h4>Zizou Coffee</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Zizou%20Coffee%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.97 km</b><span>12′ walk</span><span>4′ bike</span></div>
-<p>Daily 08:00–17:00 (Sun 09:00). Big sunny terrace. Where the neighbourhood sits.</p></article>
+<div class="pl-h"><h4>Vanaut</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Vanaut%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.37 km</b><span>4′ walk</span><span>2′ bike</span></div>
+<p>Daily 10:00–16:00. 4.9/592. Canal terrace, cake — as much gift/vintage shop as coffee bar, flavoured lattes (ube, red velvet) over straight espresso. Lovely, not serious.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Bo&#x27;s Amsterdam</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Bo%27s%20Amsterdam%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>1.05 km</b><span>13′ walk</span><span>5′ bike</span></div>
-<p>Open to 22:00 Thu–Sat. The rare evening coffee.</p></article>
+<div class="dist"><b>0.45 km</b><span>5′ walk</span><span>2′ bike</span></div>
+<p>Open to 22:00 Thu–Sat. The rare evening coffee, close to home.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Noi Coffee &amp; Eatery</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Noi%20Coffee%20%26%20Eatery%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.59 km</b><span>7′ walk</span><span>3′ bike</span></div>
+<p>Daily 08:00–17:30. Best bakery counter on Jan Eef.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>White Label Coffee</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=White%20Label%20Coffee%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.63 km</b><span>8′ walk</span><span>3′ bike</span></div>
+<p>Daily 07:30–17:30 (Sat/Sun 08:00). Roaster, medium profile.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Pudu Cafe</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Pudu%20Cafe%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.67 km</b><span>8′ walk</span><span>3′ bike</span></div>
+<p>Mon 07:00–17:00, Tue–Sun 08:00–14:30. Greek pastries — bougatsa.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Zizou Coffee</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Zizou%20Coffee%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.95 km</b><span>11′ walk</span><span>4′ bike</span></div>
+<p>Daily 08:00–17:00 (Sun 09:00). Big sunny terrace.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>DAK Showroom</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=DAK%20Showroom%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>1.26 km</b><span>15′ walk</span><span>5′ bike</span></div>
-<p>Daily 08:00–17:00 (Sat/Sun 09:00). Geishas, ferments. Expensive, tiny, extraordinary.</p></article>
-<article class="pl">
-<div class="pl-h"><h4>Friedhats FUKU</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Friedhats%20FUKU%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>1.44 km</b><span>17′ walk</span><span>6′ bike</span></div>
-<p>Mon–Fri 08:00–16:00, Sat/Sun 09:00–17:00. THE light-roast destination. No laptops.</p></article>
+<div class="dist"><b>1.05 km</b><span>13′ walk</span><span>4′ bike</span></div>
+<p>Daily 08:00–17:00 (Sat/Sun 09:00). Geishas, ferments. Small, extraordinary, pricey.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>LOT61 Coffee Roasters</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=LOT61%20Coffee%20Roasters%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>1.59 km</b><span>19′ walk</span><span>7′ bike</span></div>
-<p>Daily 08:00–18:00. Next to Ten Katemarkt. €4.40 cortado.</p></article>
-<article class="pl">
-<div class="pl-h"><h4>Back to Black</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Back%20to%20Black%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>1.95 km</b><span>23′ walk</span><span>8′ bike</span></div>
-<p>Daily 08:00–17:30. On the way to Westerpark. Huge apple pie.</p></article>
+<div class="dist"><b>1.28 km</b><span>15′ walk</span><span>5′ bike</span></div>
+<p>Daily 08:00–18:00. Next to Ten Katemarkt.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Rum Baba</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Rum%20Baba%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>2.21 km</b><span>27′ walk</span><span>9′ bike</span></div>
-<p>Daily from 08:00, closes 16:30. 5 min from Lindengracht market.</p></article></div></section>
+<div class="dist"><b>2.04 km</b><span>25′ walk</span><span>9′ bike</span></div>
+<p>Daily from 08:00, closes 16:30. In the Jordaan.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Friedhats FUKU</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Friedhats%20FUKU%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>2.07 km</b><span>25′ walk</span><span>9′ bike</span></div>
+<p>Mon–Fri 08:00–16:00, Sat/Sun 09:00–17:00. The light-roast destination. No laptops.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Back to Black</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Back%20to%20Black%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>2.27 km</b><span>27′ walk</span><span>10′ bike</span></div>
+<p>Daily 08:00–17:30. Huge apple pie.</p></article></div></section>
 <section class="cat" id="cat-cheap" style="--c:#C7601C">
-<h3><span class="dot"></span>Cheap eats <em>11</em></h3>
+<h3><span class="dot"></span>Cheap eats <em>12</em></h3>
 <div class="grid"><article class="pl">
-<div class="pl-h"><h4>Nouri&#x27;s Lunchroom</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Nouri%27s%20Lunchroom%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.07 km</b><span>1′ walk</span><span>0′ bike</span></div>
-<p>Daily 07:00–18:00. Moroccan breakfast: eggs, olives, flatbread, juice.</p></article>
+<div class="pl-h"><h4>Rotishop Gieta</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Rotishop%20Gieta%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.34 km</b><span>4′ walk</span><span>1′ bike</span></div>
+<p>Tue–Sun 15:00–21:30. CLOSED MON. Surinamese roti. 4.7/614.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>De Indo van Jan Eef</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=De%20Indo%20van%20Jan%20Eef%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.11 km</b><span>1′ walk</span><span>0′ bike</span></div>
-<p>Tue–Sun 12:00–21:00. CLOSED MON. Indonesian, build-your-own rice plate. Takeaway.</p></article>
+<div class="dist"><b>0.56 km</b><span>7′ walk</span><span>2′ bike</span></div>
+<p>Tue–Sun 12:00–21:00. CLOSED MON. Indonesian, build-your-own rice plate.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Nouri&#x27;s Lunchroom</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Nouri%27s%20Lunchroom%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.6 km</b><span>7′ walk</span><span>3′ bike</span></div>
+<p>Daily 07:00–18:00. Moroccan breakfast.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Usta Kebap</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Usta%20Kebap%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.13 km</b><span>2′ walk</span><span>1′ bike</span></div>
+<div class="dist"><b>0.61 km</b><span>7′ walk</span><span>3′ bike</span></div>
 <p>Daily 12:00–01:00 (Tue from 16:00). 4.9/803. Adana + künefe. Under €15pp.</p></article>
 <article class="pl">
-<div class="pl-h"><h4>Rotishop Gieta</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Rotishop%20Gieta%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.32 km</b><span>4′ walk</span><span>1′ bike</span></div>
-<p>Tue–Sun 15:00–21:30. CLOSED MON. Surinamese roti. 4.7/614. €.</p></article>
-<article class="pl">
-<div class="pl-h"><h4>Ram&#x27;s Roti</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Ram%27s%20Roti%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.75 km</b><span>9′ walk</span><span>3′ bike</span></div>
-<p>Daily 12:00–21:00 (Mon from 14:00). Surinamese. Chicken on the bone €9.</p></article>
-<article class="pl">
-<div class="pl-h"><h4>Tuana Grill</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Tuana%20Grill%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>1.08 km</b><span>13′ walk</span><span>5′ bike</span></div>
-<p>Daily 10:00–01:00. Turkish, family-run, generous.</p></article>
+<div class="pl-h"><h4>Zeeduivel Visspecialiteiten</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Zeeduivel%20Visspecialiteiten%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.77 km</b><span>9′ walk</span><span>3′ bike</span></div>
+<p>Tue–Sat 11:00–18:00. CLOSED SUN+MON. Fish counter — kibbeling + oysters, €30 for two.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Freddy Fryday West</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Freddy%20Fryday%20West%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>1.24 km</b><span>15′ walk</span><span>5′ bike</span></div>
+<div class="dist"><b>1.16 km</b><span>14′ walk</span><span>5′ bike</span></div>
 <p>Tue–Sun 12:00–21:00. CLOSED MON. Loaded frites.</p></article>
 <article class="pl">
-<div class="pl-h"><h4>Zeeduivel Visspecialiteiten</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Zeeduivel%20Visspecialiteiten%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>1.33 km</b><span>16′ walk</span><span>6′ bike</span></div>
-<p>Tue–Sat 11:00–18:00. CLOSED SUN+MON. Fish counter. Kibbeling for you, oysters for her. 4.9.</p></article>
+<div class="pl-h"><h4>Ram&#x27;s Roti</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Ram%27s%20Roti%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>1.19 km</b><span>14′ walk</span><span>5′ bike</span></div>
+<p>Daily 12:00–21:00 (Mon from 14:00). Surinamese.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Toko Bersama West</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Toko%20Bersama%20West%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>1.57 km</b><span>19′ walk</span><span>7′ bike</span></div>
-<p>Daily 12:00–21:30. 4.9/11,555. Rames Complete. Best cheap meal in range.</p></article>
-<article class="pl">
-<div class="pl-h"><h4>Bistro Bos</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Bistro%20Bos%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>1.59 km</b><span>19′ walk</span><span>7′ bike</span></div>
-<p>Daily 15:00–23:00. Turkish mezze + grill.</p></article>
+<div class="dist"><b>1.37 km</b><span>16′ walk</span><span>6′ bike</span></div>
+<p>Daily 12:00–21:30. 4.9/11,555. Rames Complete.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Frites &amp; Frites</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Frites%20%26%20Frites%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>1.93 km</b><span>23′ walk</span><span>8′ bike</span></div>
-<p>Daily 12:00–21:00. Frites with the full sauce range.</p></article></div></section>
+<div class="dist"><b>1.7 km</b><span>20′ walk</span><span>7′ bike</span></div>
+<p>Daily 12:00–21:00. Full sauce range.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Tuana Grill</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Tuana%20Grill%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>1.74 km</b><span>21′ walk</span><span>7′ bike</span></div>
+<p>Daily 10:00–01:00. Turkish, family-run.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Bistro Bos</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Bistro%20Bos%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>2.21 km</b><span>27′ walk</span><span>9′ bike</span></div>
+<p>Daily 15:00–23:00. Turkish mezze + grill.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Dizinghof</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Dizinghof%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>2.21 km</b><span>27′ walk</span><span>9′ bike</span></div>
+<p>Daily 17:00–03:00 (later Fri/Sat). 4.2/627. Named specifically as one of Amsterdam's best kapsalon spots — the one place near you I'd actually vouch for by reputation, not just proximity.</p></article></div></section>
 <section class="cat" id="cat-nicer" style="--c:#A32E22">
 <h3><span class="dot"></span>Nicer dinner <em>3</em></h3>
 <div class="grid"><article class="pl">
 <div class="pl-h"><h4>Abbey</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Abbey%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>1.68 km</b><span>20′ walk</span><span>7′ bike</span></div>
-<p>Tue–Sun. CLOSED MON. 4.8/652. Seasonal, warm, conversation-friendly. Nicer dinner, ~€45pp.</p></article>
+<div class="dist"><b>2.34 km</b><span>28′ walk</span><span>10′ bike</span></div>
+<p>Tue–Sun. CLOSED MON. 4.8/652. Seasonal, warm, ~€45pp.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Mossel &amp; Gin</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Mossel%20%26%20Gin%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>2.51 km</b><span>30′ walk</span><span>11′ bike</span></div>
+<div class="dist"><b>3.01 km</b><span>36′ walk</span><span>13′ bike</span></div>
 <p>Sat/Sun from 13:00, Tue–Fri from 17:00. CLOSED MON. In-season Zeeland mussels. Loud.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Brut de Mer</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Brut%20de%20Mer%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>4.04 km</b><span>49′ walk</span><span>17′ bike</span></div>
-<p>Fri–Sun 12:00–24:00, Tue–Thu from 16:00. CLOSED MON. Oyster specialist. Priciest option.</p></article></div></section>
+<div class="dist"><b>3.57 km</b><span>43′ walk</span><span>15′ bike</span></div>
+<p>Fri–Sun 12:00–24:00, Tue–Thu from 16:00. CLOSED MON. Oyster specialist, priciest option.</p></article></div></section>
 <section class="cat" id="cat-bar" style="--c:#3B6E4A">
-<h3><span class="dot"></span>Bars & terraces <em>7</em></h3>
+<h3><span class="dot"></span>Bars & terraces <em>10</em></h3>
 <div class="grid"><article class="pl">
+<div class="pl-h"><h4>Tweede Thuys</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Tweede%20Thuys%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.34 km</b><span>4′ walk</span><span>1′ bike</span></div>
+<p>Daily 11:00–24:00 (Fri/Sat to 01:00). 4.7/525. Large canal terrace, parrots overhead. Your local.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>BRONS</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=BRONS%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.44 km</b><span>5′ walk</span><span>2′ bike</span></div>
+<p>Mon–Thu from 15:00, Fri/Sat from 13:00, Sun 12:00–20:00. Opened May 2026, waterside terrace.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Wolff &amp; Beer</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Wolff%20%26%20Beer%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.52 km</b><span>6′ walk</span><span>2′ bike</span></div>
+<p>Daily from 08:00 (Fri/Sat to 03:00). 4.6. One of the few late places nearby.</p></article>
+<article class="pl">
 <div class="pl-h"><h4>Bar Baarsch</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Bar%20Baarsch%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.11 km</b><span>1′ walk</span><span>0′ bike</span></div>
-<p>Daily from 11:00. Good food. VERY LOUD at night.</p></article>
+<div class="dist"><b>0.56 km</b><span>7′ walk</span><span>2′ bike</span></div>
+<p>Daily from 11:00. Good food. Very loud at night.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>de Neef van Fred</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=de%20Neef%20van%20Fred%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.31 km</b><span>4′ walk</span><span>1′ bike</span></div>
-<p>Daily from 11:00. Terrace on a deck at the water. Sun until ~21:00.</p></article>
+<div class="dist"><b>0.63 km</b><span>8′ walk</span><span>3′ bike</span></div>
+<p>Daily from 11:00. Terrace on a deck at the water.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Café Kontakt</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Caf%C3%A9%20Kontakt%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.54 km</b><span>7′ walk</span><span>2′ bike</span></div>
-<p>Mon–Sat from 16:00. CLOSED SUN. Local pub, craft beer, non-smoking.</p></article>
+<div class="dist"><b>0.83 km</b><span>10′ walk</span><span>4′ bike</span></div>
+<p>Mon–Sat from 16:00. CLOSED SUN. Local pub, craft beer.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Café Thuys</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Caf%C3%A9%20Thuys%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>1.05 km</b><span>13′ walk</span><span>4′ bike</span></div>
-<p>Daily from 11:00. Proper old-style Amsterdam café, canal-side.</p></article>
+<div class="dist"><b>0.97 km</b><span>12′ walk</span><span>4′ bike</span></div>
+<p>Daily from 11:00. Old-style Amsterdam café, canal-side.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Café &#x27;t Binnepretje</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Caf%C3%A9%20%27t%20Binnepretje%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>1.48 km</b><span>18′ walk</span><span>6′ bike</span></div>
-<p>Daily from 11:00 (Sun 14:00). Real neighbourhood bar. Darts, locals.</p></article>
+<div class="dist"><b>2.1 km</b><span>25′ walk</span><span>9′ bike</span></div>
+<p>Daily from 11:00 (Sun 14:00). Real neighbourhood bar.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Café Brel</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Caf%C3%A9%20Brel%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>2.35 km</b><span>28′ walk</span><span>10′ bike</span></div>
-<p>Daily from 14:00. Belgian beer list, very friendly. €.</p></article>
+<div class="dist"><b>2.79 km</b><span>34′ walk</span><span>12′ bike</span></div>
+<p>Daily from 14:00. Belgian beer list.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>A. van Wees Proeflokaal</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=A.%20van%20Wees%20Proeflokaal%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>2.94 km</b><span>35′ walk</span><span>13′ bike</span></div>
-<p>Daily 10:00–23:30. Jenever tasting house. Genever flight + bitterballen.</p></article></div></section>
+<div class="dist"><b>2.79 km</b><span>33′ walk</span><span>12′ bike</span></div>
+<p>Daily 10:00–23:30. Jenever tasting house.</p></article></div></section>
 <section class="cat" id="cat-shop" style="--c:#2F4858">
-<h3><span class="dot"></span>Groceries <em>6</em></h3>
+<h3><span class="dot"></span>Groceries <em>9</em></h3>
 <div class="grid"><article class="pl">
-<div class="pl-h"><h4>Marco&#x27;s Groentespeciaalzaak</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Marco%27s%20Groentespeciaalzaak%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.07 km</b><span>1′ walk</span><span>0′ bike</span></div>
-<p>Tue–Sat 07:00–18:00. CLOSED SUN+MON. Independent greengrocer. 4.9.</p></article>
+<div class="pl-h"><h4>De Kaashut</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=De%20Kaashut%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.32 km</b><span>4′ walk</span><span>1′ bike</span></div>
+<p>Wed–Fri 09:00–14:00, Sat/Sun to 17:00. CLOSED MON+TUE. Cheese, tastings.</p></article>
 <article class="pl">
-<div class="pl-h"><h4>Dirk Supermarkt</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Dirk%20Supermarkt%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.3 km</b><span>4′ walk</span><span>1′ bike</span></div>
-<p>Mon–Sat 08:00–22:00, Sun 09:00–22:00. Your workhorse. Cheaper than Albert Heijn.</p></article>
+<div class="pl-h"><h4>Avondwinkel de Buren</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Avondwinkel%20de%20Buren%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.36 km</b><span>4′ walk</span><span>2′ bike</span></div>
+<p>Daily 14:00–02:00 (Fri/Sat to 03:00). 4.7. The good night shop.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>AH Postjesweg</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=AH%20Postjesweg%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.38 km</b><span>5′ walk</span><span>2′ bike</span></div>
+<p>Daily 08:00–22:00. Closest full supermarket, fish counter. Pricier than Aldi.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>ALDI Postjesweg</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=ALDI%20Postjesweg%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.39 km</b><span>5′ walk</span><span>2′ bike</span></div>
+<p>Mon–Sat 08:00–20:00, Sun 10:00–20:00. Cheapest option, 4 minutes away.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Bakkerij Dekker</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Bakkerij%20Dekker%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.31 km</b><span>4′ walk</span><span>1′ bike</span></div>
+<div class="dist"><b>0.49 km</b><span>6′ walk</span><span>2′ bike</span></div>
 <p>Mon–Fri 08:00–17:00, Sat to 16:30. CLOSED SUN. Old-school bread + cheese.</p></article>
 <article class="pl">
+<div class="pl-h"><h4>Dirk Supermarkt</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Dirk%20Supermarkt%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.51 km</b><span>6′ walk</span><span>2′ bike</span></div>
+<p>Mon–Sat 08:00–22:00, Sun 09:00–22:00. Cheaper than Albert Heijn, further than Aldi.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Marco&#x27;s Groentespeciaalzaak</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Marco%27s%20Groentespeciaalzaak%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.6 km</b><span>7′ walk</span><span>3′ bike</span></div>
+<p>Tue–Sat 07:00–18:00. CLOSED SUN+MON. Independent greengrocer. 4.9.</p></article>
+<article class="pl">
 <div class="pl-h"><h4>Bakkerij Nazar</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Bakkerij%20Nazar%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.62 km</b><span>7′ walk</span><span>3′ bike</span></div>
+<div class="dist"><b>0.77 km</b><span>9′ walk</span><span>3′ bike</span></div>
 <p>Mon–Sat 06:00–20:00. CLOSED SUN. Baklava.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Antakya Bakkerij</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Antakya%20Bakkerij%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.93 km</b><span>11′ walk</span><span>4′ bike</span></div>
-<p>Mon–Sat 06:00–21:00. CLOSED SUN. Turkish flatbread from the oven.</p></article>
-<article class="pl">
-<div class="pl-h"><h4>De Kaashut</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=De%20Kaashut%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.97 km</b><span>12′ walk</span><span>4′ bike</span></div>
-<p>Wed–Fri 09:00–14:00, Sat/Sun to 17:00. CLOSED MON+TUE. Cheese. Ask to taste oude Gouda.</p></article></div></section>
+<div class="dist"><b>1.3 km</b><span>16′ walk</span><span>6′ bike</span></div>
+<p>Mon–Sat 06:00–21:00. CLOSED SUN. Turkish flatbread.</p></article></div></section>
 <section class="cat" id="cat-market" style="--c:#B07A12">
 <h3><span class="dot"></span>Markets <em>4</em></h3>
 <div class="grid"><article class="pl">
-<div class="pl-h"><h4>Foodhallen</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Foodhallen%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>1.4 km</b><span>17′ walk</span><span>6′ bike</span></div>
-<p>Daily 12:00–24:00. Good, but firmly on the tourist circuit now. De Ballenbar does a bitterballen platter ~€15.</p></article>
-<article class="pl">
 <div class="pl-h"><h4>Ten Katemarkt</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Ten%20Katemarkt%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>1.42 km</b><span>17′ walk</span><span>6′ bike</span></div>
-<p>Mon–Sat 09:00–18:00. CLOSED SUN. Saturday is the big day. The market locals use.</p></article>
+<div class="dist"><b>1.04 km</b><span>12′ walk</span><span>4′ bike</span></div>
+<p>Mon–Sat 09:00–18:00. CLOSED SUN. The market locals use — not on this trip&#x27;s schedule, but 12 minutes on foot if an hour opens up.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Foodhallen</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Foodhallen%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>1.07 km</b><span>13′ walk</span><span>5′ bike</span></div>
+<p>Daily 12:00–24:00. Good, but firmly on the tourist circuit.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Winkel 43</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Winkel%2043%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>3.06 km</b><span>37′ walk</span><span>13′ bike</span></div>
-<p>Daily from 08:00 (Mon/Sat 07:00). The famous Dutch apple pie, at Noordermarkt beside Lindengracht.</p></article>
+<div class="dist"><b>3.2 km</b><span>38′ walk</span><span>14′ bike</span></div>
+<p>Daily from 08:00 (Mon/Sat 07:00). The famous Dutch apple pie, at Noordermarkt.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Lindengracht Market</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Lindengracht%20Market%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>3.17 km</b><span>38′ walk</span><span>14′ bike</span></div>
-<p>SATURDAY ONLY 09:00–16:00. Best market morning in the city.</p></article></div></section>
+<div class="dist"><b>3.34 km</b><span>40′ walk</span><span>14′ bike</span></div>
+<p>SATURDAY ONLY 09:00–16:00. Best market morning in the city — but you&#x27;ll be in Haarlem.</p></article></div></section>
 <section class="cat" id="cat-park" style="--c:#4A7A3C">
 <h3><span class="dot"></span>Parks <em>4</em></h3>
 <div class="grid"><article class="pl">
-<div class="pl-h"><h4>Erasmuspark</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Erasmuspark%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.52 km</b><span>6′ walk</span><span>2′ bike</span></div>
-<p>Daily 07:00–22:00. Two minutes away. People swim off the bridge.</p></article>
-<article class="pl">
 <div class="pl-h"><h4>Rembrandtpark</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Rembrandtpark%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>1.12 km</b><span>13′ walk</span><span>5′ bike</span></div>
-<p>Open 24h. Quieter Vondelpark. Mini farm.</p></article>
+<div class="dist"><b>0.87 km</b><span>10′ walk</span><span>4′ bike</span></div>
+<p>Open 24h. Your nearest real park. Quieter Vondelpark, mini farm.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Erasmuspark</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Erasmuspark%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>1.18 km</b><span>14′ walk</span><span>5′ bike</span></div>
+<p>Daily 07:00–22:00. People swim off the bridge in August.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Westerpark / Westergas</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Westerpark%20/%20Westergas%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>3.0 km</b><span>36′ walk</span><span>13′ bike</span></div>
+<div class="dist"><b>3.37 km</b><span>40′ walk</span><span>14′ bike</span></div>
 <p>Open 24h. Green + old gasworks turned into bars and venues.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Sloterplas</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Sloterplas%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>3.52 km</b><span>42′ walk</span><span>15′ bike</span></div>
+<div class="dist"><b>3.66 km</b><span>44′ walk</span><span>16′ bike</span></div>
 <p>Open 24h. Big lake, loop path, zero tourists.</p></article></div></section>
 <section class="cat" id="cat-museum" style="--c:#6B4A32">
-<h3><span class="dot"></span>Museums <em>2</em></h3>
+<h3><span class="dot"></span>Museums <em>1</em></h3>
 <div class="grid"><article class="pl">
 <div class="pl-h"><h4>Rijksmuseum</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Rijksmuseum%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>3.18 km</b><span>38′ walk</span><span>14′ bike</span></div>
-<p>Daily 09:00–17:00. €25, ONLINE ONLY, no door sales. Book the 09:00 slot.</p></article>
+<div class="dist"><b>2.75 km</b><span>33′ walk</span><span>12′ bike</span></div>
+<p>Daily 09:00–17:00. €25, ONLINE ONLY. Your Monday 09:00 slot is booked — see the organising tips below.</p></article></div></section>
+<section class="cat" id="cat-sight" style="--c:#7B2D5E">
+<h3><span class="dot"></span>Sights & landmarks <em>9</em></h3>
+<div class="grid"><article class="pl">
+<div class="pl-h"><h4>Homomonument</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Homomonument%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>2.68 km</b><span>32′ walk</span><span>11′ bike</span></div>
+<p>Three pink granite triangles, Westermarkt. The first monument anywhere to commemorate the persecution of gay people. Free, 15 minutes, directly on your Sunday route.</p></article>
 <article class="pl">
-<div class="pl-h"><h4>Museum Het Schip</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Museum%20Het%20Schip%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>3.26 km</b><span>39′ walk</span><span>14′ bike</span></div>
-<p>Wed–Sun 11:00–17:00. CLOSED MON+TUE. Amsterdam School architecture — the movement that built your street. Take the English tour. ~€18.</p></article></div></section>
+<div class="pl-h"><h4>Nine Streets (Negen Straatjes)</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Nine%20Streets%20%28Negen%20Straatjes%29%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>2.7 km</b><span>32′ walk</span><span>12′ bike</span></div>
+<p>Independent boutiques threaded between Herengracht, Keizersgracht and Prinsengracht. Walk the canals themselves, not just the cross-streets.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Begijnhof</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Begijnhof%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>2.98 km</b><span>36′ walk</span><span>13′ bike</span></div>
+<p>Hidden courtyard of almshouses. One of the last wooden house-fronts in the city at No. 34. Free — the entrance is an unmarked door off Spui.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Spui</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Spui%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>3.1 km</b><span>37′ walk</span><span>13′ bike</span></div>
+<p>Small square, bookshops. Friday book market 09:00–18:00, if your Friday afternoon lands here at the right moment.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Dam Square</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Dam%20Square%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>3.34 km</b><span>40′ walk</span><span>14′ bike</span></div>
+<p>Pass through, don&#x27;t plan around it. Sun 2 Aug 14:00–23:00: the free MainStage Grand Finale is here.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Oude Kerk</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Oude%20Kerk%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>3.79 km</b><span>46′ walk</span><span>16′ bike</span></div>
+<p>Amsterdam&#x27;s oldest building, consecrated 1306. Exterior free; interior has an entry fee.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Nieuwmarkt &amp; De Waag</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Nieuwmarkt%20%26%20De%20Waag%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>3.98 km</b><span>48′ walk</span><span>17′ bike</span></div>
+<p>Amsterdam&#x27;s oldest square, the 15th-century De Waag weigh-house at its centre. Quiet by day; go before 15:30 Friday, ahead of the street parties.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Zeedijk</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Zeedijk%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>3.99 km</b><span>48′ walk</span><span>17′ bike</span></div>
+<p>The old sailors&#x27; street into Chinatown. Walk it by day — busiest, loudest at night, especially through WorldPride.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>NDSM Werf / STRAAT Museum</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=NDSM%20Werf%20/%20STRAAT%20Museum%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>via ferry</b><span>not walkable</span></div>
+<p>Free ferry from behind Centraal (F4/906), ~13 min crossing, every 15–20 min, runs to ~00:00. Not walkable — see Day trips.</p></article></div></section>
 <section class="cat" id="cat-bike" style="--c:#186A73">
-<h3><span class="dot"></span>Bike rental <em>2</em></h3>
+<h3><span class="dot"></span>Bike rental <em>1</em></h3>
 <div class="grid"><article class="pl">
-<div class="pl-h"><h4>Bike Shop Admiral</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Bike%20Shop%20Admiral%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.54 km</b><span>6′ walk</span><span>2′ bike</span></div>
-<p>Backup rental. Same-day service reputation.</p></article>
-<article class="pl">
 <div class="pl-h"><h4>Fietspadje (bike rental)</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Fietspadje%20%28bike%20rental%29%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.7 km</b><span>8′ walk</span><span>3′ bike</span></div>
-<p>Mon–Fri 09:00–18:00, Sat 09:00–17:00. CLOSED SUN. ~€10/24h + deposit.</p></article></div></section>
+<div class="dist"><b>0.53 km</b><span>6′ walk</span><span>2′ bike</span></div>
+<p>Mon–Fri 09:00–18:00, Sat 09:00–17:00. CLOSED SUN. ~€10/24h + deposit. Parked for now — here if you change your mind.</p></article></div></section>
 <section class="cat" id="cat-transit" style="--c:#5A5A5A">
-<h3><span class="dot"></span>Transit <em>3</em></h3>
+<h3><span class="dot"></span>Transit <em>6</em></h3>
 <div class="grid"><article class="pl">
-<div class="pl-h"><h4>Marco Polostraat tram stop (13)</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Marco%20Polostraat%20tram%20stop%20%2813%29%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.19 km</b><span>2′ walk</span><span>1′ bike</span></div>
-<p>Tram 13 toward the centre. Your closest stop.</p></article>
+<div class="pl-h"><h4>Postjesweg tram stop</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Postjesweg%20tram%20stop%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.35 km</b><span>4′ walk</span><span>2′ bike</span></div>
+<p>~400 m south. Tram 17 toward Centraal — check 9292.nl, works ongoing.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Mercatorplein (bus 15, tram 13)</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Mercatorplein%20%28bus%2015%2C%20tram%2013%29%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>0.3 km</b><span>4′ walk</span><span>1′ bike</span></div>
-<p>Bus 15 → Sloterdijk (for Schiphol/Haarlem) and → Amsterdam Zuid (for Antwerp).</p></article>
+<div class="dist"><b>0.51 km</b><span>6′ walk</span><span>2′ bike</span></div>
+<p>Bus 15 → Sloterdijk (Schiphol/Haarlem) and → Amsterdam Zuid (Antwerp).</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Marco Polostraat tram stop (13)</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Marco%20Polostraat%20tram%20stop%20%2813%29%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.54 km</b><span>6′ walk</span><span>2′ bike</span></div>
+<p>Tram 13 toward the centre.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Jan Evertsenstraat (tram 7 / bus 18)</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Jan%20Evertsenstraat%20tram%20stop%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>0.56 km</b><span>7′ walk</span><span>2′ bike</span></div>
+<p>Your real link to Centraal Station — confirmed running both directions this summer. ~20 min tram/bus, then this 7-minute walk home. Faster than the 50-minute walk from Centraal, and the route this guide actually means whenever it says "back to the flat."</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Station Lelylaan</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Station%20Lelylaan%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>2.26 km</b><span>27′ walk</span><span>10′ bike</span></div>
+<p>Direct Sprinters to Schiphol (~10 min). Geographically your best station, awkward to reach while tram 17 is cut short.</p></article>
 <article class="pl">
 <div class="pl-h"><h4>Station Sloterdijk</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Station%20Sloterdijk%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
-<div class="dist"><b>2.89 km</b><span>35′ walk</span><span>12′ bike</span></div>
-<p>Your gateway. Sprinter to Schiphol 11 min; train to Haarlem 15 min.</p></article></div></section>
+<div class="dist"><b>3.54 km</b><span>42′ walk</span><span>15′ bike</span></div>
+<p>Sprinter to Schiphol 11 min; train to Haarlem 15 min.</p></article>
+<article class="pl">
+<div class="pl-h"><h4>Centraal Station</h4><a class="pin" href="https://www.google.com/maps/search/?api=1&query=Centraal%20Station%2C%20Amsterdam" target="_blank" rel="noopener">Map</a></div>
+<div class="dist"><b>4.2 km</b><span>50′ walk</span><span>18′ bike</span></div>
+<p>Not your airport route — you're going via Sloterdijk instead. This is where tram 7 / bus 18 land Friday afternoon, right after bags are dropped. 50 min on foot from the flat; ~20 min by tram/bus.</p></article></div></section>
 
 
-<h2 id="specialties"><span class="num">05</span>What to actually eat</h2>
-
+<h2 id="specialties"><span class="num">10</span>What to actually eat</h2>
 <h3><span class="dot" style="--c:var(--slate)"></span>Fish and seafood</h3>
-<p><b>You are here at the right moment.</b> The Zeeland mussel season runs mid-July to April, so you arrive at the very start of the new harvest — the best shellfish moment of the Dutch year. The 2026 <em>Hollandse Nieuwe</em> herring season opened 16 June.</p>
+<p>You're here at the right moment — Zeeland mussel season runs mid-July to April, so you land at the very start of the new harvest.</p>
 <table>
 <tr><th>Dish</th><th>For</th><th>What it is</th></tr>
-<tr><td><b>Kibbeling</b></td><td class="n">YOU</td><td>Cod chunks in light batter, deep-fried, with garlic or remoulade sauce. Mild, hot, not "fishy". Every market has a stall. <b>Zeeduivel</b> does the best near you.</td></tr>
-<tr><td><b>Zeeuwse mosselen</b></td><td class="n">HER</td><td>Zeeland mussels, in-season, served as a pan on the table with fries and sauces. <b>Mossel &amp; Gin</b>, Westerpark.</td></tr>
-<tr><td><b>Hollandse garnalen</b></td><td class="n">HER</td><td>Tiny North Sea brown shrimp, hand-peeled, intensely sweet. Best as a <b>garnalenkroket</b> — one of the great Dutch things.</td></tr>
-<tr><td><b>Zeeuwse oesters</b></td><td class="n">HER</td><td>World-class. In August expect <em>Creuse</em> rock oysters; the prized flat oysters are a Sept–April thing.</td></tr>
-<tr><td><b>Haring</b></td><td class="n">HER</td><td>Raw brined herring with onion and pickle, from a street cart, ~€4. The national dish. Oily and strongly marine — <b>not for you</b>.</td></tr>
-<tr><td><b>Gerookte paling</b></td><td class="n">HER</td><td>Smoked eel. Beloved, and very strong. Not for you.</td></tr>
-<tr><td colspan="3"><b>On menus, the white fish you can eat:</b> <em>kabeljauw</em> (cod), <em>tong</em> (Dover sole), <em>heilbot</em> (halibut), <em>zeeduivel</em> (monkfish — literally "sea devil").</td></tr>
+<tr><td><b>Kibbeling</b></td><td class="n">YOU</td><td>Cod chunks in light batter, deep-fried. Mild, not "fishy". <b>Zeeduivel</b> does the best near you (closed Sun+Mon).</td></tr>
+<tr><td><b>Zeeuwse mosselen</b></td><td class="n">HER</td><td>In-season Zeeland mussels — your Sunday-night cook-in, or <b>Mossel &amp; Gin</b> in Westerpark.</td></tr>
+<tr><td><b>Hollandse garnalen</b></td><td class="n">HER</td><td>Tiny North Sea shrimp — best as a <em>garnalenkroket</em>.</td></tr>
+<tr><td><b>Zeeuwse oesters</b></td><td class="n">HER</td><td>World-class. August means <em>Creuse</em> rock oysters, not the prized flat ones (Sept–April).</td></tr>
+<tr><td><b>Haring</b></td><td class="n">HER</td><td>Raw brined herring, ~€4, from a street cart. Oily, strongly marine — not for you.</td></tr>
+<tr><td colspan="3"><b>On menus, the white fish you can eat:</b> <em>kabeljauw</em> (cod), <em>tong</em> (Dover sole), <em>heilbot</em> (halibut), <em>zeeduivel</em> (monkfish).</td></tr>
 </table>
-<div class="alert"><h4>The cheapest way to solve the seafood problem</h4>
-<p><b>Zeeduivel Visspecialiteiten</b> — 1.3 km, 6 min by bike. A fish counter, not a restaurant, 4.9 stars. You get kibbeling; she gets oysters, gamba's, tuna tataki, herring. The two of you eat brilliantly for about €30 and nobody compromises. <b>Do it as a lunch. Closed Sunday and Monday.</b></p></div>
-
 <h3><span class="dot" style="--c:var(--slate)"></span>The rest of the Dutch canon</h3>
 <ul class="tight">
-<li><b>Bitterballen.</b> Crumbed, deep-fried balls of beef ragout, eaten with sharp mustard, standing at a bar with a beer. This is the centre of Dutch <em>borrel</em> culture and you should do it at least twice. Any brown café; <b>Café 't Binnepretje</b> or <b>Café Thuys</b>.</li>
-<li><b>Frites.</b> Thick-cut, twice-fried, in a paper cone. Order them with <em>mayo</em> (correct), or <em>patatje oorlog</em> — "war fries", buried under peanut sauce, mayonnaise, and raw onion. <b>Freddy Fryday West</b> or <b>Frites &amp; Frites</b>.</li>
-<li><b>Broodje kroket / uitsmijter.</b> Lunch, Dutch-style: a croquette split open on a soft roll with mustard, or three fried eggs on bread with ham and cheese. Every café does them.</li>
-<li><b>Stroopwafel.</b> Not the packaged kind. <b>Buy it warm, pressed to order, from a market stall</b> — Ten Katemarkt or Lindengracht. Completely different object.</li>
-<li><b>Appeltaart.</b> Dense, tall, cinnamon-and-raisin, served with unsweetened whipped cream. <b>Winkel 43</b> at the Noordermarkt is the famous one and it's a two-minute walk from the Saturday Lindengracht market. <b>Back to Black</b> does an enormous one closer to home.</li>
-<li><b>Oude kaas.</b> Aged Gouda — crystalline, salty, nothing like the young stuff. <b>De Kaashut</b> (1 km) will let you taste before you buy. Get a wedge for the flat.</li>
-<li><b>Hagelslag.</b> Chocolate sprinkles on buttered bread, for breakfast, by adults, without irony. Buy a box at Dirk. Do it once.</li>
-<li><b>Jenever.</b> The juniper spirit that gin descends from — maltier, rounder, served in a tulip glass filled to the brim, so the first sip is taken with hands behind your back. A <em>kopstootje</em> ("little headbutt") is a jenever with a beer chaser. <b>A. van Wees Proeflokaal</b> (Herengracht 319) does tasting flights and is not expensive.</li>
+<li><b>Bitterballen</b> — crumbed, fried beef ragout with sharp mustard, standing at a bar with a beer. <b>Café Thuys</b> or <b>'t Binnepretje</b>.</li>
+<li><b>Frites</b> — thick-cut, twice-fried. Try <em>patatje oorlog</em> — peanut sauce, mayo, raw onion.</li>
+<li><b>Stroopwafel</b> — warm, pressed to order, from a market stall. Not the packaged kind.</li>
+<li><b>Appeltaart</b> — dense, cinnamon, unsweetened whipped cream. <b>Winkel 43</b>, right on your Sunday route.</li>
+<li><b>Oude kaas</b> — aged Gouda, crystalline and salty. <b>De Kaashut</b> will let you taste before you buy.</li>
+<li><b>Jenever</b> — the juniper spirit gin descends from, served brim-full in a tulip glass. <b>A. van Wees Proeflokaal</b> does tasting flights.</li>
 </ul>
-
 <h3><span class="dot" style="--c:var(--slate)"></span>The two cuisines that are actually Amsterdam's</h3>
-<p><b>Indonesian</b> and <b>Surinamese</b> — both legacies of Dutch colonialism, both eaten constantly by Amsterdammers, and both far more characteristic of this city than pancakes. You have outstanding examples of each within 400 metres:</p>
-<ul class="tight">
-<li><b>De Indo van Jan Eef</b> (110 m) — build-your-own Indonesian rice plate, takeaway. Closed Monday.</li>
-<li><b>Rotishop Gieta</b> (320 m) — Surinamese roti: a soft flatbread with curried chicken or lamb, potato, long beans, and a yellow chilli sauce that is genuinely hot. €. Closed Monday.</li>
-<li><b>Toko Bersama West</b> (1.6 km) — 4.9 stars over 11,500 reviews. Ask for <em>Rames Complete</em>. Probably the best cheap meal you'll eat.</li>
-</ul>
-<p>A full <b>rijsttafel</b> — a dozen small Indonesian dishes around rice — is the classic special-occasion meal, but it's a €50-a-head affair. The counter versions above give you 80% of it for a quarter of the price.</p>
+<p><b>Indonesian</b> and <b>Surinamese</b> — colonial legacies, eaten constantly by Amsterdammers, and closer to you than the postcard food ever gets. <b>De Indo van Jan Eef</b> and <b>Rotishop Gieta</b> are both under 350 m from the door; <b>Toko Bersama West</b> (4.9 stars, 11,500+ reviews) is the best of the lot.</p>
 
-<h2 id="bikes"><span class="num">06</span>Bikes</h2>
-<p><b>Is it intimidating? Yes — for about ninety minutes.</b> Then it isn't.</p>
-<p>What's genuinely hard: the traffic is dense and fast, everyone assumes you know the rules, Dutch cyclists ride at 20 km/h and will ring rather than brake, and scooters share the lane. Nobody is being aggressive; they're commuting, and you're in the way.</p>
-<p>What's easier than you fear: it's flat, the infrastructure is superb, and <b>De Baarsjes is calm</b>. You are not learning to ride in the centre — you're learning on a quiet residential grid, four minutes from Rembrandtpark.</p>
-<ul class="tight">
-<li>Ride right, overtake left. Never stop <em>in</em> the lane — pull off it.</li>
-<li>Signal with your arm. People actually do, and expect it of you.</li>
-<li>Trams always have priority. <b>Cross tram tracks at 90°</b> — a wheel in the groove will put you down.</li>
-<li><b>Many Dutch rentals have a coaster brake: you brake by pedalling backwards.</b> Ask which you're getting. This is the single most disorienting thing for a North American.</li>
-<li>Essentially nobody wears a helmet and none will be offered. That's a real choice, not a formality.</li>
-</ul>
-<div class="alert"><h4>Locking: two locks, every single time</h4>
-<p>Yes, you lock it on the street — there is no alternative and it's what everyone does. But bike theft here is endemic. <b>(1)</b> The ring lock built into the rear wheel. That alone is <em>not enough</em>. <b>(2)</b> A chain or D-lock securing <em>the frame to something fixed</em> — a rack, a post, a railing. Check the second lock is included before you leave the shop.</p></div>
-<table>
-<tr><th></th><th>Per bike/day</th><th>Two bikes, Fri→Mon</th></tr>
-<tr><td><b>Fietspadje</b> (local, 700 m)</td><td class="n">~€10</td><td class="n">~€60</td></tr>
-<tr><td>A rental chain (MacBike, Black Bikes)</td><td class="n">€15–20</td><td class="n">€90–120</td></tr>
-</table>
-<p><b>Pick them up Friday afternoon, not Saturday.</b> Fietspadje is closed Sunday, so a Friday collection covers you straight through to Monday and removes the problem entirely. Expect a <b>refundable deposit of ~€50 per bike, often cash</b> — carry €100 in notes.</p>
-<p><b>Ride the west loop first</b> (Erasmuspark → Westerpark) on Friday evening or Saturday. By Monday you'll be fine on the way to the Rijksmuseum. <b>Do not cycle in the centre on Saturday 1 August.</b></p>
-
-<h2 id="museums"><span class="num">07</span>Museums — two, not five</h2>
-<h3><span class="dot" style="--c:#6B4A32"></span>Museum Het Schip — the small one</h3>
-<p>3.3 km, 14 min by bike. <b>Wed–Sun 11:00–17:00. Closed Monday and Tuesday.</b> ~€18.</p>
-<p>The masterpiece of the <b>Amsterdam School</b> — the expressionist brick movement that built social housing for workers in the 1910s and 20s. This matters <em>because of where you're staying</em>: Mercatorplein and your entire street are products of the same thinking. You'll walk out and read your own neighbourhood differently. It's a restored workers' flat and an old post office inside a housing block. Small, quiet, well-run. <b>Take the English guided tour</b> — reviewers are unanimous that it's what makes the visit. Check the time and book.</p>
-
-<h3><span class="dot" style="--c:#6B4A32"></span>Rijksmuseum — the big one, if you want it</h3>
-<p>3.2 km, 14 min by bike. <b>Daily 09:00–17:00. €25 per adult. Online only — there are no door sales.</b></p>
-<p><b>Book the 09:00 slot on Monday 3 August.</b> The weekend is WorldPride; the first hour on a Monday is the emptiest that building gets.</p>
-<p>You were right that an immense museum forces a choice. <b>Go straight up to the Gallery of Honour and the 17th century, and ignore everything else.</b> Vermeer, Hals, De Hooch, ending at the <em>Night Watch</em>. Ninety focused minutes beats four exhausted hours. Then leave, get on the bikes, and have lunch somewhere real.</p>
-<p><b>Skip the Van Gogh Museum this trip.</b> It's the most crowded room-for-room museum in the country in a normal week, and this is not one.</p>
-<p><b>And an honest alternative:</b> if you do Haarlem and visit <b>Teylers</b>, you may find you don't want the Rijksmuseum at all. That's a legitimate outcome, and it saves you €50 and a morning.</p>
-
-<h2 id="trips"><span class="num">08</span>Day trips</h2>
-
-<h3><span class="dot" style="--c:var(--ochre)"></span>Haarlem — 15 minutes. Do this one, on Saturday.</h3>
-<p><b>From Station Sloterdijk, not Centraal</b> — which is already your transfer station. You are closer to Haarlem than most people staying in Amsterdam. ~€4.50 each way per person, ~15 min.</p>
-<p>Why Saturday: the <b>Grote Markt market runs Mondays and Saturdays, 09:00–17:00, and Saturday is the big one</b> — fresh fish, cheese, bread, flowers, produce, under the St. Bavo church, ringed by terraces. Exactly the market-and-walkable-city day you're after. And it takes you cleanly out of Amsterdam on Canal Parade day.</p>
-<ul class="tight">
-<li><b>09:45</b> — arrive. <b>Grote Markt market</b> until midday. Eat from the stalls.</li>
-<li><b>Teylers Museum</b>, Spaarne 16. <em>Daily 10:00–17:00, ~€18.</em> The oldest museum in the Netherlands — fossils, minerals, 18th-century scientific instruments, art, and the founder's own house, preserved as a time capsule. Reviewers consistently note it <em>isn't crowded</em>. This may honestly be the better small museum.</li>
-<li>Or instead: <b>Frans Hals Museum</b> (<em>closed Mondays; Sat 11:00–17:00</em>) — Hals's group portraits, and a serious argument for skipping the Rijksmuseum.</li>
-<li><b>Dinner:</b> <b>Fishbar Monk</b>, Turfmarkt 20 (<em>Sat from 12:00</em>) does monkfish and turbot properly alongside oysters and scallops — <b>the one place where you both eat brilliantly off the same menu</b>. Noisy. Or <b>Vis Café Ed</b> on the Grote Markt itself: smaller, oysters and Dover sole. <b>Reserve either.</b> For something cheaper and entirely Dutch: <b>Restaurant PRAKM</b>, Kleine Houtstraat 105 (<em>Wed–Sat 17:00–21:00</em>), 4.9 stars, stamppot and mussel stew, family-run.</li>
-</ul>
-<p class="n" style="font-family:'JetBrains Mono',monospace;font-size:13px"><b>COST FOR TWO: ~€18 trains + ~€36 Teylers + food.</b></p>
-
-<h3><span class="dot" style="--c:var(--ochre)"></span>Zandvoort aan Zee — 30 minutes. Bolt it onto Haarlem.</h3>
-<p>Zandvoort is <b>one stop past Haarlem on the same line</b>, so it isn't really a separate trip — it's an afternoon. North Sea beach, dunes, a long row of beach pavilions where you can drink and eat with your feet more or less in the sand. In early August the water is around 18–19 °C, which is swimmable if you're Canadian about it.</p>
-<p><b>The clean version of the day:</b> Haarlem market in the morning → train on to Zandvoort around 14:00 → beach and a pavilion beer → train back to Haarlem for dinner → home by 22:00. Adds about €10 for two.</p>
-<p><b>Caveat:</b> a hot Saturday in August will put half of Amsterdam on that beach. If the forecast is 26 °C and sunny, go Monday instead, or accept the crowd.</p>
-
-<h3><span class="dot" style="--c:var(--ochre)"></span>Antwerp — 1h25 each way. A real trip, and a real cost.</h3>
-<p>Here's the thing that makes it more feasible than it looks: the <b>Eurocity Direct</b> to Antwerp leaves from <b>Amsterdam Zuid, not Centraal</b> — and <b>bus 15 from Mercatorplein runs straight to Station Zuid.</b> It's hourly, takes <b>1h23</b>, and lands you in <b>Antwerpen-Centraal</b>, which is itself one of the great railway buildings of Europe and worth the ticket on its own.</p>
-<p><b>What Antwerp gives you that Amsterdam doesn't:</b> Belgian beer culture (which is a different and deeper thing than Dutch), proper frites, chocolate, a magnificent Gothic cathedral full of Rubens, the MAS museum, and a compact, walkable, food-forward old city with far fewer tourists per square metre.</p>
-<p><b>What it costs you:</b> roughly <b>€60–80 per person return</b> if you book the Eurocity Direct in advance (Eurostar is faster by three minutes and much dearer — don't). Call it <b>€130–160 for the two of you</b>, plus a full day. On a four-day trip, that is a quarter of your time and a fifth of your entire budget.</p>
-<div class="alert"><h4>My honest read</h4>
-<p>Antwerp is a genuinely wonderful city and it is the <em>wrong</em> call on this particular trip. You have <b>four days</b>, one of which is a write-off (arrival), one of which is claimed by the parade, and you have said you want to feel Amsterdam life and stay away from expensive things. Antwerp costs €150 and buys you eleven hours on trains and in a city you'll only skim.</p>
-<p><b>Haarlem costs €18 and fifteen minutes.</b> Save Antwerp for a trip where it can have two nights.</p>
-</div>
-
-<h2 id="days"><span class="num">09</span>The four days</h2>
-
-<div class="day"><div class="hd"><h3>Friday 31 July</h3><span class="tag">Arrival · low ambition</span></div>
-<ul>
-<li>Land 11:00. Out by 12:15. <b>Train to Centraal</b>, walk the Jordaan, lunch, coffee at <b>Rum Baba</b>.</li>
-<li><b>Bus 18</b> west around 14:15. At the flat ~14:45, in at 15:00.</li>
-<li>Groceries at <b>Dirk</b> (0.3 km). <b>Collect the bikes from Fietspadje before 18:00.</b></li>
-<li>Short ride: <b>Erasmuspark</b>, then walk Jan Evertsenstraat end to end.</li>
-<li>Dinner: <b>De Indo van Jan Eef</b> (110 m), taken away and eaten at the flat. Or <b>Usta Kebap</b>. Bed early — you'll have been awake a long time.</li>
-</ul>
-<div class="closed"><b>Avoid</b>The centre after 16:00 — Pride street parties.</div></div>
-
-<div class="day"><div class="hd"><h3>Saturday 1 August</h3><span class="tag">Canal Parade · get out of town</span></div>
-<ul>
-<li><b>08:45</b> — walk to Mercatorplein, bus 15 to Sloterdijk, train to <b>Haarlem</b>. Arrive ~09:45.</li>
-<li><b>Grote Markt market</b> (09:00–17:00). Eat from the stalls. Buy cheese.</li>
-<li><b>Teylers Museum</b>, or <b>Frans Hals</b>, or neither — Haarlem rewards just walking it.</li>
-<li>Optional: train on to <b>Zandvoort</b> for the beach in the afternoon.</li>
-<li>Dinner in Haarlem: <b>Fishbar Monk</b> (both of you eat well) or <b>PRAKM</b> (cheaper, more Dutch). <b>Reserve.</b></li>
-<li>Home by 22:00. You will have missed the biggest party in Europe, on purpose, and slept.</li>
-</ul>
-<div class="closed"><b>If you'd rather see the parade</b>Do Lindengracht Market (Sat only, 09:00–16:00) in the Jordaan from 09:30, then watch from the <b>western end of the route near Brouwersgracht / Westerdok</b> around 12:30 — the boats finish there, so it's thinner and calmer. Leave by 14:00, before it becomes a party. Then Haarlem moves to Monday.</div></div>
-
-<div class="day"><div class="hd"><h3>Sunday 2 August</h3><span class="tag">Brick · mussels</span></div>
-<ul>
-<li>Coffee at <b>Friedhats FUKU</b> (opens 09:00 Sun, 1.4 km). Buy beans.</li>
-<li>Bike to <b>Museum Het Schip</b> (14 min). English tour. Walk the Spaarndammerbuurt afterwards — the whole quarter is the same movement.</li>
-<li>Loop home through <b>Westerpark</b> and the Westergasfabriek.</li>
-<li>Afternoon: nothing. Sit somewhere.</li>
-<li>Dinner: <b>Mossel &amp; Gin</b> in Westerpark (open Sun from 13:00) — in-season Zeeland mussels for her, fish and chips for you. Loud but fun. <b>Or</b> stay local and cheap.</li>
-</ul>
-<div class="closed"><b>Closed Sunday</b>Ten Katemarkt · Marco's greengrocer · Bakkerij Dekker · Antakya · Nazar · Zeeduivel · Fietspadje · Café Kontakt. <b>Dirk is open 09:00–22:00.</b></div></div>
-
-<div class="day"><div class="hd"><h3>Monday 3 August</h3><span class="tag">The city exhales</span></div>
-<ul>
-<li><b>Rijksmuseum, 09:00 slot</b>, booked in advance. Gallery of Honour only. Out by 11:00. <em>(Or skip it entirely — see Museums.)</em></li>
-<li>Bike back through <b>Vondelpark</b> and <b>Rembrandtpark</b>.</li>
-<li>Lunch: <b>Zeeduivel</b> — kibbeling for you, oysters for her, €30 for the pair. <em>(Closed Sunday, so this is the day.)</em></li>
-<li>Afternoon: <b>Ten Katemarkt</b> (open Monday, and quieter). Warm stroopwafel. Buy beans, buy cheese.</li>
-<li><b>Return the bikes.</b></li>
-<li>Dinner: <b>Toko Bersama West</b> — open Monday, when a great many things aren't.</li>
-<li>Last drink: bitterballen and a beer at <b>Café Thuys</b> or <b>'t Binnepretje</b>.</li>
-</ul>
-<div class="closed"><b>Closed Monday</b>Museum Het Schip · Abbey · Mossel &amp; Gin · Brut de Mer · De Indo van Jan Eef · Rotishop Gieta · Marco's greengrocer · De Kaashut · Freddy Fryday · Frans Hals Museum.</div></div>
-
-<div class="day"><div class="hd"><h3>Tuesday 4 August</h3><span class="tag">Out</span></div>
-<ul>
-<li><b>08:00 — out the door.</b> Bus 15 from Mercatorplein → Sloterdijk → Sprinter → Schiphol by ~08:55. Flight 12:00.</li>
-</ul></div>
-
-<h2 id="money"><span class="num">10</span>What it costs</h2>
-<p>Two people, four nights. <b>Flights and lodging excluded.</b> This assumes you stay away from expensive places, as you said — the Haarlem day replaces a Saturday in town, and there's no €150 oyster dinner in it.</p>
+<h2 id="money"><span class="num">11</span>What it costs</h2>
+<p>Two people, four nights. Flights and lodging excluded.</p>
 <table>
 <tr><th></th><th>Lean</th><th>Comfortable</th></tr>
 <tr><td>Airport transfers, both ways, two people</td><td class="n">€35</td><td class="n">€35</td></tr>
-<tr><td>Local trams and buses</td><td class="n">€20</td><td class="n">€40</td></tr>
-<tr><td>Bike rental — two bikes, Fri→Mon</td><td class="n">€60</td><td class="n">€90</td></tr>
-<tr><td>Haarlem day — trains for two</td><td class="n">€18</td><td class="n">€28</td></tr>
-<tr><td>Teylers Museum ×2</td><td class="n">€36</td><td class="n">€36</td></tr>
-<tr><td>Rijksmuseum ×2 <em>(optional)</em></td><td class="n">€0</td><td class="n">€50</td></tr>
-<tr><td>Museum Het Schip ×2</td><td class="n">€36</td><td class="n">€36</td></tr>
-<tr><td>Groceries — breakfasts, snacks, a meal in</td><td class="n">€50</td><td class="n">€80</td></tr>
-<tr><td>Coffee <em>(specialty is €4.50–5.50 a cup; DAK is more)</em></td><td class="n">€60</td><td class="n">€100</td></tr>
+<tr><td>Local trams and buses (day tickets where it helps)</td><td class="n">€25</td><td class="n">€45</td></tr>
+<tr><td>Haarlem + Zandvoort day — trains for two</td><td class="n">€22</td><td class="n">€30</td></tr>
+<tr><td>Rijksmuseum ×2 <em>(booked)</em></td><td class="n">€50</td><td class="n">€50</td></tr>
+<tr><td>Groceries — breakfasts, snacks, Sunday's cook-in</td><td class="n">€60</td><td class="n">€90</td></tr>
+<tr><td>Coffee</td><td class="n">€50</td><td class="n">€90</td></tr>
 <tr><td>Lunches ×4</td><td class="n">€80</td><td class="n">€120</td></tr>
-<tr><td>Dinners ×4 <em>(3 local + Fishbar Monk in Haarlem)</em></td><td class="n">€150</td><td class="n">€230</td></tr>
+<tr><td>Dinners ×4 <em>(all four local — De Baarsjes)</em></td><td class="n">€130</td><td class="n">€190</td></tr>
 <tr><td>Beers, terraces, jenever</td><td class="n">€40</td><td class="n">€80</td></tr>
-<tr><td>Market food, beans to take home, misc</td><td class="n">€40</td><td class="n">€80</td></tr>
-<tr class="tot"><td>Total</td><td class="n">€625</td><td class="n">€1,005</td></tr>
+<tr><td>Bike rental <em>(only if you decide to)</em></td><td class="n">€0</td><td class="n">€60</td></tr>
+<tr><td>NDSM / STRAAT Museum <em>(optional)</em></td><td class="n">€0</td><td class="n">€43</td></tr>
+<tr><td>Market food, misc</td><td class="n">€30</td><td class="n">€60</td></tr>
+<tr class="tot"><td>Total</td><td class="n">€522</td><td class="n">€893</td></tr>
 </table>
-<p><b>Realistic central estimate: €750–800 for the two of you</b>, roughly <b>CAD $1,150–1,250</b>.</p>
-<p><b>The three things that move this most:</b> the Saturday dinner in Haarlem (€60 at PRAKM vs €140 at Fishbar Monk); whether you do the Rijksmuseum at all (€50); and coffee, which at Friedhats and DAK prices runs past €100 for the two of you across five days before you buy a single bag of beans. Which, given the neighbourhood you've landed in, you probably should.</p>
+<p><b>Realistic central estimate: €620–700 for the two of you</b>, roughly <b>CAD $950–1,070</b>. The biggest swing items are entirely optional — bikes and STRAAT Museum are both €0 unless you decide otherwise on the day.</p>
 
-<h2 id="practical"><span class="num">11</span>Practical</h2>
+<h2 id="practical"><span class="num">12</span>Practical</h2>
 <ul class="tight">
-<li><b>Cafés close at 17:00.</b> There is no evening coffee culture here. Bo's Amsterdam (Thu–Sat to 22:00) is the exception.</li>
-<li><b>Sundays</b> shut the greengrocers, most bakeries, Ten Katemarkt, Zeeduivel and the bike shop. <b>Mondays</b> shut a startling number of restaurants. Check the day-blocks above.</li>
-<li><b>You are a pedestrian in a city where the bicycle has right of way</b> and the cyclist is unsentimental about it. Red-brick surface = bike lane, not pavement. Look right before you step off a kerb.</li>
-<li><b>Noise.</b> Dutch restaurants are hard-surfaced and loud. Worst on this list: <b>Bar Baarsch</b>, <b>Foodhallen</b>, <b>Mossel &amp; Gin</b>, <b>Fishbar Monk</b>. Easiest for conversation: <b>Abbey</b>, <b>Café Thuys</b>, <b>Noi</b>, and any terrace.</li>
-<li><b>Cash.</b> Almost everywhere takes cards, but some Turkish and Surinamese places and market stalls are cash-only, and bike deposits usually are. Carry <b>€150 in notes</b>.</li>
-<li><b>Language.</b> Everyone speaks English, fluently, and will switch before you finish your first Dutch word. Don't take it personally.</li>
-<li><b>Weather, early August:</b> 20–24 °C and it will rain at some point. Bring a light waterproof, not an umbrella — the wind will destroy it.</li>
-<li><b>Avoid</b> Mercator Avondverkoop (the night shop on Jan Evertsenstraat). Open till 02:00, and a genuine price trap.</li>
+<li><b>Trams:</b> see Getting Around above — Oranje Loper works affect trams 13/17/18 into 2027. Bus 15 (your airport route) is unaffected.</li>
+<li><b>Cafés close at 17:00.</b> No evening coffee culture here. <b>Bo's Amsterdam</b> (Thu–Sat to 22:00) is the exception.</li>
+<li><b>Sundays</b> shut the greengrocers, most bakeries, Ten Katemarkt, Zeeduivel, De Kaashut. <b>AH and Aldi on Postjesweg stay open.</b></li>
+<li><b>Mondays</b> shut a surprising number of restaurants — see the closed-Monday box in Monday's block.</li>
+<li>You're a pedestrian in a city where the bicycle has right of way. Red brick = bike lane, not pavement.</li>
+<li><b>Noise:</b> hardest to talk in are Bar Baarsch, Foodhallen, Mossel &amp; Gin, Fishbar Monk. Easiest: Abbey, Café Thuys, Noi, any terrace.</li>
+<li><b>Cash:</b> most places take cards, but some Turkish/Surinamese spots and bike deposits are cash-only. Carry ~€100 in notes.</li>
+<li><b>Night shop:</b> <b>Avondwinkel de Buren</b> on Postjesweg (4 min, to 02:00) — the honest one. Avoid the one on Jan Evertsenstraat.</li>
+<li><b>Weather, early August:</b> 20–24°C, rain at some point. A light waterproof beats an umbrella — the wind will win.</li>
 </ul>
 
 <p class="foot">
-HOURS AND PRICES VERIFIED 13 JULY 2026. RE-CHECK BEFORE YOU GO.<br>
-BOOK AHEAD: RIJKSMUSEUM TIMED SLOT · MUSEUM HET SCHIP ENGLISH TOUR · SATURDAY DINNER IN HAARLEM · EUROCITY DIRECT IF YOU OVERRULE ME ON ANTWERP.<br>
+DISTANCES MEASURED FROM 52°22′00.2″N 4°51′20.0″E, VASCO DA GAMASTRAAT. HOURS AND PRICES VERIFIED 13 JULY 2026 — RE-CHECK BEFORE YOU GO.<br>
+BOOKED ALREADY: RIJKSMUSEUM, MONDAY 09:00.<br>
+BOOK AHEAD: STRAAT MUSEUM ONLINE IF YOU GO · EUROCITY DIRECT IF YOU OVERRULE ME ON ANTWERP.<br>
 IMPORT amsterdam-de-baarsjes.kml INTO mymaps.google.com BEFORE YOU FLY.
 </p>
 </div>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
-const PLACES = [{"name": "Bar Baarsch", "cat": "bar", "lat": 52.370442, "lng": 4.853577, "note": "Daily from 11:00. Good food. VERY LOUD at night.", "km": 0.11, "walk": 1, "bike": 0}, {"name": "de Neef van Fred", "cat": "bar", "lat": 52.371046, "lng": 4.857101, "note": "Daily from 11:00. Terrace on a deck at the water. Sun until ~21:00.", "km": 0.31, "walk": 4, "bike": 1}, {"name": "Café Kontakt", "cat": "bar", "lat": 52.372018, "lng": 4.85959, "note": "Mon–Sat from 16:00. CLOSED SUN. Local pub, craft beer, non-smoking.", "km": 0.54, "walk": 7, "bike": 2}, {"name": "Café Thuys", "cat": "bar", "lat": 52.369906, "lng": 4.865376, "note": "Daily from 11:00. Proper old-style Amsterdam café, canal-side.", "km": 1.05, "walk": 13, "bike": 4}, {"name": "Café 't Binnepretje", "cat": "bar", "lat": 52.38147, "lng": 4.855998, "note": "Daily from 11:00 (Sun 14:00). Real neighbourhood bar. Darts, locals.", "km": 1.48, "walk": 18, "bike": 6}, {"name": "Café Brel", "cat": "bar", "lat": 52.384165, "lng": 4.870257, "note": "Daily from 14:00. Belgian beer list, very friendly. €.", "km": 2.35, "walk": 28, "bike": 10}, {"name": "A. van Wees Proeflokaal", "cat": "bar", "lat": 52.369968, "lng": 4.887232, "note": "Daily 10:00–23:30. Jenever tasting house. Genever flight + bitterballen.", "km": 2.94, "walk": 35, "bike": 13}, {"name": "Bike Shop Admiral", "cat": "bike", "lat": 52.371338, "lng": 4.859679, "note": "Backup rental. Same-day service reputation.", "km": 0.54, "walk": 6, "bike": 2}, {"name": "Fietspadje (bike rental)", "cat": "bike", "lat": 52.368833, "lng": 4.860573, "note": "Mon–Fri 09:00–18:00, Sat 09:00–17:00. CLOSED SUN. ~€10/24h + deposit.", "km": 0.7, "walk": 8, "bike": 3}, {"name": "Nouri's Lunchroom", "cat": "cheap", "lat": 52.370829, "lng": 4.854025, "note": "Daily 07:00–18:00. Moroccan breakfast: eggs, olives, flatbread, juice.", "km": 0.07, "walk": 1, "bike": 0}, {"name": "De Indo van Jan Eef", "cat": "cheap", "lat": 52.37052, "lng": 4.854048, "note": "Tue–Sun 12:00–21:00. CLOSED MON. Indonesian, build-your-own rice plate. Takeaway.", "km": 0.11, "walk": 1, "bike": 0}, {"name": "Usta Kebap", "cat": "cheap", "lat": 52.371, "lng": 4.854912, "note": "Daily 12:00–01:00 (Tue from 16:00). 4.9/803. Adana + künefe. Under €15pp.", "km": 0.13, "walk": 2, "bike": 1}, {"name": "Rotishop Gieta", "cat": "cheap", "lat": 52.368991, "lng": 4.854342, "note": "Tue–Sun 15:00–21:30. CLOSED MON. Surinamese roti. 4.7/614. €.", "km": 0.32, "walk": 4, "bike": 1}, {"name": "Ram's Roti", "cat": "cheap", "lat": 52.374662, "lng": 4.860025, "note": "Daily 12:00–21:00 (Mon from 14:00). Surinamese. Chicken on the bone €9.", "km": 0.75, "walk": 9, "bike": 3}, {"name": "Tuana Grill", "cat": "cheap", "lat": 52.378247, "lng": 4.848921, "note": "Daily 10:00–01:00. Turkish, family-run, generous.", "km": 1.08, "walk": 13, "bike": 5}, {"name": "Freddy Fryday West", "cat": "cheap", "lat": 52.37021, "lng": 4.867665, "note": "Tue–Sun 12:00–21:00. CLOSED MON. Loaded frites.", "km": 1.24, "walk": 15, "bike": 5}, {"name": "Zeeduivel Visspecialiteiten", "cat": "cheap", "lat": 52.363889, "lng": 4.863056, "note": "Tue–Sat 11:00–18:00. CLOSED SUN+MON. Fish counter. Kibbeling for you, oysters for her. 4.9.", "km": 1.33, "walk": 16, "bike": 6}, {"name": "Toko Bersama West", "cat": "cheap", "lat": 52.368465, "lng": 4.871008, "note": "Daily 12:00–21:30. 4.9/11,555. Rames Complete. Best cheap meal in range.", "km": 1.57, "walk": 19, "bike": 7}, {"name": "Bistro Bos", "cat": "cheap", "lat": 52.382262, "lng": 4.855965, "note": "Daily 15:00–23:00. Turkish mezze + grill.", "km": 1.59, "walk": 19, "bike": 7}, {"name": "Frites & Frites", "cat": "cheap", "lat": 52.367905, "lng": 4.875011, "note": "Daily 12:00–21:00. Frites with the full sauce range.", "km": 1.93, "walk": 23, "bike": 8}, {"name": "White Label Coffee", "cat": "coffee", "lat": 52.370431, "lng": 4.851578, "note": "Daily 07:30–17:30 (Sat/Sun 08:00). Roaster. Medium house profile.", "km": 0.2, "walk": 2, "bike": 1}, {"name": "Noi Coffee & Eatery", "cat": "coffee", "lat": 52.370175, "lng": 4.851888, "note": "Daily 08:00–17:30. Best bakery counter on Jan Eef. No toilet.", "km": 0.2, "walk": 2, "bike": 1}, {"name": "Pudu Cafe", "cat": "coffee", "lat": 52.369758, "lng": 4.849657, "note": "Mon 07:00–17:00, Tue–Sun 08:00–14:30. Greek pastries — bougatsa.", "km": 0.39, "walk": 5, "bike": 2}, {"name": "Luma Coffee Lunch", "cat": "coffee", "lat": 52.364946, "lng": 4.857577, "note": "Daily 08:00–17:00, later Fri–Sun. Quiet canal corner.", "km": 0.96, "walk": 11, "bike": 4}, {"name": "Zizou Coffee", "cat": "coffee", "lat": 52.370499, "lng": 4.864561, "note": "Daily 08:00–17:00 (Sun 09:00). Big sunny terrace. Where the neighbourhood sits.", "km": 0.97, "walk": 12, "bike": 4}, {"name": "Bo's Amsterdam", "cat": "coffee", "lat": 52.364873, "lng": 4.859759, "note": "Open to 22:00 Thu–Sat. The rare evening coffee.", "km": 1.05, "walk": 13, "bike": 5}, {"name": "DAK Showroom", "cat": "coffee", "lat": 52.368413, "lng": 4.86731, "note": "Daily 08:00–17:00 (Sat/Sun 09:00). Geishas, ferments. Expensive, tiny, extraordinary.", "km": 1.26, "walk": 15, "bike": 5}, {"name": "Friedhats FUKU", "cat": "coffee", "lat": 52.381274, "lng": 4.855158, "note": "Mon–Fri 08:00–16:00, Sat/Sun 09:00–17:00. THE light-roast destination. No laptops.", "km": 1.44, "walk": 17, "bike": 6}, {"name": "LOT61 Coffee Roasters", "cat": "coffee", "lat": 52.366827, "lng": 4.870314, "note": "Daily 08:00–18:00. Next to Ten Katemarkt. €4.40 cortado.", "km": 1.59, "walk": 19, "bike": 7}, {"name": "Back to Black", "cat": "coffee", "lat": 52.379399, "lng": 4.871473, "note": "Daily 08:00–17:30. On the way to Westerpark. Huge apple pie.", "km": 1.95, "walk": 23, "bike": 8}, {"name": "Rum Baba", "cat": "coffee", "lat": 52.369134, "lng": 4.878723, "note": "Daily from 08:00, closes 16:30. 5 min from Lindengracht market.", "km": 2.21, "walk": 27, "bike": 9}, {"name": "Foodhallen", "cat": "market", "lat": 52.36679, "lng": 4.867915, "note": "Daily 12:00–24:00. Good, but firmly on the tourist circuit now. De Ballenbar does a bitterballen platter ~€15.", "km": 1.4, "walk": 17, "bike": 6}, {"name": "Ten Katemarkt", "cat": "market", "lat": 52.366014, "lng": 4.867456, "note": "Mon–Sat 09:00–18:00. CLOSED SUN. Saturday is the big day. The market locals use.", "km": 1.42, "walk": 17, "bike": 6}, {"name": "Winkel 43", "cat": "market", "lat": 52.379094, "lng": 4.886284, "note": "Daily from 08:00 (Mon/Sat 07:00). The famous Dutch apple pie, at Noordermarkt beside Lindengracht.", "km": 3.06, "walk": 37, "bike": 13}, {"name": "Lindengracht Market", "cat": "market", "lat": 52.38053, "lng": 4.886573, "note": "SATURDAY ONLY 09:00–16:00. Best market morning in the city.", "km": 3.17, "walk": 38, "bike": 14}, {"name": "Rijksmuseum", "cat": "museum", "lat": 52.36, "lng": 4.8852, "note": "Daily 09:00–17:00. €25, ONLINE ONLY, no door sales. Book the 09:00 slot.", "km": 3.18, "walk": 38, "bike": 14}, {"name": "Museum Het Schip", "cat": "museum", "lat": 52.390504, "lng": 4.873614, "note": "Wed–Sun 11:00–17:00. CLOSED MON+TUE. Amsterdam School architecture — the movement that built your street. Take the English tour. ~€18.", "km": 3.26, "walk": 39, "bike": 14}, {"name": "Abbey", "cat": "nicer", "lat": 52.382896, "lng": 4.851033, "note": "Tue–Sun. CLOSED MON. 4.8/652. Seasonal, warm, conversation-friendly. Nicer dinner, ~€45pp.", "km": 1.68, "walk": 20, "bike": 7}, {"name": "Mossel & Gin", "cat": "nicer", "lat": 52.386482, "lng": 4.868031, "note": "Sat/Sun from 13:00, Tue–Fri from 17:00. CLOSED MON. In-season Zeeland mussels. Loud.", "km": 2.51, "walk": 30, "bike": 11}, {"name": "Brut de Mer", "cat": "nicer", "lat": 52.355783, "lng": 4.892561, "note": "Fri–Sun 12:00–24:00, Tue–Thu from 16:00. CLOSED MON. Oyster specialist. Priciest option.", "km": 4.04, "walk": 49, "bike": 17}, {"name": "Erasmuspark", "cat": "park", "lat": 52.374622, "lng": 4.851553, "note": "Daily 07:00–22:00. Two minutes away. People swim off the bridge.", "km": 0.52, "walk": 6, "bike": 2}, {"name": "Rembrandtpark", "cat": "park", "lat": 52.364722, "lng": 4.846111, "note": "Open 24h. Quieter Vondelpark. Mini farm.", "km": 1.12, "walk": 13, "bike": 5}, {"name": "Westerpark / Westergas", "cat": "park", "lat": 52.386127, "lng": 4.877835, "note": "Open 24h. Green + old gasworks turned into bars and venues.", "km": 3.0, "walk": 36, "bike": 13}, {"name": "Sloterplas", "cat": "park", "lat": 52.3672, "lng": 4.8135, "note": "Open 24h. Big lake, loop path, zero tourists.", "km": 3.52, "walk": 42, "bike": 15}, {"name": "Marco's Groentespeciaalzaak", "cat": "shop", "lat": 52.370707, "lng": 4.85329, "note": "Tue–Sat 07:00–18:00. CLOSED SUN+MON. Independent greengrocer. 4.9.", "km": 0.07, "walk": 1, "bike": 0}, {"name": "Dirk Supermarkt", "cat": "shop", "lat": 52.369391, "lng": 4.851727, "note": "Mon–Sat 08:00–22:00, Sun 09:00–22:00. Your workhorse. Cheaper than Albert Heijn.", "km": 0.3, "walk": 4, "bike": 1}, {"name": "Bakkerij Dekker", "cat": "shop", "lat": 52.369303, "lng": 4.851856, "note": "Mon–Fri 08:00–17:00, Sat to 16:30. CLOSED SUN. Old-school bread + cheese.", "km": 0.31, "walk": 4, "bike": 1}, {"name": "Bakkerij Nazar", "cat": "shop", "lat": 52.371218, "lng": 4.860584, "note": "Mon–Sat 06:00–20:00. CLOSED SUN. Baklava.", "km": 0.62, "walk": 7, "bike": 3}, {"name": "Antakya Bakkerij", "cat": "shop", "lat": 52.374922, "lng": 4.862231, "note": "Mon–Sat 06:00–21:00. CLOSED SUN. Turkish flatbread from the oven.", "km": 0.93, "walk": 11, "bike": 4}, {"name": "De Kaashut", "cat": "shop", "lat": 52.364494, "lng": 4.855744, "note": "Wed–Fri 09:00–14:00, Sat/Sun to 17:00. CLOSED MON+TUE. Cheese. Ask to taste oude Gouda.", "km": 0.97, "walk": 12, "bike": 4}, {"name": "Marco Polostraat tram stop (13)", "cat": "transit", "lat": 52.3705, "lng": 4.8554, "note": "Tram 13 toward the centre. Your closest stop.", "km": 0.19, "walk": 2, "bike": 1}, {"name": "Mercatorplein (bus 15, tram 13)", "cat": "transit", "lat": 52.3694, "lng": 4.8517, "note": "Bus 15 → Sloterdijk (for Schiphol/Haarlem) and → Amsterdam Zuid (for Antwerp).", "km": 0.3, "walk": 4, "bike": 1}, {"name": "Station Sloterdijk", "cat": "transit", "lat": 52.3891, "lng": 4.8378, "note": "Your gateway. Sprinter to Schiphol 11 min; train to Haarlem 15 min.", "km": 2.89, "walk": 35, "bike": 12}];
-const COL = {"coffee": "#6D4AB8", "cheap": "#C7601C", "nicer": "#A32E22", "bar": "#3B6E4A", "shop": "#2F4858", "market": "#B07A12", "park": "#4A7A3C", "museum": "#6B4A32", "bike": "#186A73", "transit": "#5A5A5A"};
-const NAMES = {"coffee": "Coffee", "cheap": "Cheap eats", "nicer": "Nicer dinner", "bar": "Bars & terraces", "shop": "Groceries", "market": "Markets", "park": "Parks", "museum": "Museums", "bike": "Bike rental", "transit": "Transit"};
-const HOME = [52.3712, 4.8535];
+const PLACES = [{"name": "Tweede Thuys", "cat": "bar", "lat": 52.3645076, "lng": 4.8569072, "note": "Daily 11:00–24:00 (Fri/Sat to 01:00). 4.7/525. Large canal terrace, parrots overhead. Your local.", "km": 0.34, "walk": 4, "bike": 1}, {"name": "BRONS", "cat": "bar", "lat": 52.3644131, "lng": 4.8589703, "note": "Mon–Thu from 15:00, Fri/Sat from 13:00, Sun 12:00–20:00. Opened May 2026, waterside terrace.", "km": 0.44, "walk": 5, "bike": 2}, {"name": "Wolff & Beer", "cat": "bar", "lat": 52.3643912, "lng": 4.8509926, "note": "Daily from 08:00 (Fri/Sat to 03:00). 4.6. One of the few late places nearby.", "km": 0.52, "walk": 6, "bike": 2}, {"name": "Bar Baarsch", "cat": "bar", "lat": 52.370442, "lng": 4.853577, "note": "Daily from 11:00. Good food. Very loud at night.", "km": 0.56, "walk": 7, "bike": 2}, {"name": "de Neef van Fred", "cat": "bar", "lat": 52.371046, "lng": 4.857101, "note": "Daily from 11:00. Terrace on a deck at the water.", "km": 0.63, "walk": 8, "bike": 3}, {"name": "Café Kontakt", "cat": "bar", "lat": 52.372018, "lng": 4.85959, "note": "Mon–Sat from 16:00. CLOSED SUN. Local pub, craft beer.", "km": 0.83, "walk": 10, "bike": 4}, {"name": "Café Thuys", "cat": "bar", "lat": 52.369906, "lng": 4.865376, "note": "Daily from 11:00. Old-style Amsterdam café, canal-side.", "km": 0.97, "walk": 12, "bike": 4}, {"name": "Café 't Binnepretje", "cat": "bar", "lat": 52.38147, "lng": 4.855998, "note": "Daily from 11:00 (Sun 14:00). Real neighbourhood bar.", "km": 2.1, "walk": 25, "bike": 9}, {"name": "Café Brel", "cat": "bar", "lat": 52.384165, "lng": 4.870257, "note": "Daily from 14:00. Belgian beer list.", "km": 2.79, "walk": 34, "bike": 12}, {"name": "A. van Wees Proeflokaal", "cat": "bar", "lat": 52.369968, "lng": 4.887232, "note": "Daily 10:00–23:30. Jenever tasting house.", "km": 2.79, "walk": 33, "bike": 12}, {"name": "Fietspadje (bike rental)", "cat": "bike", "lat": 52.368833, "lng": 4.860573, "note": "Mon–Fri 09:00–18:00, Sat 09:00–17:00. CLOSED SUN. ~€10/24h + deposit. Parked for now — here if you change your mind.", "km": 0.53, "walk": 6, "bike": 2}, {"name": "Rotishop Gieta", "cat": "cheap", "lat": 52.368991, "lng": 4.854342, "note": "Tue–Sun 15:00–21:30. CLOSED MON. Surinamese roti. 4.7/614.", "km": 0.34, "walk": 4, "bike": 1}, {"name": "De Indo van Jan Eef", "cat": "cheap", "lat": 52.37052, "lng": 4.854048, "note": "Tue–Sun 12:00–21:00. CLOSED MON. Indonesian, build-your-own rice plate.", "km": 0.56, "walk": 7, "bike": 2}, {"name": "Nouri's Lunchroom", "cat": "cheap", "lat": 52.370829, "lng": 4.854025, "note": "Daily 07:00–18:00. Moroccan breakfast.", "km": 0.6, "walk": 7, "bike": 3}, {"name": "Usta Kebap", "cat": "cheap", "lat": 52.371, "lng": 4.854912, "note": "Daily 12:00–01:00 (Tue from 16:00). 4.9/803. Adana + künefe. Under €15pp.", "km": 0.61, "walk": 7, "bike": 3}, {"name": "Zeeduivel Visspecialiteiten", "cat": "cheap", "lat": 52.363889, "lng": 4.863056, "note": "Tue–Sat 11:00–18:00. CLOSED SUN+MON. Fish counter — kibbeling + oysters, €30 for two.", "km": 0.77, "walk": 9, "bike": 3}, {"name": "Freddy Fryday West", "cat": "cheap", "lat": 52.37021, "lng": 4.867665, "note": "Tue–Sun 12:00–21:00. CLOSED MON. Loaded frites.", "km": 1.16, "walk": 14, "bike": 5}, {"name": "Ram's Roti", "cat": "cheap", "lat": 52.374662, "lng": 4.860025, "note": "Daily 12:00–21:00 (Mon from 14:00). Surinamese.", "km": 1.19, "walk": 14, "bike": 5}, {"name": "Toko Bersama West", "cat": "cheap", "lat": 52.368465, "lng": 4.871008, "note": "Daily 12:00–21:30. 4.9/11,555. Rames Complete.", "km": 1.37, "walk": 16, "bike": 6}, {"name": "Frites & Frites", "cat": "cheap", "lat": 52.367905, "lng": 4.875011, "note": "Daily 12:00–21:00. Full sauce range.", "km": 1.7, "walk": 20, "bike": 7}, {"name": "Tuana Grill", "cat": "cheap", "lat": 52.378247, "lng": 4.848921, "note": "Daily 10:00–01:00. Turkish, family-run.", "km": 1.74, "walk": 21, "bike": 7}, {"name": "Bistro Bos", "cat": "cheap", "lat": 52.382262, "lng": 4.855965, "note": "Daily 15:00–23:00. Turkish mezze + grill.", "km": 2.21, "walk": 27, "bike": 9}, {"name": "Luma Coffee Lunch", "cat": "coffee", "lat": 52.364946, "lng": 4.857577, "note": "Daily 08:00–17:00, later Fri–Sun. Quiet canal corner, close to home.", "km": 0.31, "walk": 4, "bike": 1}, {"name": "Vanaut", "cat": "coffee", "lat": 52.3641188, "lng": 4.8556174, "note": "Daily 10:00–16:00. 4.9/592. Canal terrace, cake — as much gift/vintage shop as coffee bar, flavoured lattes (ube, red velvet) over straight espresso. Lovely, not serious.", "km": 0.37, "walk": 4, "bike": 2}, {"name": "Bo's Amsterdam", "cat": "coffee", "lat": 52.364873, "lng": 4.859759, "note": "Open to 22:00 Thu–Sat. The rare evening coffee, close to home.", "km": 0.45, "walk": 5, "bike": 2}, {"name": "Noi Coffee & Eatery", "cat": "coffee", "lat": 52.370175, "lng": 4.851888, "note": "Daily 08:00–17:30. Best bakery counter on Jan Eef.", "km": 0.59, "walk": 7, "bike": 3}, {"name": "White Label Coffee", "cat": "coffee", "lat": 52.370431, "lng": 4.851578, "note": "Daily 07:30–17:30 (Sat/Sun 08:00). Roaster, medium profile.", "km": 0.63, "walk": 8, "bike": 3}, {"name": "Pudu Cafe", "cat": "coffee", "lat": 52.369758, "lng": 4.849657, "note": "Mon 07:00–17:00, Tue–Sun 08:00–14:30. Greek pastries — bougatsa.", "km": 0.67, "walk": 8, "bike": 3}, {"name": "Zizou Coffee", "cat": "coffee", "lat": 52.370499, "lng": 4.864561, "note": "Daily 08:00–17:00 (Sun 09:00). Big sunny terrace.", "km": 0.95, "walk": 11, "bike": 4}, {"name": "DAK Showroom", "cat": "coffee", "lat": 52.368413, "lng": 4.86731, "note": "Daily 08:00–17:00 (Sat/Sun 09:00). Geishas, ferments. Small, extraordinary, pricey.", "km": 1.05, "walk": 13, "bike": 4}, {"name": "LOT61 Coffee Roasters", "cat": "coffee", "lat": 52.366827, "lng": 4.870314, "note": "Daily 08:00–18:00. Next to Ten Katemarkt.", "km": 1.28, "walk": 15, "bike": 5}, {"name": "Rum Baba", "cat": "coffee", "lat": 52.369134, "lng": 4.878723, "note": "Daily from 08:00, closes 16:30. In the Jordaan.", "km": 2.04, "walk": 25, "bike": 9}, {"name": "Friedhats FUKU", "cat": "coffee", "lat": 52.381274, "lng": 4.855158, "note": "Mon–Fri 08:00–16:00, Sat/Sun 09:00–17:00. The light-roast destination. No laptops.", "km": 2.07, "walk": 25, "bike": 9}, {"name": "Back to Black", "cat": "coffee", "lat": 52.379399, "lng": 4.871473, "note": "Daily 08:00–17:30. Huge apple pie.", "km": 2.27, "walk": 27, "bike": 10}, {"name": "Ten Katemarkt", "cat": "market", "lat": 52.366014, "lng": 4.867456, "note": "Mon–Sat 09:00–18:00. CLOSED SUN. The market locals use — not on this trip's schedule, but 12 minutes on foot if an hour opens up.", "km": 1.04, "walk": 12, "bike": 4}, {"name": "Foodhallen", "cat": "market", "lat": 52.36679, "lng": 4.867915, "note": "Daily 12:00–24:00. Good, but firmly on the tourist circuit.", "km": 1.07, "walk": 13, "bike": 5}, {"name": "Winkel 43", "cat": "market", "lat": 52.379094, "lng": 4.886284, "note": "Daily from 08:00 (Mon/Sat 07:00). The famous Dutch apple pie, at Noordermarkt.", "km": 3.2, "walk": 38, "bike": 14}, {"name": "Lindengracht Market", "cat": "market", "lat": 52.38053, "lng": 4.886573, "note": "SATURDAY ONLY 09:00–16:00. Best market morning in the city — but you'll be in Haarlem.", "km": 3.34, "walk": 40, "bike": 14}, {"name": "Rijksmuseum", "cat": "museum", "lat": 52.36, "lng": 4.8852, "note": "Daily 09:00–17:00. €25, ONLINE ONLY. Your Monday 09:00 slot is booked — see the organising tips below.", "km": 2.75, "walk": 33, "bike": 12}, {"name": "Abbey", "cat": "nicer", "lat": 52.382896, "lng": 4.851033, "note": "Tue–Sun. CLOSED MON. 4.8/652. Seasonal, warm, ~€45pp.", "km": 2.34, "walk": 28, "bike": 10}, {"name": "Mossel & Gin", "cat": "nicer", "lat": 52.386482, "lng": 4.868031, "note": "Sat/Sun from 13:00, Tue–Fri from 17:00. CLOSED MON. In-season Zeeland mussels. Loud.", "km": 3.01, "walk": 36, "bike": 13}, {"name": "Brut de Mer", "cat": "nicer", "lat": 52.355783, "lng": 4.892561, "note": "Fri–Sun 12:00–24:00, Tue–Thu from 16:00. CLOSED MON. Oyster specialist, priciest option.", "km": 3.57, "walk": 43, "bike": 15}, {"name": "Rembrandtpark", "cat": "park", "lat": 52.364722, "lng": 4.846111, "note": "Open 24h. Your nearest real park. Quieter Vondelpark, mini farm.", "km": 0.87, "walk": 10, "bike": 4}, {"name": "Erasmuspark", "cat": "park", "lat": 52.374622, "lng": 4.851553, "note": "Daily 07:00–22:00. People swim off the bridge in August.", "km": 1.18, "walk": 14, "bike": 5}, {"name": "Westerpark / Westergas", "cat": "park", "lat": 52.386127, "lng": 4.877835, "note": "Open 24h. Green + old gasworks turned into bars and venues.", "km": 3.37, "walk": 40, "bike": 14}, {"name": "Sloterplas", "cat": "park", "lat": 52.3672, "lng": 4.8135, "note": "Open 24h. Big lake, loop path, zero tourists.", "km": 3.66, "walk": 44, "bike": 16}, {"name": "De Kaashut", "cat": "shop", "lat": 52.364494, "lng": 4.855744, "note": "Wed–Fri 09:00–14:00, Sat/Sun to 17:00. CLOSED MON+TUE. Cheese, tastings.", "km": 0.32, "walk": 4, "bike": 1}, {"name": "Avondwinkel de Buren", "cat": "shop", "lat": 52.3644442, "lng": 4.8537961, "note": "Daily 14:00–02:00 (Fri/Sat to 03:00). 4.7. The good night shop.", "km": 0.36, "walk": 4, "bike": 2}, {"name": "AH Postjesweg", "cat": "shop", "lat": 52.3640904, "lng": 4.8548122, "note": "Daily 08:00–22:00. Closest full supermarket, fish counter. Pricier than Aldi.", "km": 0.38, "walk": 5, "bike": 2}, {"name": "ALDI Postjesweg", "cat": "shop", "lat": 52.364096, "lng": 4.854356, "note": "Mon–Sat 08:00–20:00, Sun 10:00–20:00. Cheapest option, 4 minutes away.", "km": 0.39, "walk": 5, "bike": 2}, {"name": "Bakkerij Dekker", "cat": "shop", "lat": 52.369303, "lng": 4.851856, "note": "Mon–Fri 08:00–17:00, Sat to 16:30. CLOSED SUN. Old-school bread + cheese.", "km": 0.49, "walk": 6, "bike": 2}, {"name": "Dirk Supermarkt", "cat": "shop", "lat": 52.369391, "lng": 4.851727, "note": "Mon–Sat 08:00–22:00, Sun 09:00–22:00. Cheaper than Albert Heijn, further than Aldi.", "km": 0.51, "walk": 6, "bike": 2}, {"name": "Marco's Groentespeciaalzaak", "cat": "shop", "lat": 52.370707, "lng": 4.85329, "note": "Tue–Sat 07:00–18:00. CLOSED SUN+MON. Independent greengrocer. 4.9.", "km": 0.6, "walk": 7, "bike": 3}, {"name": "Bakkerij Nazar", "cat": "shop", "lat": 52.371218, "lng": 4.860584, "note": "Mon–Sat 06:00–20:00. CLOSED SUN. Baklava.", "km": 0.77, "walk": 9, "bike": 3}, {"name": "Antakya Bakkerij", "cat": "shop", "lat": 52.374922, "lng": 4.862231, "note": "Mon–Sat 06:00–21:00. CLOSED SUN. Turkish flatbread.", "km": 1.3, "walk": 16, "bike": 6}, {"name": "Homomonument", "cat": "sight", "lat": 52.3746, "lng": 4.8836, "note": "Three pink granite triangles, Westermarkt. The first monument anywhere to commemorate the persecution of gay people. Free, 15 minutes, directly on your Sunday route.", "km": 2.68, "walk": 32, "bike": 11}, {"name": "Nine Streets (Negen Straatjes)", "cat": "sight", "lat": 52.3721, "lng": 4.8853, "note": "Independent boutiques threaded between Herengracht, Keizersgracht and Prinsengracht. Walk the canals themselves, not just the cross-streets.", "km": 2.7, "walk": 32, "bike": 12}, {"name": "Begijnhof", "cat": "sight", "lat": 52.36786, "lng": 4.88985, "note": "Hidden courtyard of almshouses. One of the last wooden house-fronts in the city at No. 34. Free — the entrance is an unmarked door off Spui.", "km": 2.98, "walk": 36, "bike": 13}, {"name": "Spui", "cat": "sight", "lat": 52.36883, "lng": 4.89104, "note": "Small square, bookshops. Friday book market 09:00–18:00, if your Friday afternoon lands here at the right moment.", "km": 3.1, "walk": 37, "bike": 13}, {"name": "Dam Square", "cat": "sight", "lat": 52.3731, "lng": 4.8926, "note": "Pass through, don't plan around it. Sun 2 Aug 14:00–23:00: the free MainStage Grand Finale is here.", "km": 3.34, "walk": 40, "bike": 14}, {"name": "Oude Kerk", "cat": "sight", "lat": 52.37391, "lng": 4.89759, "note": "Amsterdam's oldest building, consecrated 1306. Exterior free; interior has an entry fee.", "km": 3.79, "walk": 46, "bike": 16}, {"name": "Nieuwmarkt & De Waag", "cat": "sight", "lat": 52.3725, "lng": 4.9004, "note": "Amsterdam's oldest square, the 15th-century De Waag weigh-house at its centre. Quiet by day; go before 15:30 Friday, ahead of the street parties.", "km": 3.98, "walk": 48, "bike": 17}, {"name": "Zeedijk", "cat": "sight", "lat": 52.3745, "lng": 4.8997, "note": "The old sailors' street into Chinatown. Walk it by day — busiest, loudest at night, especially through WorldPride.", "km": 3.99, "walk": 48, "bike": 17}, {"name": "NDSM Werf / STRAAT Museum", "cat": "sight", "lat": 52.40194, "lng": 4.89389, "note": "Free ferry from behind Centraal (F4/906), ~13 min crossing, every 15–20 min, runs to ~00:00. Not walkable — see Day trips.", "km": null, "walk": null, "bike": null}, {"name": "Postjesweg tram stop", "cat": "transit", "lat": 52.3647, "lng": 4.8532, "note": "~400 m south. Tram 17 toward Centraal — check 9292.nl, works ongoing.", "km": 0.35, "walk": 4, "bike": 2}, {"name": "Mercatorplein (bus 15, tram 13)", "cat": "transit", "lat": 52.3694, "lng": 4.8517, "note": "Bus 15 → Sloterdijk (Schiphol/Haarlem) and → Amsterdam Zuid (Antwerp).", "km": 0.51, "walk": 6, "bike": 2}, {"name": "Marco Polostraat tram stop (13)", "cat": "transit", "lat": 52.3705, "lng": 4.8554, "note": "Tram 13 toward the centre.", "km": 0.54, "walk": 6, "bike": 2}, {"name": "Jan Evertsenstraat (tram 7 / bus 18)", "cat": "transit", "lat": 52.3706, "lng": 4.8545, "note": "Your real link to Centraal — ~20 min tram/bus, then a 7-minute walk home. Faster than walking from Centraal.", "km": 0.56, "walk": 7, "bike": 2}, {"name": "Station Lelylaan", "cat": "transit", "lat": 52.35786, "lng": 4.83395, "note": "Direct Sprinters to Schiphol (~10 min). Geographically your best station, awkward to reach while tram 17 is cut short.", "km": 2.26, "walk": 27, "bike": 10}, {"name": "Station Sloterdijk", "cat": "transit", "lat": 52.3891, "lng": 4.8378, "note": "Sprinter to Schiphol 11 min; train to Haarlem 15 min.", "km": 3.54, "walk": 42, "bike": 15}, {"name": "Centraal Station", "cat": "transit", "lat": 52.3791, "lng": 4.8994, "note": "Not your airport route — you're going via Sloterdijk instead. This is where tram 7 / bus 18 land Friday afternoon, right after bags are dropped. 50 min on foot from the flat; ~20 min by tram/bus.", "km": 4.2, "walk": 50, "bike": 18}, {"name": "Dizinghof", "cat": "cheap", "lat": 52.3517476, "lng": 4.8486651, "note": "Daily 17:00\u201303:00 (later Fri/Sat). 4.2/627. Named specifically as one of Amsterdam's best kapsalon spots \u2014 the one place near you I'd actually vouch for by reputation, not just proximity.", "km": 2.21, "walk": 27, "bike": 9}];
+const COL = {"coffee": "7C3AED", "cheap": "E8710A", "nicer": "C5221F", "bar": "0B8043", "shop": "3949AB", "market": "F9A825", "park": "0F9D58", "museum": "795548", "sight": "9C2E6B", "bike": "00838F", "transit": "455A64"};
+const NAMES = {"coffee": "Coffee", "cheap": "Cheap eats", "nicer": "Nicer dinner", "bar": "Bars & terraces", "shop": "Groceries", "market": "Markets", "park": "Parks", "museum": "Museums", "sight": "Sights & landmarks", "bike": "Bike rental", "transit": "Transit"};
+const ROUTES = {"start": {"id": "C", "name": "Centraal Station", "lat": 52.3791, "lng": 4.8994, "note": "Friday's gateway into town — reached by tram 7 / bus 18 from Jan Evertsenstraat, ~20 min, right after bags are dropped."}, "friday": [{"id": "F1", "name": "Nieuwmarkt & De Waag", "lat": 52.3725, "lng": 4.9004, "note": "Amsterdam's oldest square, De Waag weigh-house at its centre."}, {"id": "F2", "name": "Zeedijk", "lat": 52.3745, "lng": 4.8997, "note": "The old sailors' street into Chinatown — quiet at 13:30, a WorldPride party zone from 16:00."}, {"id": "F3", "name": "Oude Kerk", "lat": 52.37391, "lng": 4.89759, "note": "Oldest building in the city, consecrated 1306 — if the pace allows."}], "sunday": [{"id": "S1", "name": "Begijnhof", "lat": 52.36786, "lng": 4.88985, "note": "Hidden courtyard — the door off Spui is unmarked."}, {"id": "S2", "name": "Nine Streets", "lat": 52.3721, "lng": 4.8853, "note": "Herengracht / Keizersgracht / Prinsengracht — walk the canals, not just the cross-streets."}, {"id": "S3", "name": "Homomonument", "lat": 52.3746, "lng": 4.8836, "note": "Westermarkt. Stop for fifteen minutes."}, {"id": "S4", "name": "Into the Jordaan", "lat": 52.369134, "lng": 4.878723, "note": "Wander — no fixed stop needed here."}, {"id": "S5", "name": "Noordermarkt — Winkel 43", "lat": 52.379094, "lng": 4.886284, "note": "Appeltaart, the famous version."}]};
+const HAARLEM = [{"name": "Grote Markt", "lat": 52.3811, "lng": 4.636, "note": "Sat 09:00–17:00 market. The big day — fresh fish, cheese, flowers."}, {"name": "Teylers Museum", "lat": 52.3803, "lng": 4.6376, "note": "Daily 10:00–17:00, ~€18. Oldest museum in the Netherlands, rarely crowded."}, {"name": "Frans Hals Museum", "lat": 52.3785, "lng": 4.6294, "note": "Closed Monday. Sat 11:00–17:00. Hals's group portraits."}, {"name": "Fishbar Monk", "lat": 52.3801, "lng": 4.6371, "note": "Sat from 12:00. Monkfish and turbot alongside oysters — the one menu where you both eat brilliantly. Noisy. Reserve."}, {"name": "Restaurant PRAKM", "lat": 52.3785, "lng": 4.6345, "note": "Wed–Sat 17:00–21:00. Cheaper, entirely Dutch, family-run."}, {"name": "Zandvoort beach", "lat": 52.3717, "lng": 4.5352, "note": "One stop past Haarlem, same line. North Sea, dunes, beach pavilions."}];
+const HOME = [52.366722, 4.855556];
 
-const map = L.map('map', {scrollWheelZoom:false}).setView([52.3735, 4.8600], 13);
+/* ---- master map ---- */
+const map = L.map('map', {scrollWheelZoom:false}).setView([52.3730, 4.8720], 12);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
   attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:19
 }).addTo(map);
-
-L.marker(HOME).addTo(map).bindPopup(
-  "<b>HOME — 88 Marco Polostraat</b><span class='d'>All distances measured from here</span>"
-).openPopup();
+L.marker(HOME).addTo(map).bindPopup("<b>HOME — Vasco da Gamastraat</b><span class='d'>All distances measured from here</span>").openPopup();
 L.circle(HOME, {radius:500, color:'#8C3A2B', weight:1, fillOpacity:.05}).addTo(map);
-
 const layers = {};
 for (const c in COL) layers[c] = L.layerGroup().addTo(map);
-
 PLACES.forEach(p => {
-  const m = L.circleMarker([p.lat, p.lng], {
-    radius:7, color:'#fff', weight:2, fillColor:COL[p.cat], fillOpacity:1
-  });
-  m.bindPopup(
-    "<b>"+p.name+"</b><span class='d'>"+p.km+" km &middot; "+p.walk+"&prime; walk &middot; "+p.bike+"&prime; bike</span>"+p.note+
+  const m = L.circleMarker([p.lat, p.lng], {radius:7, color:'#fff', weight:2, fillColor:COL[p.cat], fillOpacity:1});
+  const distHtml = (p.km===null) ? "via free ferry &middot; not walkable" : (p.km+" km &middot; "+p.walk+"&prime; walk &middot; "+p.bike+"&prime; bike");
+  m.bindPopup("<b>"+p.name+"</b><span class='d'>"+distHtml+"</span>"+p.note+
     "<br><br><a target='_blank' rel='noopener' href='https://www.google.com/maps/search/?api=1&query="+
-    encodeURIComponent(p.name+', Amsterdam')+"'>Open in Google Maps</a>"
-  );
+    encodeURIComponent(p.name+', Amsterdam')+"'>Open in Google Maps</a>");
   m.addTo(layers[p.cat]);
 });
-
 const fbox = document.getElementById('filters');
 for (const c in COL) {
   const b = document.createElement('button');
@@ -647,5 +712,51 @@ for (const c in COL) {
   };
   fbox.appendChild(b);
 }
+
+/* ---- numbered-pin helper ---- */
+function numberedIcon(label, color){
+  return L.divIcon({
+    className:'',
+    html:"<div style='background:"+color+";color:#fff;width:26px;height:26px;border-radius:50%;"+
+         "display:flex;align-items:center;justify-content:center;font-family:JetBrains Mono, monospace;"+
+         "font-weight:700;font-size:11px;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.4)'>"+label+"</div>",
+    iconSize:[26,26], iconAnchor:[13,13]
+  });
+}
+
+/* ---- Friday & Sunday routes map ---- */
+const map2 = L.map('map-routes', {scrollWheelZoom:false});
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+  attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:19
+}).addTo(map2);
+const routeMarkers = [];
+const startM = L.marker([ROUTES.start.lat, ROUTES.start.lng], {icon:numberedIcon('C','#455A64')})
+  .bindPopup("<b>"+ROUTES.start.name+"</b>"+ROUTES.start.note).addTo(map2);
+routeMarkers.push(startM);
+ROUTES.friday.forEach(s => {
+  const m = L.marker([s.lat, s.lng], {icon:numberedIcon(s.id, '#8C3A2B')}).bindPopup("<b>"+s.name+"</b>"+s.note).addTo(map2);
+  routeMarkers.push(m);
+});
+ROUTES.sunday.forEach(s => {
+  const m = L.marker([s.lat, s.lng], {icon:numberedIcon(s.id, '#1F6F5C')}).bindPopup("<b>"+s.name+"</b>"+s.note).addTo(map2);
+  routeMarkers.push(m);
+});
+const homeM2 = L.circleMarker(HOME, {radius:6, color:'#fff', weight:2, fillColor:'#171310', fillOpacity:1})
+  .bindPopup("<b>Home</b>").addTo(map2);
+routeMarkers.push(homeM2);
+map2.fitBounds(L.featureGroup(routeMarkers).getBounds(), {padding:[26,26]});
+
+/* ---- Haarlem & coast map ---- */
+const map3 = L.map('map-haarlem', {scrollWheelZoom:false});
+L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+  attribution:'&copy; OpenStreetMap &copy; CARTO', maxZoom:19
+}).addTo(map3);
+const haarlemMarkers = [];
+HAARLEM.forEach(p => {
+  const m = L.circleMarker([p.lat, p.lng], {radius:8, color:'#fff', weight:2, fillColor:'#C2871F', fillOpacity:1})
+    .bindPopup("<b>"+p.name+"</b>"+p.note).addTo(map3);
+  haarlemMarkers.push(m);
+});
+map3.fitBounds(L.featureGroup(haarlemMarkers).getBounds(), {padding:[30,30]});
 </script>
 </body></html>

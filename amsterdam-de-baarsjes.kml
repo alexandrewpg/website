@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
+<name>Amsterdam &#8212; De Baarsjes, 31 Jul&#8211;4 Aug 2026</name>
+<Style id="coffee"><IconStyle><color>ffED3A7C</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="cheap"><IconStyle><color>ff0A71E8</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="nicer"><IconStyle><color>ff1F22C5</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="bar"><IconStyle><color>ff43800B</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="shop"><IconStyle><color>ffAB4939</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="market"><IconStyle><color>ff25A8F9</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="park"><IconStyle><color>ff589D0F</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="museum"><IconStyle><color>ff485579</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="sight"><IconStyle><color>ff6B2E9C</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="bike"><IconStyle><color>ff8F8300</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Style id="transit"><IconStyle><color>ff645A45</color><Icon><href>http://maps.google.com/mapfiles/kml/paddle/wht-blank.png</href></Icon></IconStyle></Style>
+<Placemark><name>HOME</name><description>Vasco da Gamastraat, south end. All distances measured from here.</description><Point><coordinates>4.855556,52.366722,0</coordinates></Point></Placemark>
+<Folder><name>Coffee</name>
+<Placemark><name>Luma Coffee Lunch</name><styleUrl>#coffee</styleUrl><description><![CDATA[0.31 km from the flat &#183; 4 min walk &#183; 1 min bike
+
+Daily 08:00–17:00, later Fri–Sun. Quiet canal corner, close to home.]]></description><Point><coordinates>4.857577,52.364946,0</coordinates></Point></Placemark>
+<Placemark><name>Vanaut</name><styleUrl>#coffee</styleUrl><description><![CDATA[0.37 km from the flat &#183; 4 min walk &#183; 2 min bike
+
+Daily 10:00–16:00 (Tue from 11:00). 4.9/592. Canal terrace, cake, good coffee. Your true local — 3 minutes away.]]></description><Point><coordinates>4.8556174,52.3641188,0</coordinates></Point></Placemark>
+<Placemark><name>Bo&#x27;s Amsterdam</name><styleUrl>#coffee</styleUrl><description><![CDATA[0.45 km from the flat &#183; 5 min walk &#183; 2 min bike
+
+Open to 22:00 Thu–Sat. The rare evening coffee, close to home.]]></description><Point><coordinates>4.859759,52.364873,0</coordinates></Point></Placemark>
+<Placemark><name>Noi Coffee &amp; Eatery</name><styleUrl>#coffee</styleUrl><description><![CDATA[0.59 km from the flat &#183; 7 min walk &#183; 3 min bike
+
+Daily 08:00–17:30. Best bakery counter on Jan Eef.]]></description><Point><coordinates>4.851888,52.370175,0</coordinates></Point></Placemark>
+<Placemark><name>White Label Coffee</name><styleUrl>#coffee</styleUrl><description><![CDATA[0.63 km from the flat &#183; 8 min walk &#183; 3 min bike
+
+Daily 07:30–17:30 (Sat/Sun 08:00). Roaster, medium profile.]]></description><Point><coordinates>4.851578,52.370431,0</coordinates></Point></Placemark>
+<Placemark><name>Pudu Cafe</name><styleUrl>#coffee</styleUrl><description><![CDATA[0.67 km from the flat &#183; 8 min walk &#183; 3 min bike
+
+Mon 07:00–17:00, Tue–Sun 08:00–14:30. Greek pastries — bougatsa.]]></description><Point><coordinates>4.849657,52.369758,0</coordinates></Point></Placemark>
+<Placemark><name>Zizou Coffee</name><styleUrl>#coffee</styleUrl><description><![CDATA[0.95 km from the flat &#183; 11 min walk &#183; 4 min bike
+
+Daily 08:00–17:00 (Sun 09:00). Big sunny terrace.]]></description><Point><coordinates>4.864561,52.370499,0</coordinates></Point></Placemark>
+<Placemark><name>DAK Showroom</name><styleUrl>#coffee</styleUrl><description><![CDATA[1.05 km from the flat &#183; 13 min walk &#183; 4 min bike
+
+Daily 08:00–17:00 (Sat/Sun 09:00). Geishas, ferments. Small, extraordinary, pricey.]]></description><Point><coordinates>4.86731,52.368413,0</coordinates></Point></Placemark>
+<Placemark><name>LOT61 Coffee Roasters</name><styleUrl>#coffee</styleUrl><description><![CDATA[1.28 km from the flat &#183; 15 min walk &#183; 5 min bike
+
+Daily 08:00–18:00. Next to Ten Katemarkt.]]></description><Point><coordinates>4.870314,52.366827,0</coordinates></Point></Placemark>
+<Placemark><name>Rum Baba</name><styleUrl>#coffee</styleUrl><description><![CDATA[2.04 km from the flat &#183; 25 min walk &#183; 9 min bike
+
+Daily from 08:00, closes 16:30. In the Jordaan.]]></description><Point><coordinates>4.878723,52.369134,0</coordinates></Point></Placemark>
+<Placemark><name>Friedhats FUKU</name><styleUrl>#coffee</styleUrl><description><![CDATA[2.07 km from the flat &#183; 25 min walk &#183; 9 min bike
+
+Mon–Fri 08:00–16:00, Sat/Sun 09:00–17:00. The light-roast destination. No laptops.]]></description><Point><coordinates>4.855158,52.381274,0</coordinates></Point></Placemark>
+<Placemark><name>Back to Black</name><styleUrl>#coffee</styleUrl><description><![CDATA[2.27 km from the flat &#183; 27 min walk &#183; 10 min bike
+
+Daily 08:00–17:30. Huge apple pie.]]></description><Point><coordinates>4.871473,52.379399,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>Cheap eats</name>
+<Placemark><name>Rotishop Gieta</name><styleUrl>#cheap</styleUrl><description><![CDATA[0.34 km from the flat &#183; 4 min walk &#183; 1 min bike
+
+Tue–Sun 15:00–21:30. CLOSED MON. Surinamese roti. 4.7/614.]]></description><Point><coordinates>4.854342,52.368991,0</coordinates></Point></Placemark>
+<Placemark><name>De Indo van Jan Eef</name><styleUrl>#cheap</styleUrl><description><![CDATA[0.56 km from the flat &#183; 7 min walk &#183; 2 min bike
+
+Tue–Sun 12:00–21:00. CLOSED MON. Indonesian, build-your-own rice plate.]]></description><Point><coordinates>4.854048,52.37052,0</coordinates></Point></Placemark>
+<Placemark><name>Nouri&#x27;s Lunchroom</name><styleUrl>#cheap</styleUrl><description><![CDATA[0.6 km from the flat &#183; 7 min walk &#183; 3 min bike
+
+Daily 07:00–18:00. Moroccan breakfast.]]></description><Point><coordinates>4.854025,52.370829,0</coordinates></Point></Placemark>
+<Placemark><name>Usta Kebap</name><styleUrl>#cheap</styleUrl><description><![CDATA[0.61 km from the flat &#183; 7 min walk &#183; 3 min bike
+
+Daily 12:00–01:00 (Tue from 16:00). 4.9/803. Adana + künefe. Under €15pp.]]></description><Point><coordinates>4.854912,52.371,0</coordinates></Point></Placemark>
+<Placemark><name>Zeeduivel Visspecialiteiten</name><styleUrl>#cheap</styleUrl><description><![CDATA[0.77 km from the flat &#183; 9 min walk &#183; 3 min bike
+
+Tue–Sat 11:00–18:00. CLOSED SUN+MON. Fish counter — kibbeling + oysters, €30 for two.]]></description><Point><coordinates>4.863056,52.363889,0</coordinates></Point></Placemark>
+<Placemark><name>Freddy Fryday West</name><styleUrl>#cheap</styleUrl><description><![CDATA[1.16 km from the flat &#183; 14 min walk &#183; 5 min bike
+
+Tue–Sun 12:00–21:00. CLOSED MON. Loaded frites.]]></description><Point><coordinates>4.867665,52.37021,0</coordinates></Point></Placemark>
+<Placemark><name>Ram&#x27;s Roti</name><styleUrl>#cheap</styleUrl><description><![CDATA[1.19 km from the flat &#183; 14 min walk &#183; 5 min bike
+
+Daily 12:00–21:00 (Mon from 14:00). Surinamese.]]></description><Point><coordinates>4.860025,52.374662,0</coordinates></Point></Placemark>
+<Placemark><name>Toko Bersama West</name><styleUrl>#cheap</styleUrl><description><![CDATA[1.37 km from the flat &#183; 16 min walk &#183; 6 min bike
+
+Daily 12:00–21:30. 4.9/11,555. Rames Complete.]]></description><Point><coordinates>4.871008,52.368465,0</coordinates></Point></Placemark>
+<Placemark><name>Frites &amp; Frites</name><styleUrl>#cheap</styleUrl><description><![CDATA[1.7 km from the flat &#183; 20 min walk &#183; 7 min bike
+
+Daily 12:00–21:00. Full sauce range.]]></description><Point><coordinates>4.875011,52.367905,0</coordinates></Point></Placemark>
+<Placemark><name>Tuana Grill</name><styleUrl>#cheap</styleUrl><description><![CDATA[1.74 km from the flat &#183; 21 min walk &#183; 7 min bike
+
+Daily 10:00–01:00. Turkish, family-run.]]></description><Point><coordinates>4.848921,52.378247,0</coordinates></Point></Placemark>
+<Placemark><name>Bistro Bos</name><styleUrl>#cheap</styleUrl><description><![CDATA[2.21 km from the flat &#183; 27 min walk &#183; 9 min bike
+
+Daily 15:00–23:00. Turkish mezze + grill.]]></description><Point><coordinates>4.855965,52.382262,0</coordinates></Point></Placemark>
+<Placemark><name>Dizinghof</name><styleUrl>#cheap</styleUrl><description><![CDATA[2.21 km from the flat &#183; 27 min walk &#183; 9 min bike
+
+Daily 17:00–03:00 (later Fri/Sat). 4.2/627. Named specifically as one of Amsterdam's best kapsalon spots — the one place near you I'd actually vouch for by reputation, not just proximity.]]></description><Point><coordinates>4.8486651,52.3517476,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>Nicer dinner</name>
+<Placemark><name>Abbey</name><styleUrl>#nicer</styleUrl><description><![CDATA[2.34 km from the flat &#183; 28 min walk &#183; 10 min bike
+
+Tue–Sun. CLOSED MON. 4.8/652. Seasonal, warm, ~€45pp.]]></description><Point><coordinates>4.851033,52.382896,0</coordinates></Point></Placemark>
+<Placemark><name>Mossel &amp; Gin</name><styleUrl>#nicer</styleUrl><description><![CDATA[3.01 km from the flat &#183; 36 min walk &#183; 13 min bike
+
+Sat/Sun from 13:00, Tue–Fri from 17:00. CLOSED MON. In-season Zeeland mussels. Loud.]]></description><Point><coordinates>4.868031,52.386482,0</coordinates></Point></Placemark>
+<Placemark><name>Brut de Mer</name><styleUrl>#nicer</styleUrl><description><![CDATA[3.57 km from the flat &#183; 43 min walk &#183; 15 min bike
+
+Fri–Sun 12:00–24:00, Tue–Thu from 16:00. CLOSED MON. Oyster specialist, priciest option.]]></description><Point><coordinates>4.892561,52.355783,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>Bars & terraces</name>
+<Placemark><name>Tweede Thuys</name><styleUrl>#bar</styleUrl><description><![CDATA[0.34 km from the flat &#183; 4 min walk &#183; 1 min bike
+
+Daily 11:00–24:00 (Fri/Sat to 01:00). 4.7/525. Large canal terrace, parrots overhead. Your local.]]></description><Point><coordinates>4.8569072,52.3645076,0</coordinates></Point></Placemark>
+<Placemark><name>BRONS</name><styleUrl>#bar</styleUrl><description><![CDATA[0.44 km from the flat &#183; 5 min walk &#183; 2 min bike
+
+Mon–Thu from 15:00, Fri/Sat from 13:00, Sun 12:00–20:00. Opened May 2026, waterside terrace.]]></description><Point><coordinates>4.8589703,52.3644131,0</coordinates></Point></Placemark>
+<Placemark><name>Wolff &amp; Beer</name><styleUrl>#bar</styleUrl><description><![CDATA[0.52 km from the flat &#183; 6 min walk &#183; 2 min bike
+
+Daily from 08:00 (Fri/Sat to 03:00). 4.6. One of the few late places nearby.]]></description><Point><coordinates>4.8509926,52.3643912,0</coordinates></Point></Placemark>
+<Placemark><name>Bar Baarsch</name><styleUrl>#bar</styleUrl><description><![CDATA[0.56 km from the flat &#183; 7 min walk &#183; 2 min bike
+
+Daily from 11:00. Good food. Very loud at night.]]></description><Point><coordinates>4.853577,52.370442,0</coordinates></Point></Placemark>
+<Placemark><name>de Neef van Fred</name><styleUrl>#bar</styleUrl><description><![CDATA[0.63 km from the flat &#183; 8 min walk &#183; 3 min bike
+
+Daily from 11:00. Terrace on a deck at the water.]]></description><Point><coordinates>4.857101,52.371046,0</coordinates></Point></Placemark>
+<Placemark><name>Café Kontakt</name><styleUrl>#bar</styleUrl><description><![CDATA[0.83 km from the flat &#183; 10 min walk &#183; 4 min bike
+
+Mon–Sat from 16:00. CLOSED SUN. Local pub, craft beer.]]></description><Point><coordinates>4.85959,52.372018,0</coordinates></Point></Placemark>
+<Placemark><name>Café Thuys</name><styleUrl>#bar</styleUrl><description><![CDATA[0.97 km from the flat &#183; 12 min walk &#183; 4 min bike
+
+Daily from 11:00. Old-style Amsterdam café, canal-side.]]></description><Point><coordinates>4.865376,52.369906,0</coordinates></Point></Placemark>
+<Placemark><name>Café &#x27;t Binnepretje</name><styleUrl>#bar</styleUrl><description><![CDATA[2.1 km from the flat &#183; 25 min walk &#183; 9 min bike
+
+Daily from 11:00 (Sun 14:00). Real neighbourhood bar.]]></description><Point><coordinates>4.855998,52.38147,0</coordinates></Point></Placemark>
+<Placemark><name>Café Brel</name><styleUrl>#bar</styleUrl><description><![CDATA[2.79 km from the flat &#183; 34 min walk &#183; 12 min bike
+
+Daily from 14:00. Belgian beer list.]]></description><Point><coordinates>4.870257,52.384165,0</coordinates></Point></Placemark>
+<Placemark><name>A. van Wees Proeflokaal</name><styleUrl>#bar</styleUrl><description><![CDATA[2.79 km from the flat &#183; 33 min walk &#183; 12 min bike
+
+Daily 10:00–23:30. Jenever tasting house.]]></description><Point><coordinates>4.887232,52.369968,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>Groceries</name>
+<Placemark><name>De Kaashut</name><styleUrl>#shop</styleUrl><description><![CDATA[0.32 km from the flat &#183; 4 min walk &#183; 1 min bike
+
+Wed–Fri 09:00–14:00, Sat/Sun to 17:00. CLOSED MON+TUE. Cheese, tastings.]]></description><Point><coordinates>4.855744,52.364494,0</coordinates></Point></Placemark>
+<Placemark><name>Avondwinkel de Buren</name><styleUrl>#shop</styleUrl><description><![CDATA[0.36 km from the flat &#183; 4 min walk &#183; 2 min bike
+
+Daily 14:00–02:00 (Fri/Sat to 03:00). 4.7. The good night shop.]]></description><Point><coordinates>4.8537961,52.3644442,0</coordinates></Point></Placemark>
+<Placemark><name>AH Postjesweg</name><styleUrl>#shop</styleUrl><description><![CDATA[0.38 km from the flat &#183; 5 min walk &#183; 2 min bike
+
+Daily 08:00–22:00. Closest full supermarket, fish counter. Pricier than Aldi.]]></description><Point><coordinates>4.8548122,52.3640904,0</coordinates></Point></Placemark>
+<Placemark><name>ALDI Postjesweg</name><styleUrl>#shop</styleUrl><description><![CDATA[0.39 km from the flat &#183; 5 min walk &#183; 2 min bike
+
+Mon–Sat 08:00–20:00, Sun 10:00–20:00. Cheapest option, 4 minutes away.]]></description><Point><coordinates>4.854356,52.364096,0</coordinates></Point></Placemark>
+<Placemark><name>Bakkerij Dekker</name><styleUrl>#shop</styleUrl><description><![CDATA[0.49 km from the flat &#183; 6 min walk &#183; 2 min bike
+
+Mon–Fri 08:00–17:00, Sat to 16:30. CLOSED SUN. Old-school bread + cheese.]]></description><Point><coordinates>4.851856,52.369303,0</coordinates></Point></Placemark>
+<Placemark><name>Dirk Supermarkt</name><styleUrl>#shop</styleUrl><description><![CDATA[0.51 km from the flat &#183; 6 min walk &#183; 2 min bike
+
+Mon–Sat 08:00–22:00, Sun 09:00–22:00. Cheaper than Albert Heijn, further than Aldi.]]></description><Point><coordinates>4.851727,52.369391,0</coordinates></Point></Placemark>
+<Placemark><name>Marco&#x27;s Groentespeciaalzaak</name><styleUrl>#shop</styleUrl><description><![CDATA[0.6 km from the flat &#183; 7 min walk &#183; 3 min bike
+
+Tue–Sat 07:00–18:00. CLOSED SUN+MON. Independent greengrocer. 4.9.]]></description><Point><coordinates>4.85329,52.370707,0</coordinates></Point></Placemark>
+<Placemark><name>Bakkerij Nazar</name><styleUrl>#shop</styleUrl><description><![CDATA[0.77 km from the flat &#183; 9 min walk &#183; 3 min bike
+
+Mon–Sat 06:00–20:00. CLOSED SUN. Baklava.]]></description><Point><coordinates>4.860584,52.371218,0</coordinates></Point></Placemark>
+<Placemark><name>Antakya Bakkerij</name><styleUrl>#shop</styleUrl><description><![CDATA[1.3 km from the flat &#183; 16 min walk &#183; 6 min bike
+
+Mon–Sat 06:00–21:00. CLOSED SUN. Turkish flatbread.]]></description><Point><coordinates>4.862231,52.374922,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>Markets</name>
+<Placemark><name>Ten Katemarkt</name><styleUrl>#market</styleUrl><description><![CDATA[1.04 km from the flat &#183; 12 min walk &#183; 4 min bike
+
+Mon–Sat 09:00–18:00. CLOSED SUN. The market locals use — not on this trip's schedule, but 12 minutes on foot if an hour opens up.]]></description><Point><coordinates>4.867456,52.366014,0</coordinates></Point></Placemark>
+<Placemark><name>Foodhallen</name><styleUrl>#market</styleUrl><description><![CDATA[1.07 km from the flat &#183; 13 min walk &#183; 5 min bike
+
+Daily 12:00–24:00. Good, but firmly on the tourist circuit.]]></description><Point><coordinates>4.867915,52.36679,0</coordinates></Point></Placemark>
+<Placemark><name>Winkel 43</name><styleUrl>#market</styleUrl><description><![CDATA[3.2 km from the flat &#183; 38 min walk &#183; 14 min bike
+
+Daily from 08:00 (Mon/Sat 07:00). The famous Dutch apple pie, at Noordermarkt.]]></description><Point><coordinates>4.886284,52.379094,0</coordinates></Point></Placemark>
+<Placemark><name>Lindengracht Market</name><styleUrl>#market</styleUrl><description><![CDATA[3.34 km from the flat &#183; 40 min walk &#183; 14 min bike
+
+SATURDAY ONLY 09:00–16:00. Best market morning in the city — but you'll be in Haarlem.]]></description><Point><coordinates>4.886573,52.38053,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>Parks</name>
+<Placemark><name>Rembrandtpark</name><styleUrl>#park</styleUrl><description><![CDATA[0.87 km from the flat &#183; 10 min walk &#183; 4 min bike
+
+Open 24h. Your nearest real park. Quieter Vondelpark, mini farm.]]></description><Point><coordinates>4.846111,52.364722,0</coordinates></Point></Placemark>
+<Placemark><name>Erasmuspark</name><styleUrl>#park</styleUrl><description><![CDATA[1.18 km from the flat &#183; 14 min walk &#183; 5 min bike
+
+Daily 07:00–22:00. People swim off the bridge in August.]]></description><Point><coordinates>4.851553,52.374622,0</coordinates></Point></Placemark>
+<Placemark><name>Westerpark / Westergas</name><styleUrl>#park</styleUrl><description><![CDATA[3.37 km from the flat &#183; 40 min walk &#183; 14 min bike
+
+Open 24h. Green + old gasworks turned into bars and venues.]]></description><Point><coordinates>4.877835,52.386127,0</coordinates></Point></Placemark>
+<Placemark><name>Sloterplas</name><styleUrl>#park</styleUrl><description><![CDATA[3.66 km from the flat &#183; 44 min walk &#183; 16 min bike
+
+Open 24h. Big lake, loop path, zero tourists.]]></description><Point><coordinates>4.8135,52.3672,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>Museums</name>
+<Placemark><name>Rijksmuseum</name><styleUrl>#museum</styleUrl><description><![CDATA[2.75 km from the flat &#183; 33 min walk &#183; 12 min bike
+
+Daily 09:00–17:00. €25, ONLINE ONLY. Your Monday 09:00 slot is booked — see the organising tips below.]]></description><Point><coordinates>4.8852,52.36,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>Sights & landmarks</name>
+<Placemark><name>Homomonument</name><styleUrl>#sight</styleUrl><description><![CDATA[2.68 km from the flat &#183; 32 min walk &#183; 11 min bike
+
+Three pink granite triangles, Westermarkt. The first monument anywhere to commemorate the persecution of gay people. Free, 15 minutes, directly on your Sunday route.]]></description><Point><coordinates>4.8836,52.3746,0</coordinates></Point></Placemark>
+<Placemark><name>Nine Streets (Negen Straatjes)</name><styleUrl>#sight</styleUrl><description><![CDATA[2.7 km from the flat &#183; 32 min walk &#183; 12 min bike
+
+Independent boutiques threaded between Herengracht, Keizersgracht and Prinsengracht. Walk the canals themselves, not just the cross-streets.]]></description><Point><coordinates>4.8853,52.3721,0</coordinates></Point></Placemark>
+<Placemark><name>Begijnhof</name><styleUrl>#sight</styleUrl><description><![CDATA[2.98 km from the flat &#183; 36 min walk &#183; 13 min bike
+
+Hidden courtyard of almshouses. One of the last wooden house-fronts in the city at No. 34. Free — the entrance is an unmarked door off Spui.]]></description><Point><coordinates>4.88985,52.36786,0</coordinates></Point></Placemark>
+<Placemark><name>Spui</name><styleUrl>#sight</styleUrl><description><![CDATA[3.1 km from the flat &#183; 37 min walk &#183; 13 min bike
+
+Small square, bookshops. Friday book market 09:00–18:00, if your Friday afternoon lands here at the right moment.]]></description><Point><coordinates>4.89104,52.36883,0</coordinates></Point></Placemark>
+<Placemark><name>Dam Square</name><styleUrl>#sight</styleUrl><description><![CDATA[3.34 km from the flat &#183; 40 min walk &#183; 14 min bike
+
+Pass through, don't plan around it. Sun 2 Aug 14:00–23:00: the free MainStage Grand Finale is here.]]></description><Point><coordinates>4.8926,52.3731,0</coordinates></Point></Placemark>
+<Placemark><name>Oude Kerk</name><styleUrl>#sight</styleUrl><description><![CDATA[3.79 km from the flat &#183; 46 min walk &#183; 16 min bike
+
+Amsterdam's oldest building, consecrated 1306. Exterior free; interior has an entry fee.]]></description><Point><coordinates>4.89759,52.37391,0</coordinates></Point></Placemark>
+<Placemark><name>Nieuwmarkt &amp; De Waag</name><styleUrl>#sight</styleUrl><description><![CDATA[3.98 km from the flat &#183; 48 min walk &#183; 17 min bike
+
+Amsterdam's oldest square, the 15th-century De Waag weigh-house at its centre. Quiet by day; go before 15:30 Friday, ahead of the street parties.]]></description><Point><coordinates>4.9004,52.3725,0</coordinates></Point></Placemark>
+<Placemark><name>Zeedijk</name><styleUrl>#sight</styleUrl><description><![CDATA[3.99 km from the flat &#183; 48 min walk &#183; 17 min bike
+
+The old sailors' street into Chinatown. Walk it by day — busiest, loudest at night, especially through WorldPride.]]></description><Point><coordinates>4.8997,52.3745,0</coordinates></Point></Placemark>
+<Placemark><name>NDSM Werf / STRAAT Museum</name><styleUrl>#sight</styleUrl><description><![CDATA[Via free ferry from Centraal, ~13 min crossing &#8212; not walkable
+
+Free ferry from behind Centraal (F4/906), ~13 min crossing, every 15–20 min, runs to ~00:00. Not walkable — see Day trips.]]></description><Point><coordinates>4.89389,52.40194,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>Bike rental</name>
+<Placemark><name>Fietspadje (bike rental)</name><styleUrl>#bike</styleUrl><description><![CDATA[0.53 km from the flat &#183; 6 min walk &#183; 2 min bike
+
+Mon–Fri 09:00–18:00, Sat 09:00–17:00. CLOSED SUN. ~€10/24h + deposit. Parked for now — here if you change your mind.]]></description><Point><coordinates>4.860573,52.368833,0</coordinates></Point></Placemark>
+</Folder>
+<Folder><name>Transit</name>
+<Placemark><name>Postjesweg tram stop</name><styleUrl>#transit</styleUrl><description><![CDATA[0.35 km from the flat &#183; 4 min walk &#183; 2 min bike
+
+~400 m south. Tram 17 toward Centraal — check 9292.nl, works ongoing.]]></description><Point><coordinates>4.8532,52.3647,0</coordinates></Point></Placemark>
+<Placemark><name>Mercatorplein (bus 15, tram 13)</name><styleUrl>#transit</styleUrl><description><![CDATA[0.51 km from the flat &#183; 6 min walk &#183; 2 min bike
+
+Bus 15 → Sloterdijk (Schiphol/Haarlem) and → Amsterdam Zuid (Antwerp).]]></description><Point><coordinates>4.8517,52.3694,0</coordinates></Point></Placemark>
+<Placemark><name>Marco Polostraat tram stop (13)</name><styleUrl>#transit</styleUrl><description><![CDATA[0.54 km from the flat &#183; 6 min walk &#183; 2 min bike
+
+Tram 13 toward the centre.]]></description><Point><coordinates>4.8554,52.3705,0</coordinates></Point></Placemark>
+<Placemark><name>Station Lelylaan</name><styleUrl>#transit</styleUrl><description><![CDATA[2.26 km from the flat &#183; 27 min walk &#183; 10 min bike
+
+Direct Sprinters to Schiphol (~10 min). Geographically your best station, awkward to reach while tram 17 is cut short.]]></description><Point><coordinates>4.83395,52.35786,0</coordinates></Point></Placemark>
+<Placemark><name>Station Sloterdijk</name><styleUrl>#transit</styleUrl><description><![CDATA[3.54 km from the flat &#183; 42 min walk &#183; 15 min bike
+
+Sprinter to Schiphol 11 min; train to Haarlem 15 min.]]></description><Point><coordinates>4.8378,52.3891,0</coordinates></Point></Placemark>
+<Placemark><name>Centraal Station</name><styleUrl>#transit</styleUrl><description><![CDATA[4.2 km from the flat &#183; 50 min walk &#183; 18 min bike
+
+Not your airport route — you're going via Sloterdijk instead. This is where tram 7 / bus 18 land Friday afternoon, right after bags are dropped. 50 min on foot from the flat; ~20 min by tram/bus.]]></description><Point><coordinates>4.8994,52.3791,0</coordinates></Point></Placemark>
+<Placemark><name>Jan Evertsenstraat (tram 7 / bus 18)</name><styleUrl>#transit</styleUrl><description><![CDATA[0.56 km from the flat &#183; 7 min walk &#183; 2 min bike
+
+Your real link to Centraal — ~20 min tram/bus, then a 7-minute walk home. Faster than walking from Centraal.]]></description><Point><coordinates>4.8545,52.3706,0</coordinates></Point></Placemark>
+</Folder>
+</Document></kml>

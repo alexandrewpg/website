@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plan hebdomadaire — mise en forme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;1,6..72,300&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EAEEF0;
+  --paper-card:#F6F8F9;
+  --ink:#16242C;
+  --ink-soft:#4C6068;
+  --rule:#C3CDD2;
+  --mob:#3F7A6C;
+  --mob-bg:#DFEBE7;
+  --str:#9C6A22;
+  --str-bg:#F1E7D6;
+  --velo:#33608F;
+  --velo-bg:#DDE7F0;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Newsreader",Georgia,serif;
+  font-size:17px;
+  font-weight:300;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1000px;margin:0 auto;padding:56px 28px 96px}
+.mono{font-family:"IBM Plex Mono",monospace}
+
+h1,h2,h3,.eyebrow,.daylabel{font-family:"Bricolage Grotesque",system-ui,sans-serif}
+
+.eyebrow{
+  font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-soft);margin-bottom:18px;
+}
+h1{
+  font-size:clamp(38px,6.5vw,66px);font-weight:800;line-height:.98;
+  letter-spacing:-.03em;max-width:14ch;
+}
+.lede{
+  font-size:20px;font-style:italic;color:var(--ink-soft);
+  max-width:52ch;margin-top:22px;
+}
+
+.rule{height:1px;background:var(--rule);margin:52px 0}
+
+/* ---------- priorités ---------- */
+.prio{display:flex;flex-wrap:wrap;gap:8px;margin-top:30px}
+.prio li{list-style:none}
+.prio span{
+  display:inline-block;padding:5px 13px 6px;border:1px solid var(--rule);
+  border-radius:100px;font-family:"IBM Plex Mono",monospace;font-size:12px;
+  background:var(--paper-card);
+}
+.prio .n{color:var(--ink-soft);margin-right:7px}
+.prio li:nth-child(-n+3) span{border-color:var(--ink);}
+
+/* ---------- signature : la semaine ---------- */
+.week{
+  display:grid;grid-template-columns:repeat(7,1fr);gap:6px;
+  margin-top:34px;
+}
+.col{display:flex;flex-direction:column}
+.daylabel{
+  font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  padding-bottom:9px;border-bottom:1px solid var(--rule);margin-bottom:9px;
+}
+.stack{display:flex;flex-direction:column;justify-content:flex-start;
+  min-height:236px;gap:5px}
+.blk{
+  border-radius:5px;padding:6px 7px;font-family:"IBM Plex Mono",monospace;
+  font-size:10px;line-height:1.25;overflow:hidden;
+}
+.blk b{font-weight:500;display:block}
+.b-mob{background:var(--mob-bg);color:var(--mob)}
+.b-str{background:var(--str-bg);color:var(--str)}
+.b-velo{background:var(--velo-bg);color:var(--velo)}
+.b-opt{background:transparent;border:1px dashed var(--velo);color:var(--velo)}
+.h5{height:34px}.h10{height:48px}.h25{height:82px}.h40{height:118px}
+
+.legend{display:flex;flex-wrap:wrap;gap:20px;margin-top:24px;
+  font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--ink-soft)}
+.legend i{display:inline-block;width:11px;height:11px;border-radius:3px;
+  margin-right:8px;vertical-align:-1px}
+
+/* ---------- sections ---------- */
+section{margin-top:76px}
+h2{font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-soft);padding-bottom:12px;border-bottom:1px solid var(--rule)}
+
+.card{
+  background:var(--paper-card);border-radius:10px;padding:26px 28px;margin-top:20px;
+}
+.card h3{font-size:23px;font-weight:600;letter-spacing:-.015em}
+.card .meta{font-family:"IBM Plex Mono",monospace;font-size:12px;
+  color:var(--ink-soft);margin-top:5px}
+.card p{margin-top:14px;max-width:66ch}
+.card ul{margin-top:14px;padding-left:0;list-style:none;max-width:66ch}
+.card li{padding:7px 0 7px 20px;border-top:1px solid var(--rule);position:relative}
+.card li:first-child{border-top:none}
+.card li::before{content:"";position:absolute;left:0;top:17px;
+  width:7px;height:1px;background:var(--ink-soft)}
+.tag{display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:10px;
+  letter-spacing:.08em;text-transform:uppercase;padding:3px 9px;border-radius:4px;
+  vertical-align:3px;margin-left:10px}
+.t-mob{background:var(--mob-bg);color:var(--mob)}
+.t-str{background:var(--str-bg);color:var(--str)}
+.t-velo{background:var(--velo-bg);color:var(--velo)}
+
+.note{border-left:2px solid var(--ink);padding-left:22px;margin-top:26px;max-width:66ch}
+.note h3{font-family:"Bricolage Grotesque",sans-serif;font-size:17px;font-weight:600;
+  margin-bottom:8px}
+
+footer{margin-top:80px;padding-top:22px;border-top:1px solid var(--rule);
+  font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-soft)}
+
+@media(max-width:720px){
+  .week{grid-template-columns:1fr;gap:0}
+  .col{flex-direction:column;padding:14px 0;border-bottom:1px solid var(--rule)}
+  .daylabel{border-bottom:none;margin-bottom:8px;padding-bottom:0;font-size:14px}
+  .stack{flex-direction:row;flex-wrap:wrap;min-height:0}
+  .blk{height:auto !important;padding:7px 11px;font-size:11px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <p class="eyebrow">Plan de mise en forme &middot; sans gym</p>
+  <h1>Sept matins, quatre habitudes.</h1>
+  <p class="lede">La mobilité au réveil, tous les jours. Le reste s'accroche par-dessus. Le calendrier fait le travail de la volonté.</p>
+
+  <ol class="prio">
+    <li><span><em class="n">1</em>Poids</span></li>
+    <li><span><em class="n">2</em>Souplesse</span></li>
+    <li><span><em class="n">3</em>Énergie</span></li>
+    <li><span><em class="n">4</em>Endurance</span></li>
+    <li><span><em class="n">5</em>Posture</span></li>
+    <li><span><em class="n">6</em>Raideurs</span></li>
+    <li><span><em class="n">7</em>Force</span></li>
+    <li><span><em class="n">8</em>Coordination</span></li>
+  </ol>
+
+  <div class="rule"></div>
+
+  <h2>La semaine d'un coup d'œil</h2>
+
+  <div class="week">
+    <div class="col"><div class="daylabel">Lun</div><div class="stack">
+      <div class="blk b-mob h5"><b>Mobilité</b>5 min</div>
+      <div class="blk b-str h25"><b>Renfo</b>20–30 min</div>
+      <div class="blk b-velo h40"><b>Vélo</b>20–60 min</div>
+    </div></div>
+    <div class="col"><div class="daylabel">Mar</div><div class="stack">
+      <div class="blk b-mob h10"><b>Mobilité</b>10 min</div>
+    </div></div>
+    <div class="col"><div class="daylabel">Mer</div><div class="stack">
+      <div class="blk b-mob h5"><b>Mobilité</b>5 min</div>
+      <div class="blk b-str h25"><b>Renfo</b>20–30 min</div>
+      <div class="blk b-opt h40"><b>Vélo</b>facultatif</div>
+    </div></div>
+    <div class="col"><div class="daylabel">Jeu</div><div class="stack">
+      <div class="blk b-mob h10"><b>Mobilité</b>10 min</div>
+      <div class="blk b-str h25"><b>Renfo</b>20–30 min</div>
+      <div class="blk b-velo h40"><b>Vélo</b>20–60 min</div>
+    </div></div>
+    <div class="col"><div class="daylabel">Ven</div><div class="stack">
+      <div class="blk b-mob h10"><b>Mobilité</b>10 min</div>
+    </div></div>
+    <div class="col"><div class="daylabel">Sam</div><div class="stack">
+      <div class="blk b-mob h5"><b>Mobilité</b>5 min</div>
+    </div></div>
+    <div class="col"><div class="daylabel">Dim</div><div class="stack">
+      <div class="blk b-mob h5"><b>Mobilité</b>5 min</div>
+    </div></div>
+  </div>
+
+  <p class="lede" style="font-size:16px;margin-top:26px">La mobilité ouvre chaque journée, au réveil. Les jours réservés — mardi, vendredi soir, samedi, dimanche — sont aussi les plus légers du plan : rien d'autre que le bloc du matin.</p>
+
+  <div class="legend">
+    <span><i style="background:var(--mob)"></i>Mobilité — tous les jours</span>
+    <span><i style="background:var(--str)"></i>Renforcement — 3&times;</span>
+    <span><i style="background:var(--velo)"></i>Vélo — 2&times; (+1 facultatif)</span>
+  </div>
+
+  <section>
+    <h2>Mobilité<span class="tag t-mob">tous les matins</span></h2>
+
+    <div class="card">
+      <h3>Les jours courts — 5 minutes</h3>
+      <p class="meta">Lundi &middot; mercredi &middot; samedi &middot; dimanche</p>
+      <p>Quatre mouvements qui couvrent le plus de terrain possible. Le but n'est pas de gagner de l'amplitude ce matin-là, c'est de ne pas laisser la raideur s'installer.</p>
+      <ul>
+        <li>Rotations d'épaules, vers l'arrière puis vers l'avant — 10 de chaque côté</li>
+        <li>Chat-vache : à quatre pattes, arrondir puis creuser le dos — 10 cycles lents</li>
+        <li>Fente basse, genou au sol, bassin qui avance — 30 secondes par jambe</li>
+        <li>Cercles de chevilles, debout ou assis — 10 par pied, dans les deux sens</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3>Les jours longs — 10 minutes</h3>
+      <p class="meta">Mardi &middot; jeudi &middot; vendredi</p>
+      <p>Les quatre mouvements ci-dessus, plus trois ajouts. Commence par la coordination, pendant que le corps est encore froid : ce sont des mouvements légers qui servent aussi d'échauffement.</p>
+      <ul>
+        <li>Coordination — mains au genou opposé en alternance, marche sur place exagérée, pas croisés d'un côté à l'autre. 2 à 3 minutes, sans chercher la vitesse</li>
+        <li>Mobilité thoracique — assis, mains derrière la tête, rotation du haut du dos, 8 par côté</li>
+        <li>Ischio-jambiers — talon au sol devant soi, bascule du bassin vers l'avant, 30 secondes par jambe</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Renforcement<span class="tag t-str">3 fois par semaine</span></h2>
+
+    <div class="card">
+      <h3>Au poids du corps, à la maison</h3>
+      <p class="meta">Lundi &middot; mercredi &middot; jeudi &middot; 20 à 30 minutes</p>
+      <p>Cinq ou six exercices, deux ou trois séries chacun, 8 à 12 répétitions. Une bande élastique est le seul achat utile ; tout le reste se fait sans équipement. Alterne légèrement la sélection d'une séance à l'autre — assez pour éviter la monotonie, pas assez pour perdre le fil.</p>
+      <ul>
+        <li>Squats — pieds à largeur d'épaules, descente contrôlée</li>
+        <li>Pompes — sur les genoux ou mains surélevées sur un comptoir au début</li>
+        <li>Tirage à la bande élastique — coudes vers l'arrière, omoplates qui se rapprochent. C'est l'exercice le plus rentable pour la posture</li>
+        <li>Pont fessier — sur le dos, bassin qui monte, 2 secondes en haut</li>
+        <li>Planche, ventrale ou latérale — 20 à 40 secondes</li>
+        <li>Fentes — 8 par jambe, en tenant un mur au besoin</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Vélo<span class="tag t-velo">2 fois par semaine</span></h2>
+
+    <div class="card">
+      <h3>Ce que tu fais déjà</h3>
+      <p class="meta">Lundi &middot; jeudi &middot; mercredi si l'envie y est &middot; 20 à 60 minutes</p>
+      <p>Rien à changer sur le fond. Si tu veux que la sortie pousse davantage l'endurance sans allonger le temps, varie l'intensité à l'intérieur du parcours : deux ou trois blocs de quelques minutes plus soutenues, retour au rythme normal entre les deux. Ça donne plus de retour que des kilomètres ajoutés.</p>
+      <p>Le vélo tombe maintenant les mêmes jours que le renforcement. Si les deux dans la même journée finissent par peser, sépare-les — vélo le matin, renforcement en soirée — ou garde le mercredi comme soupape et laisse tomber la sortie ce jour-là.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>Deux choses à garder en tête</h2>
+
+    <div class="note">
+      <h3>Le poids ne se joue pas surtout ici</h3>
+      <p>L'exercice aide, mais c'est l'alimentation qui fait le gros du travail sur la composition corporelle. Le renforcement et le vélo servent à préserver la masse musculaire pendant que le poids baisse — ils ne remplacent pas le levier principal.</p>
+      <p>Et si le recul récent coïncide avec le changement de médicament, ça vaut une conversation avec le médecin ou le pharmacien. Certains traitements influencent le métabolisme ou la rétention d'eau, et aucun plan d'entraînement ne compense ça à lui seul. Ce n'est pas une raison d'arrêter — c'est une raison de ne pas juger les efforts sur un chiffre qui ne dépend pas entièrement d'eux.</p>
+    </div>
+
+    <div class="note">
+      <h3>L'énergie n'a pas son propre bloc</h3>
+      <p>Elle suit la régularité du reste plutôt que de s'entraîner directement. Si elle ne bouge pas une fois les autres habitudes installées depuis quelques semaines, c'est alors un signal à examiner pour lui-même, pas un problème d'exercice.</p>
+    </div>
+  </section>
+
+  <footer>Plan établi en juillet 2026 &middot; à réviser après six à huit semaines</footer>
+
+</div>
+</body>
+</html>

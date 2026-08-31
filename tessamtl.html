@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Montreal — The Shortlist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFF9F0;
+    --card:#FFFFFF;
+    --ink:#2B1B3D;
+    --ink-soft:#6B5A7A;
+    --line:#EFE2F2;
+    --pink:#E8177F;
+    --pink-soft:#FFE4F1;
+    --purple:#7B3FF2;
+    --purple-soft:#EFE6FF;
+    --orange:#FF7A2F;
+    --orange-soft:#FFEDDF;
+    --teal:#00A896;
+    --teal-soft:#DDF6F2;
+    --yellow:#FFC53D;
+    --yellow-soft:#FFF4D6;
+    --blue:#2E7DD1;
+    --blue-soft:#E1EFFC;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'DM Sans',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:680px;margin:0 auto;padding:0 18px 90px;}
+
+  header.top{
+    margin:18px -18px 0;
+    padding:34px 24px 30px;
+    background:linear-gradient(135deg,var(--pink) 0%,var(--purple) 55%,var(--blue) 100%);
+    color:#fff;
+    border-radius:0 0 22px 22px;
+  }
+  h1{
+    font-family:'Bricolage Grotesque',sans-serif;
+    font-weight:800;
+    font-size:34px;
+    line-height:1.05;
+    letter-spacing:-0.02em;
+    margin:0 0 10px;
+  }
+  header.top .sub{font-size:15px;line-height:1.55;opacity:0.95;max-width:52ch;}
+  header.top .dates{
+    display:inline-block;
+    background:rgba(255,255,255,0.22);
+    padding:4px 12px;
+    border-radius:99px;
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:12px;
+  }
+
+  .bar{
+    position:sticky;top:0;z-index:500;
+    background:var(--bg);
+    padding:12px 0;
+    margin-bottom:2px;
+    border-bottom:2px solid var(--line);
+    display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  }
+  .count{font-weight:700;font-size:14px;margin-right:auto;}
+  .count b{color:var(--pink);}
+  input[type="search"]{
+    font-family:'DM Sans',sans-serif;font-size:13px;padding:8px 12px;
+    border:2px solid var(--line);border-radius:99px;background:#fff;width:180px;
+  }
+  input[type="search"]:focus{outline:none;border-color:var(--purple);}
+
+  nav.jump{display:flex;flex-wrap:wrap;gap:7px;padding:14px 0 0;}
+  nav.jump a{
+    font-size:12.5px;font-weight:700;text-decoration:none;
+    padding:6px 13px;border-radius:99px;color:#fff;
+  }
+
+  section.info{
+    margin-top:22px;padding:20px 20px 8px;border-radius:16px;
+  }
+  section.info h2{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:20px;margin:0 0 8px;letter-spacing:-0.01em;
+  }
+  section.info p{font-size:14px;line-height:1.6;margin:0 0 14px;}
+  section.info .tip{
+    font-size:13.5px;line-height:1.6;margin:0 0 14px;
+    padding:11px 14px;background:rgba(255,255,255,0.72);border-radius:10px;
+  }
+  section.info ul.plain{margin:6px 0 0;padding-left:20px;font-size:13.5px;line-height:1.75;}
+
+  .i-pink{background:var(--pink-soft);} .i-pink h2{color:var(--pink);}
+  .i-purple{background:var(--purple-soft);} .i-purple h2{color:var(--purple);}
+  .i-orange{background:var(--orange-soft);} .i-orange h2{color:#D45A15;}
+  .i-teal{background:var(--teal-soft);} .i-teal h2{color:var(--teal);}
+  .i-yellow{background:var(--yellow-soft);} .i-yellow h2{color:#B07D00;}
+  .i-blue{background:var(--blue-soft);} .i-blue h2{color:var(--blue);}
+
+  /* Map */
+  #mapSection{margin-top:26px;}
+  #mapSection h2{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:22px;margin:0 0 4px;letter-spacing:-0.01em;
+  }
+  #mapSection .maphint{font-size:13px;color:var(--ink-soft);margin:0 0 12px;}
+  .mapbox{
+    position:relative;width:100%;height:0;padding-bottom:72%;min-height:300px;
+    background:
+      repeating-linear-gradient(0deg,transparent 0 39px,#E7D9F0 39px 40px),
+      repeating-linear-gradient(90deg,transparent 0 39px,#E7D9F0 39px 40px),
+      #F4EDFA;
+    border:2px solid var(--line);border-radius:16px;overflow:hidden;
+  }
+  .mapdot{
+    position:absolute;transform:translate(-50%,-50%);
+    width:13px;height:13px;border-radius:50%;
+    border:2px solid #fff;cursor:pointer;
+    box-shadow:0 1px 3px rgba(43,27,61,0.35);
+  }
+  .mapdot.big{width:16px;height:16px;}
+  .mapdot:hover{outline:2px solid #2B1B3D;}
+  .mapdot.starred{box-shadow:0 0 0 4px #FFC53D,0 1px 3px rgba(43,27,61,0.35);}
+  .maphome{
+    position:absolute;transform:translate(-50%,-50%);
+    width:17px;height:17px;border-radius:50%;
+    background:#2B1B3D;border:3px solid #fff;
+    box-shadow:0 0 0 4px rgba(43,27,61,0.18);
+  }
+  .maplabel{
+    position:absolute;transform:translate(-50%,-50%);
+    font-size:9.5px;font-weight:700;color:#5A3D00;
+    background:rgba(255,255,255,0.92);padding:1px 6px;border-radius:99px;
+    white-space:nowrap;pointer-events:none;
+  }
+  .maphomelabel{
+    position:absolute;transform:translate(-50%,-50%);
+    font-size:10px;font-weight:700;color:#2B1B3D;
+    background:rgba(255,255,255,0.9);padding:1px 6px;border-radius:99px;
+    white-space:nowrap;pointer-events:none;
+  }
+  .maplegend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+  .maplegend span{
+    font-size:11.5px;font-weight:700;color:#fff;
+    padding:4px 10px;border-radius:99px;
+  }
+  .map-controls{display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap;}
+  #locateBtn{
+    font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;
+    border:none;background:var(--pink);color:#fff;
+    padding:11px 20px;border-radius:99px;cursor:pointer;
+    box-shadow:0 3px 0 #B01062;
+  }
+  #locateBtn:active{transform:translateY(2px);box-shadow:0 1px 0 #B01062;}
+  #locateStatus{font-size:13px;color:var(--ink-soft);}
+  #closestList{list-style:none;margin:14px 0 0;padding:0;}
+  #closestList li{
+    display:flex;justify-content:space-between;align-items:center;gap:10px;
+    padding:11px 14px;margin-bottom:7px;background:#fff;
+    border-radius:10px;border-left:5px solid var(--pink);font-size:14px;
+  }
+  #closestList .cdist{color:var(--pink);font-weight:700;white-space:nowrap;}
+  #mapDetail{
+    margin-top:12px;padding:14px 16px;background:#fff;
+    border-radius:12px;border:2px solid var(--line);font-size:13.5px;display:none;
+  }
+  #mapDetail b{font-size:15px;}
+
+  /* Place list */
+  section.cat{margin-top:34px;}
+  section.cat h2{
+    font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
+    font-size:22px;margin:0;display:flex;align-items:center;gap:10px;
+    letter-spacing:-0.01em;
+  }
+  section.cat h2 .n{
+    font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;
+    color:#fff;padding:3px 10px;border-radius:99px;
+  }
+  ul.items{list-style:none;margin:14px 0 0;padding:0;}
+  li.item{
+    display:flex;align-items:flex-start;gap:12px;
+    padding:14px 16px;margin-bottom:9px;
+    background:var(--card);border-radius:13px;
+    border-left:5px solid var(--line);
+  }
+  li.item.hidden{display:none;}
+  li.item input[type="checkbox"]{
+    margin-top:3px;width:18px;height:18px;accent-color:var(--pink);
+    flex-shrink:0;cursor:pointer;
+  }
+  li.item .body{flex:1;min-width:0;}
+  .name{font-size:15.5px;font-weight:700;line-height:1.3;}
+  li.item.done{opacity:0.55;}
+  li.item.done .name{text-decoration:line-through;}
+  .meta{font-size:12.5px;color:var(--ink-soft);margin-top:3px;font-weight:500;}
+  .meta .rating{color:#B07D00;font-weight:700;}
+  .why{font-size:13.5px;line-height:1.5;margin-top:6px;}
+  .note{font-size:12px;font-style:italic;color:var(--ink-soft);margin-top:4px;}
+  .dup{display:block;font-size:11.5px;color:var(--teal);font-weight:600;margin-top:4px;}
+  .star{
+    display:inline-block;background:var(--yellow);color:#5A3D00;
+    font-size:10.5px;font-weight:700;padding:2px 9px;border-radius:99px;
+    margin-left:7px;vertical-align:middle;white-space:nowrap;
+  }
+  li.item.starred{box-shadow:0 0 0 2px var(--yellow);}
+  .links{display:flex;flex-wrap:wrap;gap:7px;margin-top:9px;}
+  .links a{
+    font-size:12px;font-weight:700;text-decoration:none;
+    padding:5px 11px;border-radius:99px;display:inline-block;
+  }
+  .l-map{background:var(--blue-soft);color:var(--blue);}
+  .l-ig{background:linear-gradient(45deg,#F9CE34,#EE2A7B,#6228D7);color:#fff;}
+  .l-tt{background:var(--ink);color:#fff;}
+  .links a:hover{opacity:0.85;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="dates">Sept 4 – 9</div>
+    <h1>Montreal:<br>the shortlist</h1>
+    <div class="sub">Home base: Hôtel-de-Ville between Duluth and Napoléon — right in the Plateau, minutes from Schwartz's, and literally on the Duluth pedestrian street. Most of this is a walk away. Tap the map pins, tap through to Google Maps, and check things off as you go.</div>
+  </header>
+
+  <div class="bar">
+    <div class="count"><b id="doneCount">0</b> / <span id="totalCount">0</span> done</div>
+    <input type="search" id="search" placeholder="Search a name…">
+  </div>
+
+  <nav class="jump" id="jumpNav"></nav>
+
+  <section id="mapSection">
+    <h2>The map</h2>
+    <p class="maphint">Every spot on this list, colour-coded. A yellow ring ⭐ means it's a 5-minute walk from your apartment. Tap a dot for details and directions.</p>
+    <div class="mapbox" id="mapBox"></div>
+    <div class="maplegend" id="mapLegend"></div>
+    <div id="mapDetail"></div>
+    <div class="map-controls">
+      <button id="locateBtn">📍 Find the 5 closest to me</button>
+      <span id="locateStatus"></span>
+    </div>
+    <ul id="closestList"></ul>
+  </section>
+
+  <section class="info i-purple">
+    <h2>🚇 Getting around</h2>
+    <p>Four colour-coded metro lines, running 5:30am–1am. Your station is <b>Mont-Royal</b> (orange line) — it's the hub for both the mountain and Old Montreal.</p>
+    <div class="tip"><b>Easiest:</b> tap your contactless credit card or Apple/Google Pay right at the turnstile. $3.75 a ride, free transfer to a bus within 120 minutes. No card to buy.</div>
+    <div class="tip">Lots of rides in one day? A day pass ($12) or 3-day pass ($22) may be cheaper — grab either at any station machine.</div>
+  </section>
+
+  <section class="info i-blue">
+    <h2>✈️ From the airport</h2>
+    <p>The airport train isn't running yet, so it's bus, taxi, or rideshare.</p>
+    <div class="tip"><b>Cheapest — Bus 747 ($11.25):</b> runs 24/7. Buy your ticket right at the airport kiosk in the arrivals area — quick and easy. It includes a 24-hour transit pass, and drops you at Berri-UQAM station, a direct no-transfer ride up the orange line to the apartment. Budget 45–70 min.</div>
+    <div class="tip"><b>Easiest with luggage — Taxi:</b> flat $41 downtown. No meter, no negotiating.</div>
+    <div class="tip"><b>Uber/Lyft:</b> roughly $35–55 depending on demand.</div>
+  </section>
+
+  <section class="info i-pink">
+    <h2>🍷 Buying alcohol here</h2>
+    <p>Two systems: the <b>SAQ</b> (government liquor stores) and <b>grocery stores / dépanneurs</b> (corner stores).</p>
+    <div class="tip"><b>SAQ</b> — the only place for spirits (vodka, gin, rum, tequila, whisky) and the full range of wine and champagne. Staff know their stuff — just ask for something good in your budget.</div>
+    <div class="tip"><b>Grocery stores & dépanneurs</b> — beer, cider, a limited wine selection, and low-alcohol coolers. No hard liquor at all, so don't go hunting for vodka at the corner store.</div>
+    <div class="tip"><b>Pro tip:</b> for real selection look for an "SAQ Sélection" branch, not a tiny "SAQ Express". There's one 10 minutes from you at 1690 Ave du Mont-Royal E. Dépanneurs stay open later for a quick beer run. And some spots are BYOW ("apportez votre vin") — bring a bottle, save a lot.</div>
+  </section>
+
+  <section class="info i-orange">
+    <h2>🎢 Adrenaline in the Old Port</h2>
+    <p>All three are on the same stretch of waterfront — you could do them back to back.</p>
+    <div class="tip"><b>Saute-Moutons</b> — jet boat straight into the Lachine Rapids. You WILL get soaked (swimsuit + towel, seriously). 1 hour, from $65, runs through late September.</div>
+    <div class="tip"><b>MTL Zipline</b> — Canada's only urban zipline, 1,200 feet over the Bonsecours basin at Hangar 16. Short and sharp.</div>
+    <div class="tip"><b>La Grande Roue</b> — the tallest observation wheel in Canada. 18-minute rotation, 360° views, best at sunset. Student rate with ID is $24 (adult $29.50). Open 10am–11pm daily.</div>
+  </section>
+
+  <section class="info i-teal">
+    <h2>🏔️ Mount Royal</h2>
+    <p>The mountain in the middle of the city. Worth doing properly once.</p>
+    <div class="tip"><b>Getting to the top:</b> closest entrance is Park Avenue at Rachel, by the Sir George-Étienne Cartier monument — a 15–20 min walk from you. From there take <b>Chemin Olmsted</b>, a gently winding, well-marked path that climbs steadily; about 25–30 minutes uphill and the easiest route for a first visit. Skipping the climb? Bus 11 from Mont-Royal metro drops you 10 minutes from the lookout.</div>
+    <div class="tip"><b>Why bother:</b> the <b>Kondiaronk Belvedere</b> in front of the chalet is the classic Montreal skyline view — the whole downtown below you, river beyond. There's a Leonard Cohen mural visible from up there, and the chalet has washrooms and a snack counter.</div>
+    <div class="tip"><b>Heads up:</b> the Tam-Tams (Sunday drum circle) are cancelled Sept 6, your only Sunday, for the UCI cycling championships.</div>
+  </section>
+
+  <section class="info i-yellow">
+    <h2>🏛️ Old Montreal & the Old Port</h2>
+    <p>Cobblestones, 300-year-old stone buildings, right on the river. Totally different feel from the Plateau.</p>
+    <div class="tip"><b>Getting there:</b> Mont-Royal station to Champ-de-Mars, same orange line, no transfer, about 15 minutes.</div>
+    <div class="tip"><b>Where to walk:</b> start on <b>Rue Saint-Paul</b> (pedestrian, boutiques, terraces) → <b>Place Jacques-Cartier</b> (main square, street performers) → <b>Marché Bonsecours</b> (gorgeous 1847 building, Quebec-made boutiques) → down to the <b>waterfront boardwalk</b> for the view.</div>
+  </section>
+
+  <section class="info i-purple">
+    <h2>🚶 Car-free streets, every day</h2>
+    <p>No weekday/weekend catch — these are pedestrian-only for your whole stay.</p>
+    <ul class="plain">
+      <li><b>Avenue du Mont-Royal</b> (St-Laurent → Resther) — right by you, through Oct 12</li>
+      <li><b>Rue Duluth</b> (St-Laurent → St-Hubert) — your street, through Oct 12</li>
+      <li><b>Sainte-Catherine E, the Village</b> — through Oct 12, terraces open late, big nightlife strip</li>
+      <li><b>Saint-Paul / Saint-Vincent, Old Montreal</b> — through Oct 29</li>
+      <li><b>Promenade Wellington, Verdun</b> — through Sept 14, ~25–30 min by metro</li>
+    </ul>
+    <div class="tip" style="margin-top:14px;">Labour Day weekend lands mid-trip (Mon Sept 7) — expect a packed, patio-heavy city.</div>
+  </section>
+
+  <section class="info i-teal">
+    <h2>🧀 Cheese curds, done right</h2>
+    <p>If you're bringing some home:</p>
+    <div class="tip"><b>The freshness test:</b> real fresh curds <b>squeak</b> against your teeth. No squeak, not fresh. That's the whole test.</div>
+    <div class="tip"><b>Where:</b> <b>La Vieille Europe</b>, an old-school European deli on St-Laurent, is a solid bet. A fromagerie or specialty grocer generally beats a supermarket — ask when the curds came in.</div>
+    <div class="tip"><b>Timing:</b> they lose the squeak within a day or two even refrigerated. Buy close to when you pack, not on day one.</div>
+  </section>
+
+  <div id="categories"></div>
+
+</div>
+
+<script>
+const PLACES = [
+  {name:"St-Viateur Bagel",rating:"4.6",price:"$1–10",tag:"Bagel shop",note:null,dup:"also has a Mont-Royal location (St-Viateur Bagel & Café Mont-Royal)",bucket:"cafe",why:"The other half of the rivalry — arguably the city's most famous bagel.",lat:45.522691,lng:-73.601958,ig:null,hot:true,star:false},
+  {name:"Fairmount Bagel",rating:"4.6",price:"$1–10",tag:"Bagel shop",note:"@fairmountbagel on Instagram",dup:null,bucket:"cafe",why:"Wood-fired Montreal bagels, one half of the city's great bagel rivalry.",lat:45.522878,lng:-73.59517,ig:"fairmountbagel",hot:true,star:false},
+  {name:"Crew Collective & Cafe",rating:"4.4",price:"$10–20",tag:"Cafe",note:"Stunning space in an old bank building",dup:null,bucket:"cafe",why:"Café inside a stunning 1920s bank building in Old Montreal.",lat:45.50232,lng:-73.559317,ig:null,hot:true,star:false},
+  {name:"Iconoglace",rating:"4.9",price:"$1–10",tag:"Ice cream",note:"@iconoglace on Instagram",dup:null,bucket:"cafe",why:"Trendy artisanal ice cream and sundaes — the Mile End shop is a short walk from the apartment.",lat:45.522336,lng:-73.593129,ig:"iconoglace",hot:true,star:false},
+  {name:"St-Viateur Bagel & Café Mont-Royal",rating:"4.4",price:"$10–20",tag:"Bagel shop",note:null,dup:"also has the original Mile End shop (St-Viateur Bagel)",bucket:"cafe",why:"Same bagels, sit-down café version closer to the apartment.",lat:45.528418,lng:-73.579016,ig:null,hot:false,star:false},
+  {name:"Olive et Gourmando",rating:"4.4",price:"$20–30",tag:"Cafe",note:null,dup:null,bucket:"cafe",why:"Beloved Old Montreal bakery-café — great sandwiches and pastries.",lat:45.501224,lng:-73.556482,ig:null,hot:true,star:false},
+  {name:"Café Santropol",rating:"4.4",price:"$20–30",tag:"Cafe",note:null,dup:null,bucket:"cafe",why:"Legendary oversized sandwiches on a leafy garden patio since 1976.",lat:45.515578,lng:-73.580506,ig:null,hot:false,star:false},
+  {name:"Café Névé",rating:"4.5",price:"$1–10",tag:"Cafe",note:null,dup:null,bucket:"cafe",why:"Cozy, plant-filled café — good for working or a slow coffee.",lat:45.519504,lng:-73.580466,ig:null,hot:false,star:true},
+  {name:"Méchants pinsons",rating:"4.6",price:"$1–10",tag:"Cafe",note:null,dup:null,bucket:"cafe",why:"Tiny, cute Plateau café — good for a coffee-and-pastry break.",lat:45.534697,lng:-73.582451,ig:null,hot:false,star:false},
+  {name:"Ma Poule Mouillée",rating:"4.6",price:"$10–20",tag:"Portuguese",note:null,dup:null,bucket:"resto",why:"Portuguese rotisserie chicken, simple and always satisfying.",lat:45.525167,lng:-73.575256,ig:null,hot:true,star:false},
+  {name:"La Belle Corée",rating:"4.5",price:"$20–30",tag:"Korean",note:null,dup:null,bucket:"resto",why:"Casual, homestyle Korean in Mile End — bibimbap and crispy fried chicken, right by the bagel shops.",lat:45.522617,lng:-73.595815,ig:null,hot:false,star:false},
+  {name:"Yokato Yokabai Ramen",rating:"4.6",price:"$20–30",tag:"Ramen",note:null,dup:null,bucket:"resto",why:"Popular, reliable ramen — great for a cold-weather dinner.",lat:45.521226,lng:-73.57854,ig:null,hot:false,star:false},
+  {name:"Café Parvis",rating:"4.4",price:"$20–30",tag:"Restaurant",note:null,dup:null,bucket:"resto",why:"Wood-fired pizzas in a plant-filled, low-lit downtown space.",lat:45.505798,lng:-73.569269,ig:null,hot:false,star:false},
+  {name:"Drogheria Fine",rating:"4.4",price:"$1–10",tag:"Italian",note:null,dup:null,bucket:"resto",why:"Casual, budget-friendly Italian counter.",lat:45.522999,lng:-73.595104,ig:null,hot:false,star:false},
+  {name:"Pho Bac 97",rating:"4.3",price:"$10–20",tag:"Vietnamese",note:null,dup:null,bucket:"resto",why:"Well-loved pho spot — big, steaming bowls at a fair price.",lat:45.507884,lng:-73.559832,ig:null,hot:false,star:false},
+  {name:"Reuben's Restaurant Delicatessen",rating:"4.2",price:"$20–30",tag:"Restaurant",note:null,dup:null,bucket:"resto",why:"Classic downtown smoked meat deli — an easy sit-down alternative to Schwartz's.",lat:45.501667,lng:-73.571111,ig:null,hot:false,star:false},
+  {name:"Restaurant Dobe & Andy",rating:"4.1",price:"$10–20",tag:"Chinese",note:null,dup:null,bucket:"resto",why:"Known for its pork belly — no-frills, reliable Chinese in Chinatown.",lat:45.507327,lng:-73.561291,ig:null,hot:false,star:false},
+  {name:"Le Comptoir de Mamie",rating:"4.5",price:"$20–70",tag:"French",note:null,dup:null,bucket:"resto",why:"Cozy French bistro, comfort-food classics.",lat:45.527241,lng:-73.580157,ig:null,hot:false,star:false},
+  {name:"Pizza Bouquet",rating:"4.7",price:"$10–20",tag:"Pizza",note:null,dup:null,bucket:"pizza",why:"Casual, well-rated pizza at a good price.",lat:45.530862,lng:-73.608137,ig:null,hot:false,star:false},
+  {name:"Pizzéria NO.900 – Peel",rating:"4.3",price:"$20–30",tag:"Pizza",note:null,dup:null,bucket:"pizza",why:"Neapolitan-style pizza, thin crust, wood-fired — downtown on Peel.",lat:45.501412,lng:-73.575487,ig:null,hot:false,star:false},
+  {name:"Heirloom Vin & Pizza - Le CENTRAL",rating:"4.1",price:"$20–30",tag:"Pizza",note:null,dup:null,bucket:"pizza",why:"Neighborhood pizza with a decent wine list.",lat:45.5092,lng:-73.563412,ig:null,hot:false,star:false},
+  {name:"Schwartz's Deli",rating:"4.4",price:"$10–20",tag:"Deli",note:"@schwartzsdeliofficial on Instagram",dup:null,bucket:"deli",why:"The original smoked meat — expect a line, worth it once.",lat:45.51635,lng:-73.57764,ig:"schwartzsdeliofficial",hot:true,star:true},
+  {name:"La Banquise",rating:"4.4",price:"$10–20",tag:"Fast food",note:"Poutine, open 24 hours",dup:null,bucket:"deli",why:"24-hour poutine institution with dozens of topping combinations.",lat:45.525323,lng:-73.574806,ig:"restolabanquise",hot:true,star:false},
+  {name:"Dunn's Famous",rating:"4.3",price:"$20–30",tag:"Deli",note:null,dup:null,bucket:"deli",why:"A calmer, less touristy alternative to Schwartz's — the smoked meat is just as good, without the line.",lat:45.500571,lng:-73.571594,ig:null,hot:false,star:false},
+  {name:"Le Roi du Smoked Meat",rating:"4.1",price:"$20–30",tag:"Meat",note:null,dup:null,bucket:"deli",why:"Smoked meat sandwiches, a cheaper alternative to the big names.",lat:45.537983,lng:-73.606631,ig:null,hot:false,star:false},
+  {name:"Chez Tousignant",rating:"4.3",price:"$10–20",tag:"Fast food",note:"Poutine",dup:null,bucket:"deli",why:"Proper Québécois greasy spoon — cute, local, great poutine.",lat:45.536092,lng:-73.612367,ig:null,hot:false,star:false},
+  {name:"Wilensky's Light Lunch",rating:"4.7",price:"$1–10",tag:"Sandwich",note:"Mile End institution",dup:null,bucket:"deli",why:"Mile End institution — the grilled Wilensky Special, no substitutions, ever.",lat:45.523362,lng:-73.594783,ig:null,hot:true,star:false},
+  {name:"Lester's Deli",rating:"4.5",price:"$20–30",tag:"Deli",note:"Hot dog, smoked meat",dup:null,bucket:"deli",why:"Same smoked meat as Schwartz's, without the line-up.",lat:45.522159,lng:-73.607093,ig:null,hot:false,star:false},
+  {name:"Renzo Sandwich",rating:"4.4",price:"$10–20",tag:"Fast food",note:null,dup:null,bucket:"deli",why:"Quick, tasty sandwiches for an easy lunch.",lat:45.52397,lng:-73.594528,ig:null,hot:false,star:false},
+  {name:"Capitaine Sandwich",rating:"4.8",price:"$10–20",tag:"Sandwich",note:null,dup:null,bucket:"deli",why:"Popular sandwich counter, quick and satisfying.",lat:45.518318,lng:-73.578318,ig:null,hot:false,star:true},
+  {name:"Hoang Oanh Sandwich",rating:"4.3",price:"$1–10",tag:"Sandwich",note:null,dup:null,bucket:"deli",why:"Excellent, cheap banh mi.",lat:45.508418,lng:-73.560411,ig:null,hot:false,star:false},
+  {name:"Randolph Pub Ludique",rating:"4.5",price:"$20–30",tag:"Pub",note:"Quartier Latin, board games",dup:null,bucket:"bar",why:"Board game pub — order a drink and pick a game.",lat:45.516403,lng:-73.565948,ig:null,hot:true,star:false},
+  {name:"Stereo",rating:"4.5",price:null,tag:"Nightclub",note:"Trending, after-hours",dup:null,bucket:"bar",why:"Montreal's legendary after-hours techno club — open till sunrise Fri/Sat, serious sound system.",lat:45.515972,lng:-73.558086,ig:"stereomontreal",hot:true,star:false},
+  {name:"Bar Le Mal Nécessaire",rating:"4.5",price:"$20–60",tag:"Cocktail bar",note:null,dup:null,bucket:"bar",why:"Hidden tiki bar in Chinatown — tropical drinks served in real fruit.",lat:45.503093,lng:-73.562835,ig:"lemalnecessaire",hot:true,star:false},
+  {name:"Brasserie Dieu du Ciel!",rating:"4.7",price:"$20–30",tag:"Brewpub",note:null,dup:null,bucket:"bar",why:"One of the original Quebec craft breweries — solid beer list.",lat:45.52279,lng:-73.59336,ig:null,hot:true,star:false},
+  {name:"Cloakroom Bar",rating:"4.6",price:"$20–70",tag:"Cocktail bar",note:null,dup:null,bucket:"bar",why:"Speakeasy hidden inside a menswear shop — no menu, just tell them what you like.",lat:45.499465,lng:-73.577842,ig:"thecloakroombar",hot:true,star:false},
+  {name:"Le Rouge Gorge",rating:"4.5",price:"$20–80",tag:"Wine bar",note:null,dup:null,bucket:"bar",why:"Natural wine bar, casual and unpretentious.",lat:45.529087,lng:-73.577923,ig:null,hot:false,star:false},
+  {name:"Poincaré",rating:"4.5",price:"$20–30",tag:"Bar",note:"Chinatown",dup:null,bucket:"bar",why:"Cocktail bar in the middle of Chinatown's nightlife strip.",lat:45.508483,lng:-73.560387,ig:null,hot:true,star:false},
+  {name:"Mamie",rating:"4.6",price:"$30–70",tag:"Wine bar",note:null,dup:null,bucket:"bar",why:"Popular wine bar, good food to go with the wine list.",lat:45.533096,lng:-73.605617,ig:null,hot:false,star:false},
+  {name:"C&C Cosmetique Coreen",rating:"4.9",price:null,tag:"Cosmetics store",note:null,dup:null,bucket:"shop",why:"Korean skincare and makeup shop in Chinatown — good for K-beauty finds and gifts.",lat:45.508628,lng:-73.561398,ig:null,hot:true,star:false},
+  {name:"MIMINORI",rating:"4.5",price:null,tag:"Convenience store",note:null,dup:null,bucket:"shop",why:"Japanese-style dépanneur — ramen, hand-rolled temaki and Korean lemonade in a corner-store format.",lat:45.530905,lng:-73.609672,ig:null,hot:true,star:false},
+  {name:"La Grande Roue de Montréal",rating:"4.5",price:"$24–30",tag:"Observation wheel",note:null,dup:null,bucket:"site",why:"Canada's tallest observation wheel, in the Old Port — 18-minute rotation, best at sunset.",lat:45.508744,lng:-73.548845,ig:null,hot:true,star:false},
+  {name:"MTL Zipline",rating:"4.5",price:null,tag:"Zipline",note:null,dup:null,bucket:"site",why:"Canada's only urban zipline — soar over the Bonsecours basin on a 1,200-foot cable, right by the clock tower pier.",lat:45.509176,lng:-73.550107,ig:null,hot:true,star:false},
+  {name:"Saute-Moutons",rating:"4.5",price:"$65+",tag:"Jet boat",note:null,dup:null,bucket:"site",why:"Jet boat ride out to the Lachine Rapids from the Old Port — you WILL get soaked. 1 hour, bring a swimsuit.",lat:45.510047,lng:-73.548197,ig:null,hot:true,star:false},
+  {name:"Promenade Wellington",rating:"4.3",price:null,tag:"Association / Organization",note:null,dup:null,bucket:"site",why:"Verdun's pedestrian summer street — car-free through Sept 14, lined with terraces, boutiques and events.",lat:45.464806,lng:-73.566992,ig:null,hot:false,star:false},
+  {name:"Green Alley Henri-Julien Drolet",rating:"5.0",price:null,tag:"Hiking area",note:null,dup:null,bucket:"site",why:"Leafy green laneway in the Plateau — a cute detour for photos.",lat:45.517466,lng:-73.571417,ig:null,hot:false,star:false},
+  {name:"Wellington St",rating:"",price:null,tag:"Street",note:null,dup:null,bucket:"site",why:"Same street — the Promenade Wellington section (near De l'Église metro) is the pedestrian stretch to aim for.",lat:45.464806,lng:-73.566992,ig:null,hot:false,star:false},
+  {name:"Le Majestique Montréal",rating:"4.5",price:"$30–90",tag:"Restaurant",note:null,dup:null,bucket:"resto",why:"Loud, eclectic and fun — oysters, a famous foot-long hot dog, and a kitchen open till 3am.",lat:45.51752,lng:-73.580316,ig:null,hot:true,star:true},
+  {name:"Chez José Café",rating:"4.7",price:"$10–20",tag:"Portuguese café / brunch",note:null,dup:null,bucket:"cafe",why:"Tiny, funky Portuguese café a two-minute walk from your door — crêpes, pastéis de nata, great brunch. Closed Wednesdays.",lat:45.518729,lng:-73.577898,ig:null,hot:true,star:true}
+];
+
+const CAT = {
+  cafe:   {label:'Cafés, bagels & ice cream', color:'#FF7A2F'},
+  resto:  {label:'Restaurants',               color:'#E8177F'},
+  pizza:  {label:'Pizza',                     color:'#D4342F'},
+  deli:   {label:'Delis, sandwiches & poutine',color:'#7B3FF2'},
+  bar:    {label:'Bars & nightlife',          color:'#2E7DD1'},
+  shop:   {label:'Shops',                     color:'#00A896'},
+  site:   {label:'Do this',                   color:'#B07D00'}
+};
+const ORDER = ['cafe','resto','pizza','deli','bar','shop','site'];
+const APT = {lat:45.5182, lng:-73.5774, name:'Your apartment'};
+
+let items = PLACES.map((p,i) => ({...p, id:'it'+i, done:false}));
+
+function gmaps(p){
+  return 'https://www.google.com/maps/search/?api=1&query=' + p.lat + ',' + p.lng;
+}
+function tiktok(p){
+  return 'https://www.tiktok.com/search?q=' + encodeURIComponent(p.name + ' Montreal');
+}
+
+/* ---------- MAP ---------- */
+(function buildMap(){
+ try{
+  const box = document.getElementById('mapBox');
+  const pts = items.filter(p => p.lat != null);
+  const all = pts.concat([APT]);
+  const lats = all.map(p=>p.lat), lngs = all.map(p=>p.lng);
+  const minLat = Math.min(...lats), maxLat = Math.max(...lats);
+  const minLng = Math.min(...lngs), maxLng = Math.max(...lngs);
+  const kx = Math.cos(((minLat+maxLat)/2) * Math.PI/180);
+  const spanX = (maxLng-minLng)*kx, spanY = (maxLat-minLat);
+  // percentage positions, with 6% padding on each side
+  const PADPCT = 6;
+  function pos(lat,lng){
+    const fx = ((lng-minLng)*kx)/spanX;
+    const fy = (maxLat-lat)/spanY;
+    return {
+      left: (PADPCT + fx*(100-2*PADPCT)).toFixed(2) + '%',
+      top:  (PADPCT + fy*(100-2*PADPCT)).toFixed(2) + '%'
+    };
+  }
+
+  const frag = document.createDocumentFragment();
+
+  pts.forEach(p => {
+    const c = pos(p.lat, p.lng);
+    const dot = document.createElement('div');
+    dot.className = 'mapdot' + (p.hot ? ' big' : '') + (p.star ? ' starred' : '');
+    dot.style.left = c.left;
+    dot.style.top = c.top;
+    dot.style.background = CAT[p.bucket].color;
+    dot.title = p.name;
+    dot.addEventListener('click', () => showDetail(p));
+    frag.appendChild(dot);
+
+    if(p.star){
+      const lab = document.createElement('div');
+      lab.className = 'maplabel';
+      lab.style.left = c.left;
+      lab.style.top = 'calc(' + c.top + ' + 16px)';
+      lab.textContent = p.name;
+      frag.appendChild(lab);
+    }
+  });
+
+  const h = pos(APT.lat, APT.lng);
+  const home = document.createElement('div');
+  home.className = 'maphome';
+  home.style.left = h.left; home.style.top = h.top;
+  home.title = 'Your apartment';
+  frag.appendChild(home);
+
+  const hl = document.createElement('div');
+  hl.className = 'maphomelabel';
+  hl.style.left = h.left;
+  hl.style.top = 'calc(' + h.top + ' - 17px)';
+  hl.textContent = 'HOME';
+  frag.appendChild(hl);
+
+  box.appendChild(frag);
+
+  const leg = document.getElementById('mapLegend');
+  leg.innerHTML = ORDER.map(k => `<span style="background:${CAT[k].color}">${CAT[k].label}</span>`).join('')
+    + '<span style="background:#FFC53D;color:#5A3D00;">⭐ = 5 min from your door</span>';
+ } catch(err){
+  document.getElementById('mapBox').innerHTML =
+    '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center;font-size:13px;color:#6B5A7A;">'
+    + 'Map couldn\'t draw here — every spot below still has a 🗺️ Directions button.</div>';
+ }
+})();
+
+function showDetail(p){
+  const d = document.getElementById('mapDetail');
+  d.style.display = 'block';
+  d.innerHTML = `<b>${p.name}</b>${p.star?' <span class="star">⭐ 5 min from home</span>':''}<br>
+    <span style="color:var(--ink-soft);">${CAT[p.bucket].label}${p.price?' · '+p.price:''}</span><br>
+    <span style="display:block;margin-top:6px;">${p.why||''}</span>
+    <span class="links" style="display:flex;">
+      <a class="l-map" href="${gmaps(p)}" target="_blank" rel="noopener">🗺️ Directions</a>
+      ${p.ig?`<a class="l-ig" href="https://www.instagram.com/${p.ig}/" target="_blank" rel="noopener">📸 @${p.ig}</a>`:''}
+      <a class="l-tt" href="${tiktok(p)}" target="_blank" rel="noopener">▶ TikTok</a>
+    </span>`;
+  d.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+/* ---------- LIST ---------- */
+const categoriesEl = document.getElementById('categories');
+const jumpNav = document.getElementById('jumpNav');
+
+function metaLine(p){
+  let parts = [];
+  if (p.rating) parts.push(`<span class="rating">${p.rating}★</span>`);
+  if (p.price) parts.push(p.price);
+  if (p.tag) parts.push(p.tag);
+  return parts.join(' · ');
+}
+
+function itemLi(p){
+  const li = document.createElement('li');
+  li.className = 'item' + (p.star ? ' starred' : '');
+  li.style.borderLeftColor = CAT[p.bucket].color;
+  li.innerHTML = `
+    <input type="checkbox" id="${p.id}">
+    <div class="body">
+      <label for="${p.id}" style="cursor:pointer;">
+        <div class="name">${p.name}${p.star?' <span class="star">⭐ 5 min away</span>':''}</div>
+        <div class="meta">${metaLine(p)}</div>
+        ${p.why ? `<div class="why">${p.why}</div>` : ''}
+        ${p.note ? `<div class="note">${p.note}</div>` : ''}
+        ${p.dup ? `<div class="dup">🔁 ${p.dup}</div>` : ''}
+      </label>
+      <div class="links">
+        <a class="l-map" href="${gmaps(p)}" target="_blank" rel="noopener">🗺️ Directions</a>
+        ${p.ig?`<a class="l-ig" href="https://www.instagram.com/${p.ig}/" target="_blank" rel="noopener">📸 @${p.ig}</a>`:''}
+        <a class="l-tt" href="${tiktok(p)}" target="_blank" rel="noopener">▶ TikTok</a>
+      </div>
+    </div>`;
+  return li;
+}
+
+ORDER.forEach(cat => {
+  const list = items.filter(p => p.bucket === cat);
+  if (!list.length) return;
+  const section = document.createElement('section');
+  section.className = 'cat';
+  section.id = 'cat-' + cat;
+  section.innerHTML = `<h2>${CAT[cat].label} <span class="n" style="background:${CAT[cat].color}">${list.length}</span></h2>`;
+  const ul = document.createElement('ul');
+  ul.className = 'items';
+  list.forEach(p => ul.appendChild(itemLi(p)));
+  section.appendChild(ul);
+  categoriesEl.appendChild(section);
+
+  const a = document.createElement('a');
+  a.href = '#cat-' + cat;
+  a.textContent = CAT[cat].label;
+  a.style.background = CAT[cat].color;
+  jumpNav.appendChild(a);
+});
+
+document.getElementById('totalCount').textContent = items.length;
+
+document.querySelectorAll('li.item input[type="checkbox"]').forEach(cb => {
+  cb.addEventListener('change', () => {
+    const p = items.find(x => x.id === cb.id);
+    p.done = cb.checked;
+    cb.closest('li').classList.toggle('done', cb.checked);
+    document.getElementById('doneCount').textContent = items.filter(i => i.done).length;
+  });
+});
+
+document.getElementById('search').addEventListener('input', (e) => {
+  const q = e.target.value.trim().toLowerCase();
+  document.querySelectorAll('li.item').forEach(li => {
+    const name = li.querySelector('.name').textContent.toLowerCase();
+    li.classList.toggle('hidden', q.length > 0 && !name.includes(q));
+  });
+  document.querySelectorAll('section.cat').forEach(sec => {
+    sec.style.display = sec.querySelectorAll('li.item:not(.hidden)').length ? '' : 'none';
+  });
+});
+
+/* ---------- CLOSEST 5 ---------- */
+function haversine(lat1,lng1,lat2,lng2){
+  const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+function showClosest(lat,lng){
+  const near = items.filter(p=>p.lat!=null)
+    .map(p=>({p, d:haversine(lat,lng,p.lat,p.lng)}))
+    .sort((a,b)=>a.d-b.d).slice(0,5);
+  document.getElementById('closestList').innerHTML = near.map(({p,d})=>`
+    <li style="border-left-color:${CAT[p.bucket].color}">
+      <span><b>${p.name}</b><br><span style="font-size:12px;color:var(--ink-soft);">${CAT[p.bucket].label}</span>
+      <a class="l-map" style="font-size:11.5px;padding:3px 9px;margin-left:0;display:inline-block;margin-top:5px;" href="${gmaps(p)}" target="_blank" rel="noopener">🗺️ Go</a></span>
+      <span class="cdist">${d<1?Math.round(d*1000)+' m':d.toFixed(1)+' km'}</span>
+    </li>`).join('');
+}
+
+// show the 5 nearest the apartment right away, so there is always something useful here
+showClosest(APT.lat, APT.lng);
+document.getElementById('locateStatus').textContent = 'Closest to your apartment:';
+
+document.getElementById('locateBtn').addEventListener('click', () => {
+  const status = document.getElementById('locateStatus');
+  if(!navigator.geolocation || !window.isSecureContext){
+    status.textContent = 'Live location needs the page to be online (not opened as a local file) — showing closest to the apartment instead.';
+    showClosest(APT.lat, APT.lng);
+    return;
+  }
+  status.textContent = 'Locating…';
+  navigator.geolocation.getCurrentPosition(
+    pos => { status.textContent = 'Found you!'; showClosest(pos.coords.latitude, pos.coords.longitude); },
+    ()  => { status.textContent = "Couldn't get your location — showing closest to the apartment instead."; showClosest(APT.lat, APT.lng); },
+    {timeout:8000}
+  );
+});
+</script>
+</body>
+</html>

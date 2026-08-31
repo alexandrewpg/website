@@ -112,8 +112,11 @@
     font-size:22px;margin:0 0 4px;letter-spacing:-0.01em;
   }
   #mapSection .maphint{font-size:13px;color:var(--ink-soft);margin:0 0 12px;}
+  .leaflet-popup-content{font-family:'DM Sans',sans-serif;font-size:13px;}
+  .leaflet-popup-content b{font-size:14.5px;}
+  .lpin{border-radius:50%;border:2px solid #fff;box-shadow:0 1px 3px rgba(43,27,61,.4);}
   .mapbox{
-    position:relative;width:100%;height:0;padding-bottom:72%;min-height:300px;
+    position:relative;width:100%;height:440px;
     background:
       repeating-linear-gradient(0deg,transparent 0 39px,#E7D9F0 39px 40px),
       repeating-linear-gradient(90deg,transparent 0 39px,#E7D9F0 39px 40px),
@@ -241,7 +244,7 @@
 
   <section id="mapSection">
     <h2>The map</h2>
-    <p class="maphint">Every spot on this list, colour-coded. A yellow ring ⭐ means it's a 5-minute walk from your apartment. Tap a dot for details and directions.</p>
+    <p class="maphint">Every spot on this list, colour-coded — pinch or scroll to zoom, drag to pan. A yellow ring ⭐ means it's a 5-minute walk from your apartment. Tap a pin for details and directions.</p>
     <div class="mapbox" id="mapBox"></div>
     <div class="maplegend" id="mapLegend"></div>
     <div id="mapDetail"></div>
@@ -398,9 +401,10 @@ function tiktok(p){
 }
 
 /* ---------- MAP ---------- */
-(function buildMap(){
+function buildSimpleMap(){
  try{
   const box = document.getElementById('mapBox');
+  box.innerHTML = '';
   const pts = items.filter(p => p.lat != null);
   const all = pts.concat([APT]);
   const lats = all.map(p=>p.lat), lngs = all.map(p=>p.lng);
@@ -466,6 +470,77 @@ function tiktok(p){
     '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center;font-size:13px;color:#6B5A7A;">'
     + 'Map couldn\'t draw here — every spot below still has a 🗺️ Directions button.</div>';
  }
+}
+
+/* Real zoomable street map (Leaflet + OpenStreetMap). Falls back to the
+   simple dot map above if the library can't be reached. */
+function buildLeafletMap(){
+  const box = document.getElementById('mapBox');
+  box.innerHTML = '';
+  const map = L.map(box, {scrollWheelZoom:true}).setView([APT.lat, APT.lng], 14);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19, attribution: '© OpenStreetMap'
+  }).addTo(map);
+
+  const bounds = [];
+  items.filter(p=>p.lat!=null).forEach(p => {
+    const size = p.hot ? 15 : 12;
+    const ring = p.star ? 'box-shadow:0 0 0 4px #FFC53D;' : '';
+    const icon = L.divIcon({
+      className:'',
+      html:`<div class="lpin" style="width:${size}px;height:${size}px;background:${CAT[p.bucket].color};${ring}"></div>`,
+      iconSize:[size,size], iconAnchor:[size/2,size/2]
+    });
+    const m = L.marker([p.lat,p.lng],{icon}).addTo(map);
+    m.bindPopup(
+      `<b>${p.name}</b>${p.star?' ⭐':''}<br>
+       <span style="color:#6B5A7A;">${CAT[p.bucket].label}${p.price?' · '+p.price:''}</span><br>
+       <span style="display:block;margin:6px 0;">${p.why||''}</span>
+       <a href="${gmaps(p)}" target="_blank" rel="noopener" style="font-weight:700;color:#2E7DD1;">🗺️ Directions</a> &nbsp;
+       <a href="${tiktok(p)}" target="_blank" rel="noopener" style="font-weight:700;color:#2B1B3D;">▶ TikTok</a>`
+    );
+    m.on('click', () => showDetail(p));
+    bounds.push([p.lat,p.lng]);
+  });
+
+  const homeIcon = L.divIcon({
+    className:'',
+    html:'<div style="width:18px;height:18px;border-radius:50%;background:#2B1B3D;border:3px solid #fff;box-shadow:0 0 0 4px rgba(43,27,61,.25);"></div>',
+    iconSize:[18,18], iconAnchor:[9,9]
+  });
+  L.marker([APT.lat,APT.lng],{icon:homeIcon}).addTo(map)
+    .bindPopup('<b>Your apartment</b><br>Hôtel-de-Ville, between Duluth &amp; Napoléon');
+  bounds.push([APT.lat,APT.lng]);
+
+  map.fitBounds(bounds, {padding:[28,28]});
+  setTimeout(()=>map.invalidateSize(), 200);
+
+  const leg = document.getElementById('mapLegend');
+  leg.innerHTML = ORDER.map(k => `<span style="background:${CAT[k].color}">${CAT[k].label}</span>`).join('')
+    + '<span style="background:#FFC53D;color:#5A3D00;">⭐ = 5 min from your door</span>';
+}
+
+/* Try Leaflet first; if it can't load (offline / blocked), draw the simple map. */
+(function initMap(){
+  let done = false;
+  function fallback(){ if(!done){ done = true; buildSimpleMap(); } }
+
+  const css = document.createElement('link');
+  css.rel = 'stylesheet';
+  css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+  document.head.appendChild(css);
+
+  const s = document.createElement('script');
+  s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+  s.onload = () => {
+    if(done) return;
+    done = true;
+    try { buildLeafletMap(); } catch(e){ done = false; fallback(); }
+  };
+  s.onerror = fallback;
+  document.head.appendChild(s);
+
+  setTimeout(fallback, 6000);
 })();
 
 function showDetail(p){

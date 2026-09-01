@@ -242,6 +242,12 @@
   li.item.done{opacity:0.55;}
   li.item.done .name{text-decoration:line-through;}
   .meta{font-size:12.5px;color:var(--ink-soft);margin-top:3px;font-weight:500;}
+  .dist{
+    display:inline-block;background:var(--purple-soft);color:var(--purple);
+    font-size:11.5px;font-weight:700;padding:2px 9px;border-radius:99px;
+    margin-top:6px;
+  }
+  .dist.far{background:var(--orange-soft);color:#C2560F;}
   .meta .rating{color:#B07D00;font-weight:700;}
   .why{font-size:13.5px;line-height:1.5;margin-top:6px;}
   .note{font-size:12px;font-style:italic;color:var(--ink-soft);margin-top:4px;}
@@ -281,7 +287,7 @@
 
   <section id="mapSection">
     <h2>The map</h2>
-    <p class="maphint">Drag to move, pinch or use + / − to zoom. A yellow ring ⭐ means it's a 5-minute walk from the apartment. Tap any pin for details and directions.</p>
+    <p class="maphint">Every place shows its walking time from the apartment. Drag to move, pinch or use + / − to zoom. A yellow ring ⭐ means it's a 5-minute walk from the apartment. Tap any pin for details and directions.</p>
     <div class="mapbox" id="mapBox">
       <div id="tileLayer"></div>
       <div id="pinLayer"></div>
@@ -366,7 +372,7 @@
   <section class="info i-pink">
     <h2>💃 Going out: how it works here</h2>
     <div class="panel">
-    <p>Boulevard Saint-Laurent — "the Main" — is the main going-out strip, and it's two streets from your door. Most of the club list below is walkable.</p>
+    <p>Boulevard Saint-Laurent — "the Main" — is the main going-out strip, and it's two streets from your door. Seven of the ten clubs below are under a 15-minute walk. Every place on this page shows its walking time from the apartment.</p>
     <div class="tip"><b>Timing is everything.</b> Legal drinking age is 18. Last call is 3am, but clubs don't fill up until 11pm–midnight. Showing up at 9pm means walking into an empty room. Start with drinks somewhere, go dancing after 11.</div>
     <div class="tip"><b>Getting home:</b> the metro stops around 1am, so plan an Uber — though from the Main you can walk home in 10 minutes.</div>
     <div class="tip"><b>Practical stuff:</b> several clubs have a dress code (no shorts, no ripped jeans, no running shoes). Bring physical ID — some places turn people away without it even with a paid ticket. Coat check is often mandatory and cash-only.</div>
@@ -470,7 +476,26 @@ const CAT = {
 const ORDER = ['cafe','resto','pizza','deli','bar','bar-night','shop','site'];
 const APT = {lat:45.5182, lng:-73.5774, name:'Your apartment'};
 
-let items = PLACES.map((p,i) => ({...p, id:'it'+i, done:false}));
+function haversine(lat1,lng1,lat2,lng2){
+  const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+let items = PLACES.map((p,i) => {
+  const d = haversine(APT.lat, APT.lng, p.lat, p.lng);
+  // straight-line distance underestimates a walk; ~1.3x is a realistic street factor
+  const walkKm = d * 1.3;
+  const mins = Math.round(walkKm / 5 * 60);      // 5 km/h
+  return {...p, id:'it'+i, done:false, distKm:d, walkKm, walkMin:mins};
+});
+
+function distLabel(p){
+  const m = Math.round(p.walkKm * 1000);
+  const dist = m < 1000 ? m + ' m' : (p.walkKm).toFixed(1) + ' km';
+  if(p.walkMin <= 30) return '🚶 ' + p.walkMin + ' min walk · ' + dist;
+  return '🚇 ' + dist + ' — take the metro';
+}
 
 function gmaps(p){
   return 'https://www.google.com/maps/search/?api=1&query=' + p.lat + ',' + p.lng;
@@ -641,6 +666,7 @@ function showDetail(p){
   d.style.display = 'block';
   d.innerHTML = `<b>${p.name}</b>${p.star?' <span class="star">⭐ 5 min from home</span>':''}<br>
     <span style="color:var(--ink-soft);">${CAT[p.bucket].label}${p.price?' · '+p.price:''}</span><br>
+    <span class="dist${p.walkMin>30?' far':''}">${distLabel(p)}</span><br>
     <span style="display:block;margin-top:6px;">${p.why||''}</span>
     <span class="links" style="display:flex;">
       <a class="l-map" href="${gmaps(p)}" target="_blank" rel="noopener">🗺️ Directions</a>
@@ -672,6 +698,7 @@ function itemLi(p){
       <label for="${p.id}" style="cursor:pointer;">
         <div class="name">${p.name}${p.star?' <span class="star">⭐ 5 min away</span>':''}</div>
         <div class="meta">${metaLine(p)}</div>
+        <div class="dist${p.walkMin>30?' far':''}">${distLabel(p)}</div>
         ${p.why ? `<div class="why">${p.why}</div>` : ''}
         ${p.note ? `<div class="note">${p.note}</div>` : ''}
         ${p.dup ? `<div class="dup">🔁 ${p.dup}</div>` : ''}
@@ -686,7 +713,7 @@ function itemLi(p){
 }
 
 ORDER.forEach(cat => {
-  const list = items.filter(p => p.bucket === cat);
+  const list = items.filter(p => p.bucket === cat).sort((a,b) => a.walkKm - b.walkKm);
   if (!list.length) return;
   const section = document.createElement('section');
   section.className = 'cat';
@@ -766,11 +793,6 @@ document.getElementById('search').addEventListener('input', (e) => {
 });
 
 /* ---------- CLOSEST 5 ---------- */
-function haversine(lat1,lng1,lat2,lng2){
-  const R=6371, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
-  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
-  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-}
 
 function showClosest(lat,lng){
   const near = items.filter(p=>p.lat!=null)
@@ -786,20 +808,51 @@ function showClosest(lat,lng){
 
 // show the 5 nearest the apartment right away, so there is always something useful here
 showClosest(APT.lat, APT.lng);
-document.getElementById('locateStatus').textContent = 'Closest to your apartment:';
+const statusEl = document.getElementById('locateStatus');
+statusEl.textContent = 'Closest to your apartment:';
 
 document.getElementById('locateBtn').addEventListener('click', () => {
   const status = document.getElementById('locateStatus');
-  if(!navigator.geolocation || !window.isSecureContext){
-    status.textContent = "Live location only works when this page is online, not opened as a downloaded file. Showing what's closest to the apartment instead — and every 🗺️ Directions button still navigates from wherever you are.";
+
+  if(!navigator.geolocation){
+    status.textContent = "This browser doesn't support location. Showing what's closest to the apartment instead.";
     showClosest(APT.lat, APT.lng);
     return;
   }
+
+  // Location needs a secure connection. If we're on plain http, offer the https version.
+  if(!window.isSecureContext && location.protocol === 'http:'){
+    status.innerHTML = 'Location needs a secure connection. '
+      + '<a href="https://' + location.host + location.pathname + '" style="font-weight:700;color:var(--pink);">Open the https version</a> and try again.';
+    return;
+  }
+  if(!window.isSecureContext){
+    status.textContent = "Live location only works when this page is opened online, not as a downloaded file. Showing what's closest to the apartment instead.";
+    showClosest(APT.lat, APT.lng);
+    return;
+  }
+
   status.textContent = 'Locating…';
   navigator.geolocation.getCurrentPosition(
-    pos => { status.textContent = 'Found you!'; showClosest(pos.coords.latitude, pos.coords.longitude); },
-    ()  => { status.textContent = "Couldn't get your location — showing closest to the apartment instead."; showClosest(APT.lat, APT.lng); },
-    {timeout:8000}
+    pos => {
+      status.textContent = 'Found you — closest spots:';
+      showClosest(pos.coords.latitude, pos.coords.longitude);
+    },
+    err => {
+      let msg;
+      if(err.code === 1){
+        msg = "Location permission was blocked. On iPhone: Settings → your browser → Location. In Chrome: tap the 🔒 in the address bar → Location → Allow, then reload.";
+      } else if(err.code === 2){
+        msg = "Your position couldn't be determined right now — try again outdoors or with Wi-Fi on.";
+      } else if(err.code === 3){
+        msg = "Location timed out. Try once more.";
+      } else {
+        msg = "Location unavailable (" + (err.message || 'unknown error') + ").";
+      }
+      status.textContent = msg + " Showing what's closest to the apartment instead.";
+      showClosest(APT.lat, APT.lng);
+    },
+    {timeout: 15000, maximumAge: 60000, enableHighAccuracy: false}
   );
 });
 </script>

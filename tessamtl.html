@@ -85,12 +85,22 @@
   }
 
   section.info{
-    margin-top:22px;padding:20px 20px 8px;border-radius:16px;
+    margin-top:14px;padding:0;border-radius:16px;overflow:hidden;
   }
   section.info h2{
     font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
-    font-size:20px;margin:0 0 8px;letter-spacing:-0.01em;
+    font-size:19px;margin:0;letter-spacing:-0.01em;
+    padding:16px 18px;cursor:pointer;
+    display:flex;align-items:center;gap:10px;
+    user-select:none;
   }
+  section.info h2::after{
+    content:'▾';margin-left:auto;font-size:15px;
+    transition:transform .18s;opacity:.65;
+  }
+  section.info.open h2::after{transform:rotate(180deg);}
+  section.info .panel{display:none;padding:0 18px 6px;}
+  section.info.open .panel{display:block;}
   section.info p{font-size:14px;line-height:1.6;margin:0 0 14px;}
   section.info .tip{
     font-size:13.5px;line-height:1.6;margin:0 0 14px;
@@ -117,38 +127,41 @@
   .lpin{border-radius:50%;border:2px solid #fff;box-shadow:0 1px 3px rgba(43,27,61,.4);}
   .mapbox{
     position:relative;width:100%;height:440px;
-    background:
-      repeating-linear-gradient(0deg,transparent 0 39px,#E7D9F0 39px 40px),
-      repeating-linear-gradient(90deg,transparent 0 39px,#E7D9F0 39px 40px),
-      #F4EDFA;
+    background:#E8E0F0;
     border:2px solid var(--line);border-radius:16px;overflow:hidden;
+    touch-action:none;cursor:grab;
   }
-  .mapdot{
+  .mapbox.dragging{cursor:grabbing;}
+  #tileLayer,#pinLayer{position:absolute;inset:0;}
+  #pinLayer{pointer-events:none;}
+  #tileLayer img{position:absolute;width:256px;height:256px;user-select:none;-webkit-user-drag:none;}
+  .mappin{
     position:absolute;transform:translate(-50%,-50%);
-    width:13px;height:13px;border-radius:50%;
-    border:2px solid #fff;cursor:pointer;
-    box-shadow:0 1px 3px rgba(43,27,61,0.35);
+    border-radius:50%;border:2px solid #fff;cursor:pointer;
+    box-shadow:0 1px 4px rgba(43,27,61,.5);pointer-events:auto;
+    width:14px;height:14px;
   }
-  .mapdot.big{width:16px;height:16px;}
-  .mapdot:hover{outline:2px solid #2B1B3D;}
-  .mapdot.starred{box-shadow:0 0 0 4px #FFC53D,0 1px 3px rgba(43,27,61,0.35);}
+  .mappin.big{width:17px;height:17px;}
+  .mappin.starred{box-shadow:0 0 0 4px #FFC53D,0 1px 4px rgba(43,27,61,.5);}
   .maphome{
     position:absolute;transform:translate(-50%,-50%);
-    width:17px;height:17px;border-radius:50%;
+    width:19px;height:19px;border-radius:50%;
     background:#2B1B3D;border:3px solid #fff;
-    box-shadow:0 0 0 4px rgba(43,27,61,0.18);
+    box-shadow:0 0 0 4px rgba(43,27,61,.25);pointer-events:auto;
   }
-  .maplabel{
-    position:absolute;transform:translate(-50%,-50%);
-    font-size:9.5px;font-weight:700;color:#5A3D00;
-    background:rgba(255,255,255,0.92);padding:1px 6px;border-radius:99px;
-    white-space:nowrap;pointer-events:none;
+  .mapzoom{
+    position:absolute;top:10px;right:10px;z-index:20;
+    display:flex;flex-direction:column;gap:6px;
   }
-  .maphomelabel{
-    position:absolute;transform:translate(-50%,-50%);
-    font-size:10px;font-weight:700;color:#2B1B3D;
-    background:rgba(255,255,255,0.9);padding:1px 6px;border-radius:99px;
-    white-space:nowrap;pointer-events:none;
+  .mapzoom button{
+    width:38px;height:38px;font-size:21px;font-weight:700;line-height:1;
+    border:none;border-radius:10px;background:#fff;color:var(--ink);
+    cursor:pointer;box-shadow:0 2px 6px rgba(43,27,61,.28);
+  }
+  .mapattr{
+    position:absolute;bottom:0;right:0;z-index:20;
+    font-size:9.5px;background:rgba(255,255,255,.8);
+    padding:2px 6px;border-radius:6px 0 0 0;color:#555;
   }
   .maplegend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
   .maplegend span{
@@ -178,21 +191,45 @@
   #mapDetail b{font-size:15px;}
 
   /* Place list */
-  section.cat{margin-top:34px;}
+  section.cat{
+    margin-top:12px;background:#fff;border-radius:16px;
+    border:2px solid var(--line);overflow:hidden;
+  }
   section.cat h2{
     font-family:'Bricolage Grotesque',sans-serif;font-weight:800;
-    font-size:22px;margin:0;display:flex;align-items:center;gap:10px;
-    letter-spacing:-0.01em;
+    font-size:19px;margin:0;display:flex;align-items:center;gap:10px;
+    letter-spacing:-0.01em;padding:15px 18px;cursor:pointer;user-select:none;
+  }
+  section.cat h2::after{
+    content:'▾';margin-left:auto;font-size:15px;
+    transition:transform .18s;opacity:.65;
+  }
+  section.cat.open h2::after{transform:rotate(180deg);}
+  section.cat ul.items{display:none;}
+  section.cat.open ul.items{display:block;}
+  .sectiontools{
+    display:flex;gap:8px;margin:20px 0 4px;flex-wrap:wrap;
+  }
+  .sectiontools button{
+    font-family:'DM Sans',sans-serif;font-size:12.5px;font-weight:700;
+    border:2px solid var(--line);background:#fff;color:var(--ink-soft);
+    padding:7px 14px;border-radius:99px;cursor:pointer;
+  }
+  #backTop{
+    position:fixed;right:14px;bottom:14px;z-index:900;
+    width:46px;height:46px;border:none;border-radius:50%;
+    background:var(--purple);color:#fff;font-size:20px;cursor:pointer;
+    box-shadow:0 3px 10px rgba(43,27,61,.35);display:none;
   }
   section.cat h2 .n{
     font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;
     color:#fff;padding:3px 10px;border-radius:99px;
   }
-  ul.items{list-style:none;margin:14px 0 0;padding:0;}
+  ul.items{list-style:none;margin:0;padding:0 14px 14px;}
   li.item{
     display:flex;align-items:flex-start;gap:12px;
     padding:14px 16px;margin-bottom:9px;
-    background:var(--card);border-radius:13px;
+    background:#FDFAFF;border-radius:13px;
     border-left:5px solid var(--line);
   }
   li.item.hidden{display:none;}
@@ -244,8 +281,13 @@
 
   <section id="mapSection">
     <h2>The map</h2>
-    <p class="maphint">Every spot on this list, colour-coded — pinch or scroll to zoom, drag to pan. A yellow ring ⭐ means it's a 5-minute walk from your apartment. Tap a pin for details and directions.</p>
-    <div class="mapbox" id="mapBox"></div>
+    <p class="maphint">Drag to move, pinch or use + / − to zoom. A yellow ring ⭐ means it's a 5-minute walk from the apartment. Tap any pin for details and directions.</p>
+    <div class="mapbox" id="mapBox">
+      <div id="tileLayer"></div>
+      <div id="pinLayer"></div>
+      <div class="mapzoom"><button id="zIn" aria-label="Zoom in">+</button><button id="zOut" aria-label="Zoom out">−</button></div>
+      <div class="mapattr">© OpenStreetMap</div>
+    </div>
     <div class="maplegend" id="mapLegend"></div>
     <div id="mapDetail"></div>
     <div class="map-controls">
@@ -257,52 +299,59 @@
 
   <section class="info i-purple">
     <h2>🚇 Getting around</h2>
+    <div class="panel">
     <p>Four colour-coded metro lines, running 5:30am–1am. Your station is <b>Mont-Royal</b> (orange line) — it's the hub for both the mountain and Old Montreal.</p>
     <div class="tip"><b>Easiest:</b> tap your contactless credit card or Apple/Google Pay right at the turnstile. $3.75 a ride, free transfer to a bus within 120 minutes. No card to buy.</div>
-    <div class="tip">Lots of rides in one day? A day pass ($12) or 3-day pass ($22) may be cheaper — grab either at any station machine.</div>
+    <div class="tip">Lots of rides in one day? A day pass ($12) or 3-day pass ($22) may be cheaper — grab either at any station machine.</div></div>
   </section>
 
   <section class="info i-blue">
     <h2>✈️ From the airport</h2>
+    <div class="panel">
     <p>The airport train isn't running yet, so it's bus, taxi, or rideshare.</p>
     <div class="tip"><b>Cheapest — Bus 747 ($11.25):</b> runs 24/7. Buy your ticket right at the airport kiosk in the arrivals area — quick and easy. It includes a 24-hour transit pass, and drops you at Berri-UQAM station, a direct no-transfer ride up the orange line to the apartment. Budget 45–70 min.</div>
     <div class="tip"><b>Easiest with luggage — Taxi:</b> flat $41 downtown. No meter, no negotiating.</div>
-    <div class="tip"><b>Uber/Lyft:</b> roughly $35–55 depending on demand.</div>
+    <div class="tip"><b>Uber/Lyft:</b> roughly $35–55 depending on demand.</div></div>
   </section>
 
   <section class="info i-pink">
     <h2>🍷 Buying alcohol here</h2>
+    <div class="panel">
     <p>Two systems: the <b>SAQ</b> (government liquor stores) and <b>grocery stores / dépanneurs</b> (corner stores).</p>
     <div class="tip"><b>SAQ</b> — the only place for spirits (vodka, gin, rum, tequila, whisky) and the full range of wine and champagne. Staff know their stuff — just ask for something good in your budget.</div>
     <div class="tip"><b>Grocery stores & dépanneurs</b> — beer, cider, a limited wine selection, and low-alcohol coolers. No hard liquor at all, so don't go hunting for vodka at the corner store.</div>
-    <div class="tip"><b>Pro tip:</b> for real selection look for an "SAQ Sélection" branch, not a tiny "SAQ Express". There's one 10 minutes from you at 1690 Ave du Mont-Royal E. Dépanneurs stay open later for a quick beer run. And some spots are BYOW ("apportez votre vin") — bring a bottle, save a lot.</div>
+    <div class="tip"><b>Pro tip:</b> for real selection look for an "SAQ Sélection" branch, not a tiny "SAQ Express". There's one 10 minutes from you at 1690 Ave du Mont-Royal E. Dépanneurs stay open later for a quick beer run. And some spots are BYOW ("apportez votre vin") — bring a bottle, save a lot.</div></div>
   </section>
 
   <section class="info i-orange">
     <h2>🎢 Adrenaline in the Old Port</h2>
+    <div class="panel">
     <p>All three are on the same stretch of waterfront — you could do them back to back.</p>
     <div class="tip"><b>Saute-Moutons</b> — jet boat straight into the Lachine Rapids. You WILL get soaked (swimsuit + towel, seriously). 1 hour, from $65, runs through late September.</div>
     <div class="tip"><b>MTL Zipline</b> — Canada's only urban zipline, 1,200 feet over the Bonsecours basin at Hangar 16. Short and sharp.</div>
-    <div class="tip"><b>La Grande Roue</b> — the tallest observation wheel in Canada. 18-minute rotation, 360° views, best at sunset. Student rate with ID is $24 (adult $29.50). Open 10am–11pm daily.</div>
+    <div class="tip"><b>La Grande Roue</b> — the tallest observation wheel in Canada. 18-minute rotation, 360° views, best at sunset. Student rate with ID is $24 (adult $29.50). Open 10am–11pm daily.</div></div>
   </section>
 
   <section class="info i-teal">
     <h2>🏔️ Mount Royal</h2>
+    <div class="panel">
     <p>The mountain in the middle of the city. Worth doing properly once.</p>
     <div class="tip"><b>Getting to the top:</b> closest entrance is Park Avenue at Rachel, by the Sir George-Étienne Cartier monument — a 15–20 min walk from you. From there take <b>Chemin Olmsted</b>, a gently winding, well-marked path that climbs steadily; about 25–30 minutes uphill and the easiest route for a first visit. Skipping the climb? Bus 11 from Mont-Royal metro drops you 10 minutes from the lookout.</div>
     <div class="tip"><b>Why bother:</b> the <b>Kondiaronk Belvedere</b> in front of the chalet is the classic Montreal skyline view — the whole downtown below you, river beyond. There's a Leonard Cohen mural visible from up there, and the chalet has washrooms and a snack counter.</div>
-    <div class="tip"><b>Heads up:</b> the Tam-Tams (Sunday drum circle) are cancelled Sept 6, your only Sunday, for the UCI cycling championships.</div>
+    <div class="tip"><b>Heads up:</b> the Tam-Tams (Sunday drum circle) are cancelled Sept 6, your only Sunday, for the UCI cycling championships.</div></div>
   </section>
 
   <section class="info i-yellow">
     <h2>🏛️ Old Montreal & the Old Port</h2>
+    <div class="panel">
     <p>Cobblestones, 300-year-old stone buildings, right on the river. Totally different feel from the Plateau.</p>
     <div class="tip"><b>Getting there:</b> Mont-Royal station to Champ-de-Mars, same orange line, no transfer, about 15 minutes.</div>
-    <div class="tip"><b>Where to walk:</b> start on <b>Rue Saint-Paul</b> (pedestrian, boutiques, terraces) → <b>Place Jacques-Cartier</b> (main square, street performers) → <b>Marché Bonsecours</b> (gorgeous 1847 building, Quebec-made boutiques) → down to the <b>waterfront boardwalk</b> for the view.</div>
+    <div class="tip"><b>Where to walk:</b> start on <b>Rue Saint-Paul</b> (pedestrian, boutiques, terraces) → <b>Place Jacques-Cartier</b> (main square, street performers) → <b>Marché Bonsecours</b> (gorgeous 1847 building, Quebec-made boutiques) → down to the <b>waterfront boardwalk</b> for the view.</div></div>
   </section>
 
   <section class="info i-purple">
     <h2>🚶 Car-free streets, every day</h2>
+    <div class="panel">
     <p>No weekday/weekend catch — these are pedestrian-only for your whole stay.</p>
     <ul class="plain">
       <li><b>Avenue du Mont-Royal</b> (St-Laurent → Resther) — right by you, through Oct 12</li>
@@ -311,29 +360,36 @@
       <li><b>Saint-Paul / Saint-Vincent, Old Montreal</b> — through Oct 29</li>
       <li><b>Promenade Wellington, Verdun</b> — through Sept 14, ~25–30 min by metro</li>
     </ul>
-    <div class="tip" style="margin-top:14px;">Labour Day weekend lands mid-trip (Mon Sept 7) — expect a packed, patio-heavy city.</div>
+    <div class="tip" style="margin-top:14px;">Labour Day weekend lands mid-trip (Mon Sept 7) — expect a packed, patio-heavy city.</div></div>
   </section>
 
   <section class="info i-teal">
     <h2>🧀 Cheese curds, done right</h2>
+    <div class="panel">
     <p>If you're bringing some home:</p>
     <div class="tip"><b>The freshness test:</b> real fresh curds <b>squeak</b> against your teeth. No squeak, not fresh. That's the whole test.</div>
     <div class="tip"><b>Where:</b> <b>La Vieille Europe</b>, an old-school European deli on St-Laurent, is a solid bet. A fromagerie or specialty grocer generally beats a supermarket — ask when the curds came in.</div>
-    <div class="tip"><b>Timing:</b> they lose the squeak within a day or two even refrigerated. Buy close to when you pack, not on day one.</div>
+    <div class="tip"><b>Timing:</b> they lose the squeak within a day or two even refrigerated. Buy close to when you pack, not on day one.</div></div>
   </section>
 
+  <div class="sectiontools">
+    <button id="expandAll">Expand all</button>
+    <button id="collapseAll">Collapse all</button>
+  </div>
+
   <div id="categories"></div>
+  <button id="backTop" aria-label="Back to top">↑</button>
 
 </div>
 
 <script>
 const PLACES = [
-  {name:"St-Viateur Bagel",rating:"4.6",price:"$1–10",tag:"Bagel shop",note:null,dup:"also has a Mont-Royal location (St-Viateur Bagel & Café Mont-Royal)",bucket:"cafe",why:"The other half of the rivalry — arguably the city's most famous bagel.",lat:45.522691,lng:-73.601958,ig:null,hot:true,star:false},
+  {name:"St-Viateur Bagel",rating:"4.6",price:"$1–10",tag:"Bagel shop",note:null,dup:"also has a Mont-Royal location (St-Viateur Bagel & Café Mont-Royal)",bucket:"cafe",why:"The other half of the rivalry — arguably the city's most famous bagel.",lat:45.522691,lng:-73.601958,ig:"stviateurbagel",hot:true,star:false},
   {name:"Fairmount Bagel",rating:"4.6",price:"$1–10",tag:"Bagel shop",note:"@fairmountbagel on Instagram",dup:null,bucket:"cafe",why:"Wood-fired Montreal bagels, one half of the city's great bagel rivalry.",lat:45.522878,lng:-73.59517,ig:"fairmountbagel",hot:true,star:false},
-  {name:"Crew Collective & Cafe",rating:"4.4",price:"$10–20",tag:"Cafe",note:"Stunning space in an old bank building",dup:null,bucket:"cafe",why:"Café inside a stunning 1920s bank building in Old Montreal.",lat:45.50232,lng:-73.559317,ig:null,hot:true,star:false},
+  {name:"Crew Collective & Cafe",rating:"4.4",price:"$10–20",tag:"Cafe",note:"Stunning space in an old bank building",dup:null,bucket:"cafe",why:"Café inside a stunning 1920s bank building in Old Montreal.",lat:45.50232,lng:-73.559317,ig:"crewcollectivecafe",hot:true,star:false},
   {name:"Iconoglace",rating:"4.9",price:"$1–10",tag:"Ice cream",note:"@iconoglace on Instagram",dup:null,bucket:"cafe",why:"Trendy artisanal ice cream and sundaes — the Mile End shop is a short walk from the apartment.",lat:45.522336,lng:-73.593129,ig:"iconoglace",hot:true,star:false},
-  {name:"St-Viateur Bagel & Café Mont-Royal",rating:"4.4",price:"$10–20",tag:"Bagel shop",note:null,dup:"also has the original Mile End shop (St-Viateur Bagel)",bucket:"cafe",why:"Same bagels, sit-down café version closer to the apartment.",lat:45.528418,lng:-73.579016,ig:null,hot:false,star:false},
-  {name:"Olive et Gourmando",rating:"4.4",price:"$20–30",tag:"Cafe",note:null,dup:null,bucket:"cafe",why:"Beloved Old Montreal bakery-café — great sandwiches and pastries.",lat:45.501224,lng:-73.556482,ig:null,hot:true,star:false},
+  {name:"St-Viateur Bagel & Café Mont-Royal",rating:"4.4",price:"$10–20",tag:"Bagel shop",note:null,dup:"also has the original Mile End shop (St-Viateur Bagel)",bucket:"cafe",why:"Same bagels, sit-down café version closer to the apartment.",lat:45.528418,lng:-73.579016,ig:"stviateurbagel",hot:false,star:false},
+  {name:"Olive et Gourmando",rating:"4.4",price:"$20–30",tag:"Cafe",note:null,dup:null,bucket:"cafe",why:"Beloved Old Montreal bakery-café — great sandwiches and pastries.",lat:45.501224,lng:-73.556482,ig:"olive_et_gourmando",hot:true,star:false},
   {name:"Café Santropol",rating:"4.4",price:"$20–30",tag:"Cafe",note:null,dup:null,bucket:"cafe",why:"Legendary oversized sandwiches on a leafy garden patio since 1976.",lat:45.515578,lng:-73.580506,ig:null,hot:false,star:false},
   {name:"Café Névé",rating:"4.5",price:"$1–10",tag:"Cafe",note:null,dup:null,bucket:"cafe",why:"Cozy, plant-filled café — good for working or a slow coffee.",lat:45.519504,lng:-73.580466,ig:null,hot:false,star:true},
   {name:"Méchants pinsons",rating:"4.6",price:"$1–10",tag:"Cafe",note:null,dup:null,bucket:"cafe",why:"Tiny, cute Plateau café — good for a coffee-and-pastry break.",lat:45.534697,lng:-73.582451,ig:null,hot:false,star:false},
@@ -355,7 +411,7 @@ const PLACES = [
   {name:"Le Roi du Smoked Meat",rating:"4.1",price:"$20–30",tag:"Meat",note:null,dup:null,bucket:"deli",why:"Smoked meat sandwiches, a cheaper alternative to the big names.",lat:45.537983,lng:-73.606631,ig:null,hot:false,star:false},
   {name:"Chez Tousignant",rating:"4.3",price:"$10–20",tag:"Fast food",note:"Poutine",dup:null,bucket:"deli",why:"Proper Québécois greasy spoon — cute, local, great poutine.",lat:45.536092,lng:-73.612367,ig:null,hot:false,star:false},
   {name:"Wilensky's Light Lunch",rating:"4.7",price:"$1–10",tag:"Sandwich",note:"Mile End institution",dup:null,bucket:"deli",why:"Mile End institution — the grilled Wilensky Special, no substitutions, ever.",lat:45.523362,lng:-73.594783,ig:null,hot:true,star:false},
-  {name:"Lester's Deli",rating:"4.5",price:"$20–30",tag:"Deli",note:"Hot dog, smoked meat",dup:null,bucket:"deli",why:"Same smoked meat as Schwartz's, without the line-up.",lat:45.522159,lng:-73.607093,ig:null,hot:false,star:false},
+  {name:"Lester's Deli",rating:"4.5",price:"$20–30",tag:"Deli",note:"Hot dog, smoked meat",dup:null,bucket:"deli",why:"Same smoked meat as Schwartz's, without the line-up.",lat:45.522159,lng:-73.607093,ig:"lestersdeli",hot:false,star:false},
   {name:"Renzo Sandwich",rating:"4.4",price:"$10–20",tag:"Fast food",note:null,dup:null,bucket:"deli",why:"Quick, tasty sandwiches for an easy lunch.",lat:45.52397,lng:-73.594528,ig:null,hot:false,star:false},
   {name:"Capitaine Sandwich",rating:"4.8",price:"$10–20",tag:"Sandwich",note:null,dup:null,bucket:"deli",why:"Popular sandwich counter, quick and satisfying.",lat:45.518318,lng:-73.578318,ig:null,hot:false,star:true},
   {name:"Hoang Oanh Sandwich",rating:"4.3",price:"$1–10",tag:"Sandwich",note:null,dup:null,bucket:"deli",why:"Excellent, cheap banh mi.",lat:45.508418,lng:-73.560411,ig:null,hot:false,star:false},
@@ -400,147 +456,161 @@ function tiktok(p){
   return 'https://www.tiktok.com/search?q=' + encodeURIComponent(p.name + ' Montreal');
 }
 
-/* ---------- MAP ---------- */
-function buildSimpleMap(){
- try{
-  const box = document.getElementById('mapBox');
-  box.innerHTML = '';
-  const pts = items.filter(p => p.lat != null);
-  const all = pts.concat([APT]);
-  const lats = all.map(p=>p.lat), lngs = all.map(p=>p.lng);
-  const minLat = Math.min(...lats), maxLat = Math.max(...lats);
-  const minLng = Math.min(...lngs), maxLng = Math.max(...lngs);
-  const kx = Math.cos(((minLat+maxLat)/2) * Math.PI/180);
-  const spanX = (maxLng-minLng)*kx, spanY = (maxLat-minLat);
-  // percentage positions, with 6% padding on each side
-  const PADPCT = 6;
-  function pos(lat,lng){
-    const fx = ((lng-minLng)*kx)/spanX;
-    const fy = (maxLat-lat)/spanY;
-    return {
-      left: (PADPCT + fx*(100-2*PADPCT)).toFixed(2) + '%',
-      top:  (PADPCT + fy*(100-2*PADPCT)).toFixed(2) + '%'
-    };
+/* ---------- MAP: self-contained slippy map, OpenStreetMap raster tiles ----------
+   No external JS library: tiles are plain <img> elements, so this works even
+   when the page is opened straight from a file. */
+(function(){
+  const box  = document.getElementById('mapBox');
+  const tileL = document.getElementById('tileLayer');
+  const pinL  = document.getElementById('pinLayer');
+  const TS = 256, MINZ = 11, MAXZ = 18;
+  let z = 14, center = {lat: APT.lat, lng: APT.lng};
+
+  const lon2x  = (lng,z) => (lng+180)/360 * Math.pow(2,z) * TS;
+  const lat2y  = (lat,z) => {
+    const r = lat*Math.PI/180;
+    return (1 - Math.log(Math.tan(r)+1/Math.cos(r))/Math.PI)/2 * Math.pow(2,z) * TS;
+  };
+  const x2lon = (x,z) => x/(Math.pow(2,z)*TS)*360 - 180;
+  const y2lat = (y,z) => {
+    const n = Math.PI - 2*Math.PI*y/(Math.pow(2,z)*TS);
+    return 180/Math.PI * Math.atan(0.5*(Math.exp(n)-Math.exp(-n)));
+  };
+
+  const W = () => box.clientWidth  || 640;
+  const H = () => box.clientHeight || 440;
+
+  const pins = [];
+  function buildPins(){
+    pinL.innerHTML = '';
+    items.filter(p=>p.lat!=null).forEach(p => {
+      const el = document.createElement('div');
+      el.className = 'mappin' + (p.hot?' big':'') + (p.star?' starred':'');
+      el.style.background = CAT[p.bucket].color;
+      el.title = p.name;
+      el.addEventListener('click', e => { e.stopPropagation(); showDetail(p); });
+      pinL.appendChild(el);
+      pins.push({p, el});
+    });
+    const home = document.createElement('div');
+    home.className = 'maphome';
+    home.title = 'Your apartment';
+    pinL.appendChild(home);
+    pins.push({p:{lat:APT.lat, lng:APT.lng, home:true}, el:home});
   }
 
-  const frag = document.createDocumentFragment();
+  function render(){
+    const w = W(), h = H();
+    const cx = lon2x(center.lng, z), cy = lat2y(center.lat, z);
+    const originX = cx - w/2, originY = cy - h/2;
+    const n = Math.pow(2,z);
 
-  pts.forEach(p => {
-    const c = pos(p.lat, p.lng);
-    const dot = document.createElement('div');
-    dot.className = 'mapdot' + (p.hot ? ' big' : '') + (p.star ? ' starred' : '');
-    dot.style.left = c.left;
-    dot.style.top = c.top;
-    dot.style.background = CAT[p.bucket].color;
-    dot.title = p.name;
-    dot.addEventListener('click', () => showDetail(p));
-    frag.appendChild(dot);
+    const x0 = Math.floor(originX/TS), x1 = Math.floor((originX+w)/TS);
+    const y0 = Math.floor(originY/TS), y1 = Math.floor((originY+h)/TS);
 
-    if(p.star){
-      const lab = document.createElement('div');
-      lab.className = 'maplabel';
-      lab.style.left = c.left;
-      lab.style.top = 'calc(' + c.top + ' + 16px)';
-      lab.textContent = p.name;
-      frag.appendChild(lab);
+    const want = {};
+    for(let tx=x0; tx<=x1; tx++){
+      for(let ty=y0; ty<=y1; ty++){
+        if(ty<0 || ty>=n) continue;
+        const wx = ((tx%n)+n)%n;
+        const key = z+'/'+wx+'/'+ty+'/'+tx;
+        want[key] = {tx, wx, ty};
+      }
     }
-  });
-
-  const h = pos(APT.lat, APT.lng);
-  const home = document.createElement('div');
-  home.className = 'maphome';
-  home.style.left = h.left; home.style.top = h.top;
-  home.title = 'Your apartment';
-  frag.appendChild(home);
-
-  const hl = document.createElement('div');
-  hl.className = 'maphomelabel';
-  hl.style.left = h.left;
-  hl.style.top = 'calc(' + h.top + ' - 17px)';
-  hl.textContent = 'HOME';
-  frag.appendChild(hl);
-
-  box.appendChild(frag);
-
-  const leg = document.getElementById('mapLegend');
-  leg.innerHTML = ORDER.map(k => `<span style="background:${CAT[k].color}">${CAT[k].label}</span>`).join('')
-    + '<span style="background:#FFC53D;color:#5A3D00;">⭐ = 5 min from your door</span>';
- } catch(err){
-  document.getElementById('mapBox').innerHTML =
-    '<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center;font-size:13px;color:#6B5A7A;">'
-    + 'Map couldn\'t draw here — every spot below still has a 🗺️ Directions button.</div>';
- }
-}
-
-/* Real zoomable street map (Leaflet + OpenStreetMap). Falls back to the
-   simple dot map above if the library can't be reached. */
-function buildLeafletMap(){
-  const box = document.getElementById('mapBox');
-  box.innerHTML = '';
-  const map = L.map(box, {scrollWheelZoom:true}).setView([APT.lat, APT.lng], 14);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19, attribution: '© OpenStreetMap'
-  }).addTo(map);
-
-  const bounds = [];
-  items.filter(p=>p.lat!=null).forEach(p => {
-    const size = p.hot ? 15 : 12;
-    const ring = p.star ? 'box-shadow:0 0 0 4px #FFC53D;' : '';
-    const icon = L.divIcon({
-      className:'',
-      html:`<div class="lpin" style="width:${size}px;height:${size}px;background:${CAT[p.bucket].color};${ring}"></div>`,
-      iconSize:[size,size], iconAnchor:[size/2,size/2]
+    tileL.innerHTML = '';
+    Object.keys(want).forEach(k => {
+      const {tx,wx,ty} = want[k];
+      const img = document.createElement('img');
+      img.src = 'https://tile.openstreetmap.org/'+z+'/'+wx+'/'+ty+'.png';
+      img.alt = '';
+      img.style.left = (tx*TS - originX) + 'px';
+      img.style.top  = (ty*TS - originY) + 'px';
+      img.onerror = () => { img.style.visibility = 'hidden'; };
+      tileL.appendChild(img);
     });
-    const m = L.marker([p.lat,p.lng],{icon}).addTo(map);
-    m.bindPopup(
-      `<b>${p.name}</b>${p.star?' ⭐':''}<br>
-       <span style="color:#6B5A7A;">${CAT[p.bucket].label}${p.price?' · '+p.price:''}</span><br>
-       <span style="display:block;margin:6px 0;">${p.why||''}</span>
-       <a href="${gmaps(p)}" target="_blank" rel="noopener" style="font-weight:700;color:#2E7DD1;">🗺️ Directions</a> &nbsp;
-       <a href="${tiktok(p)}" target="_blank" rel="noopener" style="font-weight:700;color:#2B1B3D;">▶ TikTok</a>`
-    );
-    m.on('click', () => showDetail(p));
-    bounds.push([p.lat,p.lng]);
-  });
 
-  const homeIcon = L.divIcon({
-    className:'',
-    html:'<div style="width:18px;height:18px;border-radius:50%;background:#2B1B3D;border:3px solid #fff;box-shadow:0 0 0 4px rgba(43,27,61,.25);"></div>',
-    iconSize:[18,18], iconAnchor:[9,9]
-  });
-  L.marker([APT.lat,APT.lng],{icon:homeIcon}).addTo(map)
-    .bindPopup('<b>Your apartment</b><br>Hôtel-de-Ville, between Duluth &amp; Napoléon');
-  bounds.push([APT.lat,APT.lng]);
+    pins.forEach(({p,el}) => {
+      const px = lon2x(p.lng, z) - originX;
+      const py = lat2y(p.lat, z) - originY;
+      if(px < -40 || px > w+40 || py < -40 || py > h+40){ el.style.display='none'; return; }
+      el.style.display = '';
+      el.style.left = px + 'px';
+      el.style.top  = py + 'px';
+    });
+  }
 
-  map.fitBounds(bounds, {padding:[28,28]});
-  setTimeout(()=>map.invalidateSize(), 200);
+  function setZoom(nz, ax, ay){
+    nz = Math.max(MINZ, Math.min(MAXZ, nz));
+    if(nz === z) return;
+    const w = W(), h = H();
+    if(ax === undefined){ ax = w/2; ay = h/2; }
+    // keep the point under (ax,ay) fixed
+    const originX = lon2x(center.lng,z) - w/2, originY = lat2y(center.lat,z) - h/2;
+    const anchorLng = x2lon(originX+ax, z), anchorLat = y2lat(originY+ay, z);
+    z = nz;
+    const nOriginX = lon2x(anchorLng,z) - ax, nOriginY = lat2y(anchorLat,z) - ay;
+    center = { lng: x2lon(nOriginX + w/2, z), lat: y2lat(nOriginY + h/2, z) };
+    render();
+  }
+
+  // --- drag / pan ---
+  let dragging = false, lastX = 0, lastY = 0, moved = false;
+  function down(x,y){ dragging = true; moved = false; lastX = x; lastY = y; box.classList.add('dragging'); }
+  function move(x,y){
+    if(!dragging) return;
+    const dx = x-lastX, dy = y-lastY;
+    if(Math.abs(dx)>2||Math.abs(dy)>2) moved = true;
+    lastX = x; lastY = y;
+    const w=W(), h=H();
+    const originX = lon2x(center.lng,z) - w/2 - dx;
+    const originY = lat2y(center.lat,z) - h/2 - dy;
+    center = { lng: x2lon(originX + w/2, z), lat: y2lat(originY + h/2, z) };
+    render();
+  }
+  function up(){ dragging = false; box.classList.remove('dragging'); }
+
+  box.addEventListener('mousedown', e => { down(e.clientX, e.clientY); e.preventDefault(); });
+  window.addEventListener('mousemove', e => move(e.clientX, e.clientY));
+  window.addEventListener('mouseup', up);
+
+  let pinchDist = null;
+  box.addEventListener('touchstart', e => {
+    if(e.touches.length === 1){ down(e.touches[0].clientX, e.touches[0].clientY); }
+    else if(e.touches.length === 2){
+      dragging = false;
+      pinchDist = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+    }
+  }, {passive:true});
+  box.addEventListener('touchmove', e => {
+    if(e.touches.length === 1 && dragging){
+      move(e.touches[0].clientX, e.touches[0].clientY);
+      e.preventDefault();
+    } else if(e.touches.length === 2 && pinchDist){
+      const d = Math.hypot(e.touches[0].clientX-e.touches[1].clientX, e.touches[0].clientY-e.touches[1].clientY);
+      if(d/pinchDist > 1.35){ setZoom(z+1); pinchDist = d; }
+      else if(d/pinchDist < 0.74){ setZoom(z-1); pinchDist = d; }
+      e.preventDefault();
+    }
+  }, {passive:false});
+  box.addEventListener('touchend', () => { up(); pinchDist = null; }, {passive:true});
+
+  box.addEventListener('wheel', e => {
+    e.preventDefault();
+    const r = box.getBoundingClientRect();
+    setZoom(z + (e.deltaY < 0 ? 1 : -1), e.clientX-r.left, e.clientY-r.top);
+  }, {passive:false});
+
+  document.getElementById('zIn').addEventListener('click', e => { e.stopPropagation(); setZoom(z+1); });
+  document.getElementById('zOut').addEventListener('click', e => { e.stopPropagation(); setZoom(z-1); });
+
+  buildPins();
+  render();
+  window.addEventListener('resize', render);
+  setTimeout(render, 300);
 
   const leg = document.getElementById('mapLegend');
   leg.innerHTML = ORDER.map(k => `<span style="background:${CAT[k].color}">${CAT[k].label}</span>`).join('')
     + '<span style="background:#FFC53D;color:#5A3D00;">⭐ = 5 min from your door</span>';
-}
-
-/* Try Leaflet first; if it can't load (offline / blocked), draw the simple map. */
-(function initMap(){
-  let done = false;
-  function fallback(){ if(!done){ done = true; buildSimpleMap(); } }
-
-  const css = document.createElement('link');
-  css.rel = 'stylesheet';
-  css.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
-  document.head.appendChild(css);
-
-  const s = document.createElement('script');
-  s.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
-  s.onload = () => {
-    if(done) return;
-    done = true;
-    try { buildLeafletMap(); } catch(e){ done = false; fallback(); }
-  };
-  s.onerror = fallback;
-  document.head.appendChild(s);
-
-  setTimeout(fallback, 6000);
 })();
 
 function showDetail(p){
@@ -614,6 +684,42 @@ ORDER.forEach(cat => {
 
 document.getElementById('totalCount').textContent = items.length;
 
+/* ---------- collapsible sections (all closed by default) ---------- */
+document.querySelectorAll('section.info, section.cat').forEach(sec => {
+  const h = sec.querySelector('h2');
+  if(!h) return;
+  h.setAttribute('role','button');
+  h.setAttribute('tabindex','0');
+  const toggle = () => sec.classList.toggle('open');
+  h.addEventListener('click', toggle);
+  h.addEventListener('keydown', e => {
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+  });
+});
+
+document.getElementById('expandAll').addEventListener('click', () => {
+  document.querySelectorAll('section.info, section.cat').forEach(s => s.classList.add('open'));
+});
+document.getElementById('collapseAll').addEventListener('click', () => {
+  document.querySelectorAll('section.info, section.cat').forEach(s => s.classList.remove('open'));
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+/* jump links open the section they point at */
+jumpNav.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    const sec = document.querySelector(a.getAttribute('href'));
+    if(sec) sec.classList.add('open');
+  });
+});
+
+/* back to top */
+const backTop = document.getElementById('backTop');
+window.addEventListener('scroll', () => {
+  backTop.style.display = window.scrollY > 500 ? 'block' : 'none';
+});
+backTop.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+
 document.querySelectorAll('li.item input[type="checkbox"]').forEach(cb => {
   cb.addEventListener('change', () => {
     const p = items.find(x => x.id === cb.id);
@@ -630,7 +736,9 @@ document.getElementById('search').addEventListener('input', (e) => {
     li.classList.toggle('hidden', q.length > 0 && !name.includes(q));
   });
   document.querySelectorAll('section.cat').forEach(sec => {
-    sec.style.display = sec.querySelectorAll('li.item:not(.hidden)').length ? '' : 'none';
+    const n = sec.querySelectorAll('li.item:not(.hidden)').length;
+    sec.style.display = n ? '' : 'none';
+    if(q.length > 0 && n) sec.classList.add('open');
   });
 });
 
@@ -660,7 +768,7 @@ document.getElementById('locateStatus').textContent = 'Closest to your apartment
 document.getElementById('locateBtn').addEventListener('click', () => {
   const status = document.getElementById('locateStatus');
   if(!navigator.geolocation || !window.isSecureContext){
-    status.textContent = 'Live location needs the page to be online (not opened as a local file) — showing closest to the apartment instead.';
+    status.textContent = "Live location only works when this page is online, not opened as a downloaded file. Showing what's closest to the apartment instead — and every 🗺️ Directions button still navigates from wherever you are.";
     showClosest(APT.lat, APT.lng);
     return;
   }

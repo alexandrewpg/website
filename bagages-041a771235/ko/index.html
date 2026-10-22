@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#2f5d50">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="짐 목록">
+<title>여행 짐 목록</title>
+<style>
+:root{--bg:#f5f3ee;--card:#fff;--ink:#23211d;--muted:#6e695f;--line:#e1dccf;--accent:#2f5d50;--accent-soft:#e2ebe7;--warn:#9a3b2e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic","Segoe UI",Roboto,sans-serif}
+header{background:var(--accent);color:#fff;padding:calc(14px + env(safe-area-inset-top)) 20px 0}
+header h1{margin:0 0 10px;font-size:20px;font-weight:600;max-width:860px;margin-inline:auto}
+nav{display:flex;gap:4px;max-width:860px;margin:0 auto}
+nav button{background:transparent;border:0;color:#d4e2dc;padding:10px 18px;font:inherit;cursor:pointer;border-radius:8px 8px 0 0}
+nav button.active{background:var(--bg);color:var(--ink);font-weight:600}
+main{max-width:860px;margin:0 auto;padding:20px 16px 90px}
+.tab{display:none}.tab.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:16px}
+h2{font-size:17px;margin:0 0 10px}
+h3{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:18px 0 4px;font-weight:600}
+h4{font-size:15px;margin:16px 0 2px}
+p.note,.note{color:var(--muted);font-size:14px;margin:4px 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px 14px}
+label.f{display:flex;flex-direction:column;font-size:13px;color:var(--muted);gap:3px}
+input[type=text],input[type=date],input[type=number],select,textarea{font:inherit;color:var(--ink);padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:#fff;width:100%}
+textarea{min-height:80px}
+button.b{font:inherit;font-size:14px;padding:8px 14px;border-radius:7px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+button.b:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+button.danger{color:var(--warn)}
+.row{display:flex;align-items:center;gap:10px;padding:7px 2px;border-bottom:1px solid #f0ede6}
+.row:last-child{border-bottom:0}
+.row input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent);flex:none}
+.row .lbl{flex:1}
+.row .qty{font-weight:600;white-space:nowrap}
+.alt{font-weight:400;color:var(--muted);font-size:14px}
+.row.done .lbl,.row.done .qty{text-decoration:line-through;color:var(--muted)}
+.row .del{border:0;background:none;color:#b3ab9c;font-size:18px;cursor:pointer;padding:0 4px}
+.row .del:hover{color:var(--warn)}
+.row input.q{width:62px;padding:4px 6px;text-align:center;flex:none}
+.row.off .lbl{color:var(--muted)}
+.grp{font-size:11px;color:#fff;background:#8a8273;border-radius:4px;padding:1px 6px;white-space:nowrap}
+.grp.hiver{background:#4f6f8f}.grp.andie{background:#8f5f6f}.grp.perso{background:#6f7f4f}
+.tag{font-size:12px;color:var(--muted);background:#f1eee7;border-radius:4px;padding:1px 6px;white-space:nowrap}
+.listhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.dest{font-size:22px;font-weight:650;margin:0}
+.meta{color:var(--muted);margin:2px 0 0}
+.progress{height:6px;background:#ece8df;border-radius:3px;margin:14px 0 4px;overflow:hidden}
+.progress div{height:100%;background:var(--accent);transition:width .2s}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.genbar{position:fixed;left:0;right:0;bottom:0;background:rgba(245,243,238,.96);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:none}
+.genbar.show{display:block}
+.genbar .in{max-width:860px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:10px}
+details.arch{border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin-bottom:8px}
+details.arch summary{cursor:pointer;font-weight:600}
+.unused{color:var(--muted);text-decoration:line-through}
+.empty{text-align:center;color:var(--muted);padding:40px 10px}
+.inline{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:14px;margin:8px 0}
+@media print{header,.actions,.genbar,#coulisses{display:none!important}body{background:#fff}.card{border:0;padding:0}main{padding:0}}
+</style>
+</head>
+<body>
+<header>
+  <h1>여행 짐 목록</h1>
+  <nav>
+    <button data-tab="liste" class="active">목록</button>
+    <button data-tab="coulisses">설정</button>
+  </nav>
+</header>
+
+<main>
+<!-- ============ LISTE ============ -->
+<section id="liste" class="tab active"></section>
+
+<!-- ============ COULISSES ============ -->
+<section id="coulisses" class="tab">
+
+  <div class="card">
+    <h2>사용 방법</h2>
+    <p class="note">1. 목적지와 날짜를 입력하고, 세탁이 가능하면 세탁 간격(최대 일수)도 입력하세요. 2. 필요한 항목을 체크하세요. 필수 항목은 처음부터 체크되어 있고, 나머지(선택, 겨울)는 직접 체크해야 추가됩니다. 모든 항목에 수량을 입력할 수 있습니다. 3. <b>목록 만들기</b>를 누르세요. 4. 여행에서 돌아오면 여행을 정리하고 보관하세요. 다음 여행에 도움이 되는 정보가 여기에 남습니다.</p>
+    <p class="note">수량: 여행 기간에 따라 달라지는 옷은 출발할 때 한 벌을 입고 가므로 여행 일수보다 하루 적게 챙깁니다. 세탁을 하면 세탁 간격 일수만큼 챙겨서(입고 가는 한 벌은 별도) 빨래가 마르는 동안 갈아입을 옷이 있게 합니다. 목록에는 항상 세탁 없이 필요한 수량이 먼저, 괄호 안에 세탁할 때의 수량이 표시됩니다.</p>
+  </div>
+
+  <div class="card">
+    <h2>여행</h2>
+    <div class="grid">
+      <label class="f">목적지<input type="text" id="t-dest" placeholder="예: 몬트리올"></label>
+      <label class="f">출발일<input type="date" id="t-start"></label>
+      <label class="f">돌아오는 날<input type="date" id="t-end"></label>
+      <label class="f">여행 일수<input type="number" id="t-days" min="1"></label>
+      <label class="f">세탁 간격 (최대 일수)<input type="number" id="t-laundry" min="1" placeholder="비워 두면 세탁 없음"></label>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>항목</h2>
+    <p class="note">항목은 구역별로 묶여 있고 필수 항목이 먼저 나옵니다. 라벨은 선택, 겨울, 직접 추가한 항목을 표시합니다. 수량 칸: 비워 두면 자동 수량(기간에 따른 옷) 또는 수량 없음, 숫자를 넣으면 그 수량이 적용됩니다. ×를 누르면 항목이 삭제됩니다.</p>
+    <div id="catalog"></div>
+  </div>
+
+  <div class="card">
+    <h2>항목 추가</h2>
+    <div class="grid">
+      <label class="f">항목<input type="text" id="a-label" placeholder="예: 엄마 선물"></label>
+      <label class="f">구역<select id="a-section"></select></label>
+      <label class="f">수량 (선택)<input type="number" id="a-qty" min="0"></label>
+    </div>
+    <div class="inline">
+      <label><input type="checkbox" id="a-daily"> 기간에 따라 수량 계산</label>
+      <label><input type="radio" name="a-scope" value="trip" checked> 이번 여행만</label>
+      <label><input type="radio" name="a-scope" value="catalog"> 내 항목에 저장</label>
+      <button class="b" id="a-add">추가</button>
+    </div>
+    <div id="extras"></div>
+  </div>
+
+  <div class="card" id="bilan-card">
+    <h2>여행 정리</h2>
+    <div id="bilan"></div>
+  </div>
+
+  <div class="card">
+    <h2>보관된 여행</h2>
+    <div id="archives"></div>
+  </div>
+
+  <div class="card">
+    <h2>백업</h2>
+    <p class="note">모든 내용은 바꿀 때마다 이 기기의 앱에 바로 저장됩니다. 기기를 바꾸거나 앱을 삭제하거나 브라우저 데이터를 지울 때만 사라지니, 특히 여행을 보관한 뒤에는 가끔 백업을 내보내서 안전한 곳에 보관하세요.</p>
+    <p class="note" id="last-bk"></p>
+    <div class="actions">
+      <button class="b" id="exp">백업 내보내기</button>
+      <button class="b" id="imp">백업 가져오기</button>
+      <input type="file" id="imp-file" accept=".json,application/json" hidden>
+      <button class="b danger" id="reset-cat">기본 항목으로 되돌리기</button>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="genbar" id="genbar"><div class="in">
+  <span class="note" id="gen-count"></span>
+  <button class="b primary" id="gen">목록 만들기</button>
+</div></div>
+
+<script>
+const KEY='packingList.ko.v1';
+const SECTIONS=[
+  ['depart','출발할 때 입는 것'],
+  ['valise','여행가방'],
+  ['toilette','여행가방 — 세면도구'],
+  ['liquides','여행가방 — 액체류 봉투'],
+  ['acces','바로 꺼낼 것 (전자기기와 소품)'],
+  ['verif','확인할 것 (디지털)']
+];
+const SECNAME=Object.fromEntries(SECTIONS);
+const CATV=2;
+const GROUPS=[
+  ['base','필수',''],
+  ['options','선택',''],
+  ['hiver','겨울',''],
+  ['perso','직접 추가','']
+];
+const DEFAULTS=[
+ // 필수
+ ['base','depart','속옷',0,'Underwear'],['base','depart','양말',0,'Socks'],['base','depart','바지 또는 청바지',0,'Pants or jeans'],['base','depart','상의',0,'Top'],
+ ['base','depart','스웨터 또는 카디건',0,'Sweater or cardigan'],['base','depart','신발',0,'Shoes'],['base','depart','지갑',0,'Wallet'],['base','depart','휴대폰',0,'Phone'],['base','depart','여권',0,'Passport'],
+ ['base','valise','속옷',1,'Underwear'],['base','valise','양말',1,'Socks'],['base','valise','상의',1,'Tops'],['base','valise','여벌 바지',0,'Extra pair of pants'],
+ ['base','toilette','칫솔(충전) 및 케이블',0,'Toothbrush (charged) and cable'],['base','toilette','빗',0,'Hairbrush or comb'],['base','toilette','손톱깎이',0,'Nail clippers'],
+ ['base','toilette','치실',0,'Floss'],['base','toilette','약',0,'Medication'],
+ ['base','liquides','치약',0,'Toothpaste'],['base','liquides','데오드란트',0,'Deodorant'],
+ ['base','acces','휴대폰 충전기',0,'Phone charger'],['base','acces','휴대폰 케이블',0,'Phone cable'],['base','acces','애플워치 충전기',0,'Apple Watch charger'],['base','acces','USB 충전 허브',0,'USB charging hub'],
+ ['base','verif','항공권 (앱 또는 이메일)',0,'Plane tickets (app or email)'],['base','verif','숙소 예약',0,'Accommodation booking'],
+ // 선택
+ ['options','depart','벨트',0,'Belt'],['options','depart','바람막이',0,'Windbreaker'],['options','depart','재킷 또는 블레이저',0,'Jacket or blazer'],
+ ['options','valise','잠옷',0,'Pyjamas'],['options','valise','수영복',0,'Swimsuit'],['options','valise','모자',0,'Hat'],['options','valise','우산',0,'Umbrella'],
+ ['options','valise','우비',0,'Raincoat'],['options','valise','격식 있는 옷',0,'Dressy outfit'],['options','valise','반바지 또는 치마',0,'Shorts or skirt'],
+ ['options','valise','샌들',0,'Sandals'],['options','valise','여벌 신발',0,'Extra pair of shoes'],['options','valise','작은 배낭',0,'Small backpack'],['options','valise','빨래 주머니',0,'Laundry bags'],
+ ['options','toilette','화장품 파우치',0,'Makeup bag'],['options','toilette','면도기',0,'Razor'],['options','toilette','머리끈 또는 집게핀',0,'Hair ties or clips'],
+ ['options','toilette','드라이어 또는 고데기',0,'Hair dryer or straightener'],['options','toilette','수건',0,'Washcloth'],['options','toilette','콘택트렌즈와 케이스',0,'Contact lenses and case'],
+ ['options','liquides','샴푸와 린스',0,'Shampoo and conditioner'],['options','liquides','보습제',0,'Moisturizer'],['options','liquides','선크림',0,'Sunscreen'],['options','liquides','구강청결제',0,'Mouthwash'],
+ ['options','acces','전자책 단말기와 케이블',0,'E-reader and cable'],['options','acces','태블릿과 케이블',0,'Tablet and cable'],['options','acces','노트북과 충전기',0,'Laptop and cable'],
+ ['options','acces','멀티 어댑터',0,'Plug adapter'],['options','acces','안경과 안경집',0,'Glasses and case'],['options','acces','수면 안대',0,'Sleep mask'],
+ ['options','acces','귀마개',0,'Earplugs'],['options','acces','헤드폰',0,'Headphones'],['options','acces','수첩과 펜',0,'Notebook and pen'],
+ ['options','verif','탑승권',0,'Boarding pass'],['options','verif','렌터카 또는 기차 예약',0,'Car or train booking'],['options','verif','여행자 보험',0,'Travel insurance'],
+ // 겨울
+ ['hiver','depart','부츠',0,'Boots'],['hiver','depart','겨울 코트',0,'Winter coat'],['hiver','depart','털모자',0,'Toque'],
+ ['hiver','depart','장갑',0,'Mittens or gloves'],['hiver','depart','목도리',0,'Scarf'],['hiver','valise','여벌 두꺼운 스웨터',0,'Extra warm sweater']
+];
+function slug(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+function defaultCatalog(){return DEFAULTS.map(([g,s,l,d,k])=>({id:s+'-'+slug(k||l),label:l,section:s,group:g,daily:!!d,on:g==='base'}))}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function $(id){return document.getElementById(id)}
+
+let S=load();
+function load(){
+  let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+  if(!d||typeof d!=='object')d={};
+  if(!Array.isArray(d.catalog)){d.catalog=defaultCatalog();d.catv=CATV}
+  if((d.catv||1)<CATV){
+    d.catalog=d.catalog.filter(i=>i.id!=='depart-t-shirt-ou-chemise'&&i.id!=='depart-chandail-chaud-ou-veston');
+    for(const it of defaultCatalog())if(!d.catalog.some(i=>i.id===it.id))d.catalog.push(it);
+    d.catv=CATV;
+  }
+  d.trip=d.trip||{dest:'',start:'',end:'',days:'',laundry:''};
+  d.extras=d.extras||[];d.current=d.current||null;d.archives=d.archives||[];
+  return d;
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){alert('이 브라우저에 저장할 수 없습니다. 백업을 내보내 주세요.')}}
+
+/* ---------- dates & quantités ---------- */
+function daysBetween(a,b){if(!a||!b)return 0;const d=(new Date(b+'T12:00')-new Date(a+'T12:00'))/864e5;return d>=0?Math.round(d)+1:0}
+function fmt(d,opt){return new Date(d+'T12:00').toLocaleDateString('ko-KR',opt)}
+function fmtRange(a,b){
+  const k=s=>{const D=new Date(s+'T12:00');return [D.getFullYear(),D.getMonth()+1,D.getDate()]};
+  if(a&&b){const [y1,m1,d1]=k(a),[y2,m2,d2]=k(b);
+    if(y1===y2&&m1===m2)return y1+'년 '+m1+'월 '+d1+'일~'+d2+'일';
+    if(y1===y2)return y1+'년 '+m1+'월 '+d1+'일~'+m2+'월 '+d2+'일';
+    return y1+'년 '+m1+'월 '+d1+'일~'+y2+'년 '+m2+'월 '+d2+'일';}
+  if(a){const [y,m,d]=k(a);return y+'년 '+m+'월 '+d+'일 출발'}
+  return '';
+}
+function qtyFor(it,t){
+  if(it.qty!==undefined&&it.qty!==null&&it.qty!=='')return {no:+it.qty,w:null};
+  if(!it.daily||!t.days)return null;
+  const no=Math.max(t.days-1,0);
+  const L=+t.laundry;
+  const w=(L&&L<t.days-1)?L:null;
+  return {no,w};
+}
+function qtyHtml(q){if(!q)return '';return '× '+q.no+(q.w!==null?' <span class="alt">(세탁 시 '+q.w+')</span>':'')}
+
+/* ---------- onglets ---------- */
+function show(tab){
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  document.querySelectorAll('.tab').forEach(s=>s.classList.toggle('active',s.id===tab));
+  $('genbar').classList.toggle('show',tab==='coulisses');
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.tab));
+
+/* ---------- LISTE ---------- */
+function renderList(){
+  const el=$('liste');const c=S.current;
+  if(!c){el.innerHTML='<div class="card empty">아직 목록이 없습니다.<br><br><button class="b primary" onclick="show(\'coulisses\')">설정으로 가기</button></div>';return}
+  const t=c.trip;const total=c.items.length;const done=c.items.filter(i=>c.checks[i.id]).length;
+  let meta=[fmtRange(t.start,t.end),t.days?t.days+'일':''].filter(Boolean).join(' · ');
+  let lav=t.laundry?'세탁 가능: 최대 '+t.laundry+'일마다 세탁':'세탁 없이 계산한 수량';
+  let h='<div class="card"><div class="listhead"><div><p class="dest">'+esc(t.dest||'여행')+'</p><p class="meta">'+esc(meta)+'</p><p class="note">'+esc(lav)+'</p></div>'+
+    '<div class="actions"><button class="b" id="l-reset">체크 모두 해제</button><button class="b" onclick="window.print()">인쇄</button></div></div>'+
+    '<div class="progress"><div style="width:'+(total?done/total*100:0)+'%"></div></div><p class="note">'+done+' / '+total+'개 준비 완료</p>';
+  for(const [sid,sname] of SECTIONS){
+    const its=c.items.filter(i=>i.section===sid);if(!its.length)continue;
+    h+='<h3>'+esc(sname)+'</h3>';
+    for(const it of its){const ck=!!c.checks[it.id];
+      h+='<label class="row'+(ck?' done':'')+'"><input type="checkbox" data-chk="'+esc(it.id)+'"'+(ck?' checked':'')+'><span class="lbl">'+esc(it.label)+'</span><span class="qty">'+qtyHtml(it.qty)+'</span></label>';}
+  }
+  el.innerHTML=h+'</div>';
+  el.querySelectorAll('[data-chk]').forEach(cb=>cb.onchange=()=>{c.checks[cb.dataset.chk]=cb.checked;save();renderList()});
+  $('l-reset').onclick=()=>{if(confirm('모든 체크를 해제할까요?')){c.checks={};save();renderList()}};
+}
+
+/* ---------- COULISSES : voyage ---------- */
+function fillTrip(){const t=S.trip;$('t-dest').value=t.dest||'';$('t-start').value=t.start||'';$('t-end').value=t.end||'';$('t-days').value=t.days||'';$('t-laundry').value=t.laundry||''}
+function readTrip(){
+  const t=S.trip;t.dest=$('t-dest').value.trim();t.start=$('t-start').value;t.end=$('t-end').value;
+  const auto=daysBetween(t.start,t.end);if(auto){t.days=auto;$('t-days').value=auto}else t.days=+$('t-days').value||'';
+  t.laundry=+$('t-laundry').value||'';save();renderCatalog();
+}
+['t-dest','t-start','t-end','t-days','t-laundry'].forEach(id=>$(id).addEventListener('change',readTrip));
+
+/* ---------- COULISSES : catalogue ---------- */
+function renderCatalog(){
+  const GO=Object.fromEntries(GROUPS.map((g,i)=>[g[0],i]));
+  const GL={options:'선택',hiver:'겨울',perso:'추가'};
+  let h='';
+  for(const [sid,sname] of SECTIONS){
+    const s=S.catalog.filter(i=>i.section===sid).sort((a,b)=>(GO[a.group]??9)-(GO[b.group]??9));
+    if(!s.length)continue;
+    h+='<h3>'+esc(sname)+'</h3>';
+    for(const it of s){
+      const auto=(it.daily&&S.trip.days)?qtyFor({daily:true},S.trip):null;
+      const manual=it.qty!==undefined&&it.qty!==null&&it.qty!=='';
+      h+='<div class="row'+(it.on?'':' off')+'"><input type="checkbox" id="c-'+esc(it.id)+'" data-on="'+esc(it.id)+'"'+(it.on?' checked':'')+'>'+
+        '<label class="lbl" for="c-'+esc(it.id)+'">'+esc(it.label)+(GL[it.group]?' <span class="grp '+it.group+'">'+GL[it.group]+'</span>':'')+'</label>'+
+        (it.daily&&!manual?'<span class="qty">'+(auto?qtyHtml(auto):'<span class="tag">기간에 따라</span>')+'</span>':'')+
+        '<input type="number" min="0" class="q" data-q="'+esc(it.id)+'" value="'+(manual?esc(it.qty):'')+'" placeholder="'+(auto?auto.no:'수량')+'" title="수량">'+
+        '<button class="del" title="항목 삭제" data-del="'+esc(it.id)+'">×</button></div>';
+    }
+  }
+  $('catalog').innerHTML=h;
+  $('catalog').querySelectorAll('[data-on]').forEach(cb=>cb.onchange=()=>{S.catalog.find(i=>i.id===cb.dataset.on).on=cb.checked;cb.closest('.row').classList.toggle('off',!cb.checked);save();updateCount()});
+  $('catalog').querySelectorAll('[data-q]').forEach(inp=>inp.onchange=()=>{const it=S.catalog.find(i=>i.id===inp.dataset.q);
+    it.qty=inp.value===''?null:Math.max(0,Math.round(+inp.value));if(it.qty&&!it.on)it.on=true;save();renderCatalog()});
+  $('catalog').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{const it=S.catalog.find(i=>i.id===b.dataset.del);
+    if(confirm('“'+it.label+'” 항목을 삭제할까요?')){S.catalog=S.catalog.filter(i=>i!==it);save();renderCatalog()}});
+  updateCount();
+}
+function updateCount(){const n=S.catalog.filter(i=>i.on).length+S.extras.length;$('gen-count').textContent=n+'개 선택됨'}
+
+/* ---------- COULISSES : ajouts ---------- */
+$('a-section').innerHTML=SECTIONS.map(([id,n])=>'<option value="'+id+'"'+(id==='valise'?' selected':'')+'>'+esc(n)+'</option>').join('');
+$('a-add').onclick=()=>{
+  const label=$('a-label').value.trim();if(!label){$('a-label').focus();return}
+  const section=$('a-section').value,daily=$('a-daily').checked;const qv=$('a-qty').value;const qty=qv===''?null:Math.max(0,Math.round(+qv));
+  const scope=document.querySelector('input[name=a-scope]:checked').value;
+  const id=(scope==='catalog'?'perso-':'x-')+Date.now();
+  if(scope==='catalog')S.catalog.push({id,label,section,group:'perso',daily,qty,on:true});
+  else S.extras.push({id,label,section,daily,qty});
+  $('a-label').value='';$('a-qty').value='';$('a-daily').checked=false;save();renderCatalog();renderExtras();
+};
+$('a-label').addEventListener('keydown',e=>{if(e.key==='Enter')$('a-add').click()});
+function renderExtras(){
+  if(!S.extras.length){$('extras').innerHTML='';updateCount();return}
+  $('extras').innerHTML='<h3>이번 여행만</h3>'+S.extras.map(x=>'<div class="row"><span class="lbl">'+esc(x.label)+'</span>'+(x.qty?'<span class="qty">× '+x.qty+'</span>':'')+'<span class="tag">'+esc(SECNAME[x.section])+'</span><button class="del" data-x="'+esc(x.id)+'">×</button></div>').join('');
+  $('extras').querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{S.extras=S.extras.filter(x=>x.id!==b.dataset.x);save();renderExtras()});
+  updateCount();
+}
+
+/* ---------- Générer ---------- */
+$('gen').onclick=()=>{
+  readTrip();
+  if(S.current&&Object.values(S.current.checks).some(Boolean)&&!confirm('현재 목록을 새로 바꿀까요? 체크 표시가 사라집니다.'))return;
+  const t={...S.trip};
+  const items=S.catalog.filter(i=>i.on).map(i=>({id:i.id,label:i.label,section:i.section,daily:i.daily,qtyManual:i.qty}))
+    .concat(S.extras.map(x=>({id:x.id,label:x.label,section:x.section,daily:x.daily,qtyManual:x.qty})));
+  items.forEach(i=>{i.qty=qtyFor({daily:i.daily,qty:i.qtyManual},t);delete i.qtyManual});
+  S.current={trip:t,items,checks:{},unused:{},notes:'',created:new Date().toISOString()};
+  save();renderList();renderBilan();show('liste');
+};
+
+/* ---------- Bilan ---------- */
+function renderBilan(){
+  const c=S.current,el=$('bilan');
+  if(!c){el.innerHTML='<p class="note">진행 중인 목록이 없습니다.</p>';return}
+  let h='<p class="note">돌아오면 사용하지 않은 항목을 체크하고 부족했던 것을 적은 뒤 보관하세요.</p>';
+  for(const [sid,sname] of SECTIONS){const its=c.items.filter(i=>i.section===sid);if(!its.length)continue;
+    h+='<h3>'+esc(sname)+'</h3>';
+    for(const it of its)h+='<label class="row"><input type="checkbox" data-un="'+esc(it.id)+'"'+(c.unused[it.id]?' checked':'')+'><span class="lbl">'+esc(it.label)+'</span><span class="tag">사용 안 함</span></label>';}
+  h+='<h3>Notes</h3><textarea id="b-notes" placeholder="부족했던 것, 너무 많았던 것, 조정할 수량…">'+esc(c.notes||'')+'</textarea>'+
+    '<div class="actions" style="margin-top:10px"><button class="b primary" id="b-arch">이 여행 보관하기</button></div>';
+  el.innerHTML=h;
+  el.querySelectorAll('[data-un]').forEach(cb=>cb.onchange=()=>{c.unused[cb.dataset.un]=cb.checked;save()});
+  $('b-notes').oninput=e=>{c.notes=e.target.value;save()};
+  $('b-arch').onclick=()=>{
+    if(!confirm('이 여행을 보관할까요? 현재 목록과 이번 여행만 추가한 항목이 지워집니다.'))return;
+    S.archives.unshift({trip:c.trip,items:c.items,unused:c.unused,notes:c.notes,archivedAt:new Date().toISOString()});
+    S.current=null;S.extras=[];save();renderAll();
+    alert('여행을 보관했습니다. 백업을 내보내 두세요.');
+  };
+}
+
+/* ---------- Archives ---------- */
+function renderArchives(){
+  const el=$('archives');
+  if(!S.archives.length){el.innerHTML='<p class="note">보관된 여행이 없습니다.</p>';return}
+  el.innerHTML=S.archives.map((a,k)=>{
+    const t=a.trip;const nUn=Object.values(a.unused||{}).filter(Boolean).length;
+    let h='<details class="arch"><summary>'+esc(t.dest||'여행')+' — '+esc(fmtRange(t.start,t.end)||'날짜 없음')+(t.days?' ('+t.days+'일)':'')+'</summary>';
+    h+='<p class="note">'+a.items.length+'개 항목 · 사용 안 함 '+nUn+'개'+(t.laundry?' · '+t.laundry+'일마다 세탁':'')+'</p>';
+    if(a.notes)h+='<p><b>Notes :</b> '+esc(a.notes).replace(/\n/g,'<br>')+'</p>';
+    for(const [sid,sname] of SECTIONS){const its=a.items.filter(i=>i.section===sid);if(!its.length)continue;
+      h+='<h3>'+esc(sname)+'</h3>'+its.map(i=>'<div class="'+(a.unused&&a.unused[i.id]?'unused':'')+'">'+esc(i.label)+(i.qty?' '+qtyHtml(i.qty):'')+'</div>').join('');}
+    h+='<div class="actions" style="margin-top:10px"><button class="b" data-reuse="'+k+'">이 여행으로 시작</button><button class="b danger" data-rm="'+k+'">삭제</button></div></details>';
+    return h;}).join('');
+  el.querySelectorAll('[data-reuse]').forEach(b=>b.onclick=()=>{
+    const a=S.archives[+b.dataset.reuse];
+    const skip=confirm('“사용 안 함” 항목을 뺄까요?\n(확인 = 빼기, 취소 = 모두 유지)');
+    const keep=a.items.filter(i=>!(skip&&a.unused&&a.unused[i.id]));
+    const ids=new Set(keep.map(i=>i.id));
+    S.catalog.forEach(i=>i.on=ids.has(i.id));
+    S.extras=keep.filter(i=>!S.catalog.some(c=>c.id===i.id)).map(i=>({id:'x-'+Date.now()+Math.random().toString(36).slice(2,6),label:i.label,section:i.section,daily:i.daily}));
+    S.trip={dest:a.trip.dest,start:'',end:'',days:'',laundry:a.trip.laundry||''};
+    save();fillTrip();renderCatalog();renderExtras();window.scrollTo(0,0);
+  });
+  el.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{if(confirm('보관된 이 여행을 완전히 삭제할까요?')){S.archives.splice(+b.dataset.rm,1);save();renderArchives()}});
+}
+
+/* ---------- Sauvegarde ---------- */
+$('exp').onclick=async()=>{
+  const name='packing-list-ko-backup-'+new Date().toISOString().slice(0,10)+'.json';
+  const json=JSON.stringify(S,null,2);
+  const done=()=>{S.lastBackup=new Date().toISOString();save();renderBackup()};
+  try{const f=new File([json],name,{type:'application/json'});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:name});done();return}
+  }catch(e){if(e&&e.name==='AbortError')return}
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([json],{type:'application/json'}));
+  a.download=name;document.body.appendChild(a);a.click();a.remove();done();
+};
+function renderBackup(){$('last-bk').textContent='마지막 백업: '+(S.lastBackup?new Date(S.lastBackup).toLocaleString('ko-KR',{dateStyle:'medium',timeStyle:'short'}):'없음')}
+$('imp').onclick=()=>$('imp-file').click();
+$('imp-file').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.catalog))throw 0;
+      if(!confirm('현재 데이터를 모두 이 백업으로 바꿀까요?'))return;
+      localStorage.setItem(KEY,JSON.stringify(d));S=load();renderAll();alert('백업을 가져왔습니다.');
+    }catch(err){alert('올바른 백업 파일이 아닙니다.')}};
+  r.readAsText(f);e.target.value='';
+};
+$('reset-cat').onclick=()=>{if(confirm('기본 항목으로 되돌릴까요? 직접 추가하거나 삭제한 항목은 사라집니다 (현재 목록과 보관된 여행은 유지됩니다).')){S.catalog=defaultCatalog();S.catv=CATV;save();renderCatalog()}};
+
+function renderAll(){renderBackup();fillTrip();renderCatalog();renderExtras();renderList();renderBilan();renderArchives()}
+renderAll();
+if(navigator.storage&&navigator.storage.persist){navigator.storage.persist().catch(()=>{})}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
+</script>
+</body>
+</html>

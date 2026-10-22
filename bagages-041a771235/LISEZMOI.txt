@@ -1,0 +1,10 @@
+Dossier à déposer tel quel à la racine de votre site.
+
+Adresses :
+  Votre liste : https://alexandrecoutu.com/bagages-041a771235/fr/
+  Andie       : https://alexandrecoutu.com/bagages-041a771235/ko/
+
+- Ne pas créer de lien vers ce dossier, ni l'ajouter au robots.txt.
+- Si le dépôt GitHub est public, ce dossier y est visible : rendre le dépôt privé.
+- Après une modification d'un index.html, changer "-v1" en "-v2" dans le sw.js du même dossier,
+  sinon le téléphone garde l'ancienne version en mémoire.

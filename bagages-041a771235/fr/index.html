@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#2f5d50">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Ma liste">
+<title>Ma liste de bagages</title>
+<style>
+:root{--bg:#f5f3ee;--card:#fff;--ink:#23211d;--muted:#6e695f;--line:#e1dccf;--accent:#2f5d50;--accent-soft:#e2ebe7;--warn:#9a3b2e}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+header{background:var(--accent);color:#fff;padding:calc(14px + env(safe-area-inset-top)) 20px 0}
+header h1{margin:0 0 10px;font-size:20px;font-weight:600;max-width:860px;margin-inline:auto}
+nav{display:flex;gap:4px;max-width:860px;margin:0 auto}
+nav button{background:transparent;border:0;color:#d4e2dc;padding:10px 18px;font:inherit;cursor:pointer;border-radius:8px 8px 0 0}
+nav button.active{background:var(--bg);color:var(--ink);font-weight:600}
+main{max-width:860px;margin:0 auto;padding:20px 16px 90px}
+.tab{display:none}.tab.active{display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:16px}
+h2{font-size:17px;margin:0 0 10px}
+h3{font-size:13px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:18px 0 4px;font-weight:600}
+h4{font-size:15px;margin:16px 0 2px}
+p.note,.note{color:var(--muted);font-size:14px;margin:4px 0 10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px 14px}
+label.f{display:flex;flex-direction:column;font-size:13px;color:var(--muted);gap:3px}
+input[type=text],input[type=date],input[type=number],select,textarea{font:inherit;color:var(--ink);padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:#fff;width:100%}
+textarea{min-height:80px}
+button.b{font:inherit;font-size:14px;padding:8px 14px;border-radius:7px;border:1px solid var(--line);background:#fff;color:var(--ink);cursor:pointer}
+button.b:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+button.danger{color:var(--warn)}
+.row{display:flex;align-items:center;gap:10px;padding:7px 2px;border-bottom:1px solid #f0ede6}
+.row:last-child{border-bottom:0}
+.row input[type=checkbox]{width:20px;height:20px;accent-color:var(--accent);flex:none}
+.row .lbl{flex:1}
+.row .qty{font-weight:600;white-space:nowrap}
+.alt{font-weight:400;color:var(--muted);font-size:14px}
+.row.done .lbl,.row.done .qty{text-decoration:line-through;color:var(--muted)}
+.row .del{border:0;background:none;color:#b3ab9c;font-size:18px;cursor:pointer;padding:0 4px}
+.row .del:hover{color:var(--warn)}
+.row input.q{width:62px;padding:4px 6px;text-align:center;flex:none}
+.row.off .lbl{color:var(--muted)}
+.grp{font-size:11px;color:#fff;background:#8a8273;border-radius:4px;padding:1px 6px;white-space:nowrap}
+.grp.hiver{background:#4f6f8f}.grp.andie{background:#8f5f6f}.grp.perso{background:#6f7f4f}
+.tag{font-size:12px;color:var(--muted);background:#f1eee7;border-radius:4px;padding:1px 6px;white-space:nowrap}
+.listhead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.dest{font-size:22px;font-weight:650;margin:0}
+.meta{color:var(--muted);margin:2px 0 0}
+.progress{height:6px;background:#ece8df;border-radius:3px;margin:14px 0 4px;overflow:hidden}
+.progress div{height:100%;background:var(--accent);transition:width .2s}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.genbar{position:fixed;left:0;right:0;bottom:0;background:rgba(245,243,238,.96);border-top:1px solid var(--line);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:none}
+.genbar.show{display:block}
+.genbar .in{max-width:860px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:10px}
+details.arch{border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin-bottom:8px}
+details.arch summary{cursor:pointer;font-weight:600}
+.unused{color:var(--muted);text-decoration:line-through}
+.empty{text-align:center;color:var(--muted);padding:40px 10px}
+.inline{display:flex;gap:14px;flex-wrap:wrap;align-items:center;font-size:14px;margin:8px 0}
+@media print{header,.actions,.genbar,#coulisses{display:none!important}body{background:#fff}.card{border:0;padding:0}main{padding:0}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Ma liste de bagages</h1>
+  <nav>
+    <button data-tab="liste" class="active">Liste</button>
+    <button data-tab="coulisses">Coulisses</button>
+  </nav>
+</header>
+
+<main>
+<!-- ============ LISTE ============ -->
+<section id="liste" class="tab active"></section>
+
+<!-- ============ COULISSES ============ -->
+<section id="coulisses" class="tab">
+
+  <div class="card">
+    <h2>Comment ça marche</h2>
+    <p class="note">1. Entrez la destination, les dates et, s’il y a lieu, le nombre maximal de jours sans lavage. 2. Cochez les articles voulus : les essentiels sont cochés au départ; les autres (options, hiver, Andie) ne sont ajoutés que si vous les cochez. Vous pouvez inscrire une quantité pour n’importe quel article. 3. Cliquez sur <b>Générer la liste</b>. 4. Au retour, faites le bilan et archivez le voyage : c’est là que se trouve l’information utile pour la prochaine fois.</p>
+    <p class="note">Quantités : pour les vêtements qui varient selon la durée, la valise contient un jour de moins que la durée du voyage, puisqu’un ensemble est porté au départ. Avec lavage, la valise contient autant d’ensembles que de jours sans lavage (plus celui porté), pour avoir de quoi se changer pendant que le linge sèche — comme pour la Corée en 2024. La liste indique toujours la quantité sans lavage et, entre parenthèses, la quantité avec lavage.</p>
+  </div>
+
+  <div class="card">
+    <h2>Voyage</h2>
+    <div class="grid">
+      <label class="f">Destination<input type="text" id="t-dest" placeholder="ex. Sorel"></label>
+      <label class="f">Départ<input type="date" id="t-start"></label>
+      <label class="f">Retour<input type="date" id="t-end"></label>
+      <label class="f">Nombre de jours<input type="number" id="t-days" min="1"></label>
+      <label class="f">Jours max sans lavage<input type="number" id="t-laundry" min="1" placeholder="vide = pas de lavage"></label>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Articles</h2>
+    <p class="note">Tous les articles sont regroupés par section, les essentiels en premier. L’étiquette indique les articles d’hiver, pour Andie ou ajoutés par vous. Case de quantité : vide = quantité automatique (vêtements selon la durée) ou aucune; un chiffre = votre quantité. Le × retire un article du catalogue.</p>
+    <div id="catalog"></div>
+  </div>
+
+  <div class="card">
+    <h2>Ajouter un article</h2>
+    <div class="grid">
+      <label class="f">Article<input type="text" id="a-label" placeholder="ex. Cadeau pour Maman"></label>
+      <label class="f">Section<select id="a-section"></select></label>
+      <label class="f">Quantité (facultatif)<input type="number" id="a-qty" min="0"></label>
+    </div>
+    <div class="inline">
+      <label><input type="checkbox" id="a-daily"> Quantité selon la durée</label>
+      <label><input type="radio" name="a-scope" value="trip" checked> Ce voyage seulement</label>
+      <label><input type="radio" name="a-scope" value="catalog"> Garder dans mon catalogue</label>
+      <button class="b" id="a-add">Ajouter</button>
+    </div>
+    <div id="extras"></div>
+  </div>
+
+  <div class="card" id="bilan-card">
+    <h2>Bilan du voyage en cours</h2>
+    <div id="bilan"></div>
+  </div>
+
+  <div class="card">
+    <h2>Voyages archivés</h2>
+    <div id="archives"></div>
+  </div>
+
+  <div class="card">
+    <h2>Sauvegarde</h2>
+    <p class="note">Tout est enregistré sur cet appareil, dans cette appli, à chaque modification. Ça ne disparaît que si vous changez d’appareil, désinstallez l’appli ou effacez les données du navigateur : exportez une sauvegarde de temps en temps, surtout après avoir archivé un voyage, et gardez-la dans Drive.</p>
+    <p class="note" id="last-bk"></p>
+    <div class="actions">
+      <button class="b" id="exp">Exporter une sauvegarde</button>
+      <button class="b" id="imp">Importer une sauvegarde</button>
+      <input type="file" id="imp-file" accept=".json,application/json" hidden>
+      <button class="b danger" id="reset-cat">Restaurer le catalogue d’origine</button>
+    </div>
+  </div>
+</section>
+</main>
+
+<div class="genbar" id="genbar"><div class="in">
+  <span class="note" id="gen-count"></span>
+  <button class="b primary" id="gen">Générer la liste</button>
+</div></div>
+
+<script>
+const KEY='listeBagages.v1';
+const SECTIONS=[
+  ['depart','En partant (sur moi)'],
+  ['valise','Valise'],
+  ['toilette','Valise — kit de toilette'],
+  ['liquides','Valise — sac de liquides'],
+  ['acces','Accès facile (électronique et petits objets)'],
+  ['verif','À vérifier (accès numérique)']
+];
+const SECNAME=Object.fromEntries(SECTIONS);
+const CATV=2;
+const GROUPS=[
+  ['base','Essentiels','Ce que vos listes récentes ont toujours contenu.'],
+  ['options','Options','Selon le voyage.'],
+  ['hiver','Hiver',''],
+  ['andie','Pour Andie',''],
+  ['perso','Mes ajouts','Articles que vous avez ajoutés au catalogue.']
+];
+const DEFAULTS=[
+ // Essentiels
+ ['base','depart','Sous-vêtements'],['base','depart','Bas'],['base','depart','Jeans ou pantalon confortable'],
+ ['base','depart','T-shirt'],['options','depart','Chemise'],['base','depart','Chandail chaud'],['options','depart','Veston'],['base','depart','Ceinture'],
+ ['base','depart','Souliers'],['base','depart','Portefeuille'],['base','depart','Téléphone'],['base','depart','Passeport (et copie)'],
+ ['base','valise','Sous-vêtements',1],['base','valise','Bas',1],['base','valise','T-shirts',1],
+ ['base','valise','Autre paire de jeans ou pantalon'],
+ ['base','toilette','Brosse à dents (chargée) et fil'],['base','toilette','Brosse à cheveux'],
+ ['base','toilette','Rasoir électrique (quotidien)'],['base','toilette','Coupe-ongles'],['base','toilette','Q-tips'],
+ ['base','toilette','Soie dentaire'],['base','toilette','Pilules'],
+ ['base','liquides','Dentifrice'],['base','liquides','Déodorant'],['base','liquides','Mini rince-bouche'],
+ ['base','acces','Base de recharge des appareils auditifs'],['base','acces','Chargeur de téléphone'],
+ ['base','acces','Fil de téléphone'],['base','acces','Hub de recharge USB'],['base','acces','Tissu pour lunettes'],
+ ['base','verif','Billets d’avion (app ou courriel)'],['base','verif','Réservation d’hébergement'],
+ // Options
+ ['options','depart','Coupe-vent'],
+ ['options','valise','Maillot de bain'],['options','valise','Chapeau'],['options','valise','Parapluie'],
+ ['options','valise','Imperméable'],['options','valise','Chemise à manches longues'],['options','valise','Bermudas ou shorts'],
+ ['options','valise','Sandales'],['options','valise','Autre paire de souliers'],['options','valise','Petit sac à dos'],
+ ['options','valise','Sacs pour linge sale'],
+ ['options','toilette','Rasoir à barbe'],['options','toilette','Débarbouillette'],['options','toilette','Savon'],
+ ['options','liquides','Vaporisateur nasal'],['options','liquides','Shampoing'],
+ ['options','acces','Kobo et fil'],['options','acces','iPad et fil'],['options','acces','Ordinateur et fil'],
+ ['options','acces','Convertisseur ou adaptateur de prise'],['options','acces','Boîtier à lunettes'],
+ ['options','acces','Masque pour dormir (avion)'],['options','acces','Bas pour l’avion'],['options','acces','Petit carnet et stylo'],
+ ['options','verif','Carte d’embarquement'],['options','verif','Réservation de voiture ou de train'],
+ // Hiver
+ ['hiver','depart','Bottes'],['hiver','depart','Manteau d’hiver'],['hiver','depart','Tuque'],
+ ['hiver','depart','Mitaines ou gants'],['hiver','depart','Foulard'],['hiver','valise','Chandail chaud supplémentaire'],
+ // Andie
+ ['andie','acces','Fil de la montre d’Andie'],['andie','acces','Câble USB d’Andie']
+];
+function slug(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+function defaultCatalog(){return DEFAULTS.map(([g,s,l,d])=>({id:s+'-'+slug(l),label:l,section:s,group:g,daily:!!d,on:g==='base'}))}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function $(id){return document.getElementById(id)}
+
+let S=load();
+function load(){
+  let d=null;try{d=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+  if(!d||typeof d!=='object')d={};
+  if(!Array.isArray(d.catalog)){d.catalog=defaultCatalog();d.catv=CATV}
+  if((d.catv||1)<CATV){
+    d.catalog=d.catalog.filter(i=>i.id!=='depart-t-shirt-ou-chemise'&&i.id!=='depart-chandail-chaud-ou-veston');
+    for(const it of defaultCatalog())if(!d.catalog.some(i=>i.id===it.id))d.catalog.push(it);
+    d.catv=CATV;
+  }
+  d.trip=d.trip||{dest:'',start:'',end:'',days:'',laundry:''};
+  d.extras=d.extras||[];d.current=d.current||null;d.archives=d.archives||[];
+  return d;
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){alert('Impossible d’enregistrer dans ce navigateur. Exportez une sauvegarde.')}}
+
+/* ---------- dates & quantités ---------- */
+function daysBetween(a,b){if(!a||!b)return 0;const d=(new Date(b+'T12:00')-new Date(a+'T12:00'))/864e5;return d>=0?Math.round(d)+1:0}
+function fmt(d,opt){return new Date(d+'T12:00').toLocaleDateString('fr-CA',opt)}
+function fmtRange(a,b){
+  if(a&&b){const A=new Date(a+'T12:00'),B=new Date(b+'T12:00');
+    if(A.getFullYear()===B.getFullYear()){
+      const first=A.getMonth()===B.getMonth()?fmt(a,{day:'numeric'}):fmt(a,{day:'numeric',month:'long'});
+      return 'du '+first+' au '+fmt(b,{day:'numeric',month:'long',year:'numeric'});}
+    return 'du '+fmt(a,{day:'numeric',month:'long',year:'numeric'})+' au '+fmt(b,{day:'numeric',month:'long',year:'numeric'});}
+  if(a)return 'départ le '+fmt(a,{day:'numeric',month:'long',year:'numeric'});
+  return '';
+}
+function qtyFor(it,t){
+  if(it.qty!==undefined&&it.qty!==null&&it.qty!=='')return {no:+it.qty,w:null};
+  if(!it.daily||!t.days)return null;
+  const no=Math.max(t.days-1,0);
+  const L=+t.laundry;
+  const w=(L&&L<t.days-1)?L:null;
+  return {no,w};
+}
+function qtyHtml(q){if(!q)return '';return '× '+q.no+(q.w!==null?' <span class="alt">('+q.w+' avec lavage)</span>':'')}
+
+/* ---------- onglets ---------- */
+function show(tab){
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  document.querySelectorAll('.tab').forEach(s=>s.classList.toggle('active',s.id===tab));
+  $('genbar').classList.toggle('show',tab==='coulisses');
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>show(b.dataset.tab));
+
+/* ---------- LISTE ---------- */
+function renderList(){
+  const el=$('liste');const c=S.current;
+  if(!c){el.innerHTML='<div class="card empty">Aucune liste pour l’instant.<br><br><button class="b primary" onclick="show(\'coulisses\')">Aller aux coulisses</button></div>';return}
+  const t=c.trip;const total=c.items.length;const done=c.items.filter(i=>c.checks[i.id]).length;
+  let meta=[fmtRange(t.start,t.end),t.days?t.days+' jours':''].filter(Boolean).join(' · ');
+  let lav=t.laundry?'Lavage possible : au plus '+t.laundry+' jours sans lavage':'Quantités prévues sans lavage';
+  let h='<div class="card"><div class="listhead"><div><p class="dest">'+esc(t.dest||'Voyage')+'</p><p class="meta">'+esc(meta)+'</p><p class="note">'+esc(lav)+'</p></div>'+
+    '<div class="actions"><button class="b" id="l-reset">Réinitialiser les coches</button><button class="b" onclick="window.print()">Imprimer</button></div></div>'+
+    '<div class="progress"><div style="width:'+(total?done/total*100:0)+'%"></div></div><p class="note">'+done+' sur '+total+' articles prêts</p>';
+  for(const [sid,sname] of SECTIONS){
+    const its=c.items.filter(i=>i.section===sid);if(!its.length)continue;
+    h+='<h3>'+esc(sname)+'</h3>';
+    for(const it of its){const ck=!!c.checks[it.id];
+      h+='<label class="row'+(ck?' done':'')+'"><input type="checkbox" data-chk="'+esc(it.id)+'"'+(ck?' checked':'')+'><span class="lbl">'+esc(it.label)+'</span><span class="qty">'+qtyHtml(it.qty)+'</span></label>';}
+  }
+  el.innerHTML=h+'</div>';
+  el.querySelectorAll('[data-chk]').forEach(cb=>cb.onchange=()=>{c.checks[cb.dataset.chk]=cb.checked;save();renderList()});
+  $('l-reset').onclick=()=>{if(confirm('Décocher tous les articles?')){c.checks={};save();renderList()}};
+}
+
+/* ---------- COULISSES : voyage ---------- */
+function fillTrip(){const t=S.trip;$('t-dest').value=t.dest||'';$('t-start').value=t.start||'';$('t-end').value=t.end||'';$('t-days').value=t.days||'';$('t-laundry').value=t.laundry||''}
+function readTrip(){
+  const t=S.trip;t.dest=$('t-dest').value.trim();t.start=$('t-start').value;t.end=$('t-end').value;
+  const auto=daysBetween(t.start,t.end);if(auto){t.days=auto;$('t-days').value=auto}else t.days=+$('t-days').value||'';
+  t.laundry=+$('t-laundry').value||'';save();renderCatalog();
+}
+['t-dest','t-start','t-end','t-days','t-laundry'].forEach(id=>$(id).addEventListener('change',readTrip));
+
+/* ---------- COULISSES : catalogue ---------- */
+function renderCatalog(){
+  const GO=Object.fromEntries(GROUPS.map((g,i)=>[g[0],i]));
+  const GL={options:'option',hiver:'hiver',andie:'Andie',perso:'ajout'};
+  let h='';
+  for(const [sid,sname] of SECTIONS){
+    const s=S.catalog.filter(i=>i.section===sid).sort((a,b)=>(GO[a.group]??9)-(GO[b.group]??9));
+    if(!s.length)continue;
+    h+='<h3>'+esc(sname)+'</h3>';
+    for(const it of s){
+      const auto=(it.daily&&S.trip.days)?qtyFor({daily:true},S.trip):null;
+      const manual=it.qty!==undefined&&it.qty!==null&&it.qty!=='';
+      h+='<div class="row'+(it.on?'':' off')+'"><input type="checkbox" id="c-'+esc(it.id)+'" data-on="'+esc(it.id)+'"'+(it.on?' checked':'')+'>'+
+        '<label class="lbl" for="c-'+esc(it.id)+'">'+esc(it.label)+(GL[it.group]?' <span class="grp '+it.group+'">'+GL[it.group]+'</span>':'')+'</label>'+
+        (it.daily&&!manual?'<span class="qty">'+(auto?qtyHtml(auto):'<span class="tag">selon la durée</span>')+'</span>':'')+
+        '<input type="number" min="0" class="q" data-q="'+esc(it.id)+'" value="'+(manual?esc(it.qty):'')+'" placeholder="'+(auto?auto.no:'qté')+'" title="Quantité">'+
+        '<button class="del" title="Retirer du catalogue" data-del="'+esc(it.id)+'">×</button></div>';
+    }
+  }
+  $('catalog').innerHTML=h;
+  $('catalog').querySelectorAll('[data-on]').forEach(cb=>cb.onchange=()=>{S.catalog.find(i=>i.id===cb.dataset.on).on=cb.checked;cb.closest('.row').classList.toggle('off',!cb.checked);save();updateCount()});
+  $('catalog').querySelectorAll('[data-q]').forEach(inp=>inp.onchange=()=>{const it=S.catalog.find(i=>i.id===inp.dataset.q);
+    it.qty=inp.value===''?null:Math.max(0,Math.round(+inp.value));if(it.qty&&!it.on)it.on=true;save();renderCatalog()});
+  $('catalog').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{const it=S.catalog.find(i=>i.id===b.dataset.del);
+    if(confirm('Retirer « '+it.label+' » du catalogue?')){S.catalog=S.catalog.filter(i=>i!==it);save();renderCatalog()}});
+  updateCount();
+}
+function updateCount(){const n=S.catalog.filter(i=>i.on).length+S.extras.length;$('gen-count').textContent=n+' articles sélectionnés'}
+
+/* ---------- COULISSES : ajouts ---------- */
+$('a-section').innerHTML=SECTIONS.map(([id,n])=>'<option value="'+id+'"'+(id==='valise'?' selected':'')+'>'+esc(n)+'</option>').join('');
+$('a-add').onclick=()=>{
+  const label=$('a-label').value.trim();if(!label){$('a-label').focus();return}
+  const section=$('a-section').value,daily=$('a-daily').checked;const qv=$('a-qty').value;const qty=qv===''?null:Math.max(0,Math.round(+qv));
+  const scope=document.querySelector('input[name=a-scope]:checked').value;
+  const id=(scope==='catalog'?'perso-':'x-')+Date.now();
+  if(scope==='catalog')S.catalog.push({id,label,section,group:'perso',daily,qty,on:true});
+  else S.extras.push({id,label,section,daily,qty});
+  $('a-label').value='';$('a-qty').value='';$('a-daily').checked=false;save();renderCatalog();renderExtras();
+};
+$('a-label').addEventListener('keydown',e=>{if(e.key==='Enter')$('a-add').click()});
+function renderExtras(){
+  if(!S.extras.length){$('extras').innerHTML='';updateCount();return}
+  $('extras').innerHTML='<h3>Pour ce voyage seulement</h3>'+S.extras.map(x=>'<div class="row"><span class="lbl">'+esc(x.label)+'</span>'+(x.qty?'<span class="qty">× '+x.qty+'</span>':'')+'<span class="tag">'+esc(SECNAME[x.section])+'</span><button class="del" data-x="'+esc(x.id)+'">×</button></div>').join('');
+  $('extras').querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{S.extras=S.extras.filter(x=>x.id!==b.dataset.x);save();renderExtras()});
+  updateCount();
+}
+
+/* ---------- Générer ---------- */
+$('gen').onclick=()=>{
+  readTrip();
+  if(S.current&&Object.values(S.current.checks).some(Boolean)&&!confirm('Remplacer la liste en cours? Les cases cochées seront perdues.'))return;
+  const t={...S.trip};
+  const items=S.catalog.filter(i=>i.on).map(i=>({id:i.id,label:i.label,section:i.section,daily:i.daily,qtyManual:i.qty}))
+    .concat(S.extras.map(x=>({id:x.id,label:x.label,section:x.section,daily:x.daily,qtyManual:x.qty})));
+  items.forEach(i=>{i.qty=qtyFor({daily:i.daily,qty:i.qtyManual},t);delete i.qtyManual});
+  S.current={trip:t,items,checks:{},unused:{},notes:'',created:new Date().toISOString()};
+  save();renderList();renderBilan();show('liste');
+};
+
+/* ---------- Bilan ---------- */
+function renderBilan(){
+  const c=S.current,el=$('bilan');
+  if(!c){el.innerHTML='<p class="note">Aucune liste en cours.</p>';return}
+  let h='<p class="note">Au retour, cochez ce qui n’a pas servi et notez ce qui a manqué, puis archivez.</p>';
+  for(const [sid,sname] of SECTIONS){const its=c.items.filter(i=>i.section===sid);if(!its.length)continue;
+    h+='<h3>'+esc(sname)+'</h3>';
+    for(const it of its)h+='<label class="row"><input type="checkbox" data-un="'+esc(it.id)+'"'+(c.unused[it.id]?' checked':'')+'><span class="lbl">'+esc(it.label)+'</span><span class="tag">pas utilisé</span></label>';}
+  h+='<h3>Notes</h3><textarea id="b-notes" placeholder="Ce qui a manqué, ce qui était de trop, quantités à revoir…">'+esc(c.notes||'')+'</textarea>'+
+    '<div class="actions" style="margin-top:10px"><button class="b primary" id="b-arch">Archiver ce voyage</button></div>';
+  el.innerHTML=h;
+  el.querySelectorAll('[data-un]').forEach(cb=>cb.onchange=()=>{c.unused[cb.dataset.un]=cb.checked;save()});
+  $('b-notes').oninput=e=>{c.notes=e.target.value;save()};
+  $('b-arch').onclick=()=>{
+    if(!confirm('Archiver ce voyage? La liste en cours et les ajouts ponctuels seront effacés.'))return;
+    S.archives.unshift({trip:c.trip,items:c.items,unused:c.unused,notes:c.notes,archivedAt:new Date().toISOString()});
+    S.current=null;S.extras=[];save();renderAll();
+    alert('Voyage archivé. Pensez à exporter une sauvegarde.');
+  };
+}
+
+/* ---------- Archives ---------- */
+function renderArchives(){
+  const el=$('archives');
+  if(!S.archives.length){el.innerHTML='<p class="note">Aucun voyage archivé.</p>';return}
+  el.innerHTML=S.archives.map((a,k)=>{
+    const t=a.trip;const nUn=Object.values(a.unused||{}).filter(Boolean).length;
+    let h='<details class="arch"><summary>'+esc(t.dest||'Voyage')+' — '+esc(fmtRange(t.start,t.end)||'sans dates')+(t.days?' ('+t.days+' jours)':'')+'</summary>';
+    h+='<p class="note">'+a.items.length+' articles · '+nUn+' pas utilisés'+(t.laundry?' · lavage aux '+t.laundry+' jours':'')+'</p>';
+    if(a.notes)h+='<p><b>Notes :</b> '+esc(a.notes).replace(/\n/g,'<br>')+'</p>';
+    for(const [sid,sname] of SECTIONS){const its=a.items.filter(i=>i.section===sid);if(!its.length)continue;
+      h+='<h3>'+esc(sname)+'</h3>'+its.map(i=>'<div class="'+(a.unused&&a.unused[i.id]?'unused':'')+'">'+esc(i.label)+(i.qty?' '+qtyHtml(i.qty):'')+'</div>').join('');}
+    h+='<div class="actions" style="margin-top:10px"><button class="b" data-reuse="'+k+'">Repartir de ce voyage</button><button class="b danger" data-rm="'+k+'">Supprimer</button></div></details>';
+    return h;}).join('');
+  el.querySelectorAll('[data-reuse]').forEach(b=>b.onclick=()=>{
+    const a=S.archives[+b.dataset.reuse];
+    const skip=confirm('Exclure les articles marqués « pas utilisé »?\n(OK = exclure, Annuler = tout garder)');
+    const keep=a.items.filter(i=>!(skip&&a.unused&&a.unused[i.id]));
+    const ids=new Set(keep.map(i=>i.id));
+    S.catalog.forEach(i=>i.on=ids.has(i.id));
+    S.extras=keep.filter(i=>!S.catalog.some(c=>c.id===i.id)).map(i=>({id:'x-'+Date.now()+Math.random().toString(36).slice(2,6),label:i.label,section:i.section,daily:i.daily}));
+    S.trip={dest:a.trip.dest,start:'',end:'',days:'',laundry:a.trip.laundry||''};
+    save();fillTrip();renderCatalog();renderExtras();window.scrollTo(0,0);
+  });
+  el.querySelectorAll('[data-rm]').forEach(b=>b.onclick=()=>{if(confirm('Supprimer définitivement ce voyage archivé?')){S.archives.splice(+b.dataset.rm,1);save();renderArchives()}});
+}
+
+/* ---------- Sauvegarde ---------- */
+$('exp').onclick=async()=>{
+  const name='ma-liste-sauvegarde-'+new Date().toISOString().slice(0,10)+'.json';
+  const json=JSON.stringify(S,null,2);
+  const done=()=>{S.lastBackup=new Date().toISOString();save();renderBackup()};
+  try{const f=new File([json],name,{type:'application/json'});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:name});done();return}
+  }catch(e){if(e&&e.name==='AbortError')return}
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([json],{type:'application/json'}));
+  a.download=name;document.body.appendChild(a);a.click();a.remove();done();
+};
+function renderBackup(){$('last-bk').textContent='Dernière sauvegarde : '+(S.lastBackup?new Date(S.lastBackup).toLocaleString('fr-CA',{dateStyle:'medium',timeStyle:'short'}):'jamais')}
+$('imp').onclick=()=>$('imp-file').click();
+$('imp-file').onchange=e=>{
+  const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.catalog))throw 0;
+      if(!confirm('Remplacer toutes les données actuelles par cette sauvegarde?'))return;
+      localStorage.setItem(KEY,JSON.stringify(d));S=load();renderAll();alert('Sauvegarde importée.');
+    }catch(err){alert('Ce fichier n’est pas une sauvegarde valide.')}};
+  r.readAsText(f);e.target.value='';
+};
+$('reset-cat').onclick=()=>{if(confirm('Restaurer le catalogue d’origine? Vos ajouts au catalogue et vos retraits seront perdus (la liste en cours et les archives sont conservées).')){S.catalog=defaultCatalog();S.catv=CATV;save();renderCatalog()}};
+
+function renderAll(){renderBackup();fillTrip();renderCatalog();renderExtras();renderList();renderBilan();renderArchives()}
+renderAll();
+if(navigator.storage&&navigator.storage.persist){navigator.storage.persist().catch(()=>{})}
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
+</script>
+</body>
+</html>

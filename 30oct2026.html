@@ -3,28 +3,42 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Exercice de traduction législative du 30 octobre 2026</title>
+<title>Ateliers interactifs de traduction législative — 30 octobre 2026</title>
 <style>
-:root{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#182333;background:#fafbfd}
-*{box-sizing:border-box}body{margin:0}.page{max-width:790px;margin:65px auto;padding:0 24px 60px}h1{font-size:clamp(1.6rem,4vw,2.15rem);line-height:1.2;letter-spacing:-.035em;margin:0 0 26px}p{line-height:1.6}button{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;border:1px solid #23569b;background:#245ea8;color:#fff;border-radius:12px;min-height:70px;padding:17px 22px;font:600 1.04rem system-ui;cursor:pointer;margin:20px 0 8px}button:hover{background:#1b4a86}button:focus-visible{outline:3px solid #9ac7ff;outline-offset:3px}.status{font-size:.91rem;min-height:24px;color:#176345;margin:5px 0 40px}h2{font-size:1.28rem;margin:30px 0 20px}.provision{padding:23px 26px;background:#fff;border:1px solid #dce2ec;border-radius:12px;line-height:1.65}.provision p{margin:0 0 11px}.provision .item{padding-left:28px;text-indent:-28px}.provision .last{margin-bottom:0}.subtle{font-size:.85rem;color:#627084;margin-top:24px}#prompt{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;left:-10000px}@media(max-width:500px){.page{margin:38px auto;padding:0 18px 48px}.provision{padding:18px}}
+:root{--ink:#242522;--muted:#656661;--paper:#fcfaf6;--accent:#445f57;--rule:#c9c8c0;font-family:Arial,Helvetica,sans-serif;color:var(--ink);background:var(--paper)}
+*{box-sizing:border-box}body{margin:0}main{max-width:800px;margin:0 auto;padding:44px 24px 70px}header{text-align:center;margin-bottom:28px}h1{font-size:1.03rem;letter-spacing:.045em;margin:0 0 14px;font-weight:700;text-transform:uppercase}header p{font-style:italic;margin:0;color:var(--muted);font-size:.96rem;line-height:1.5}.instructions{border:1px solid var(--rule);padding:15px 18px 10px;background:#fffdfa}.instructions h2{font-size:.96rem;text-decoration:underline;margin:0 0 12px}.instructions ol{margin:0 0 20px;padding-left:38px}.instructions li{line-height:1.7;padding-left:5px;margin:0 0 6px;font-size:.95rem}.instructions li::marker{font-weight:bold}.instructions p{font-size:.94rem;line-height:1.55;margin:0 0 3px}.exercise{text-align:center;margin:29px 0 23px}.exercise h2{font-size:1.02rem;margin:0 0 12px}.copy{border:1px solid var(--accent);border-radius:3px;background:var(--accent);color:white;padding:10px 20px;min-height:40px;font:600 .95rem Arial,Helvetica,sans-serif;cursor:pointer}.copy:hover{background:#304941}.copy:focus-visible{outline:3px solid #a9c3b8;outline-offset:3px}.status{font-size:.86rem;color:var(--accent);min-height:1.3em;margin:8px 0}.reading{margin-top:25px}.reading h2{font-size:.99rem;font-weight:400;margin:0 0 16px}.provision{line-height:1.6;font-size:.97rem}.provision p{margin:0 0 9px}.provision .item{padding-left:32px;text-indent:-32px}.provision .second{margin-top:24px}#prompt{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none;left:-10000px}@media(max-width:600px){main{padding:30px 18px 55px}.instructions{padding:14px}.instructions ol{padding-left:26px}.copy{width:100%;max-width:330px}.provision{font-size:.95rem}}
 </style>
 </head>
 <body>
-<main class="page">
-<h1>Exercice de traduction législative du 30 octobre 2026</h1>
-<p>Cliquez pour copier l'invite à insérer dans l'IA de votre choix.</p>
-<button id="copy" type="button" aria-describedby="status"><span aria-hidden="true">▣</span><span id="button-label">Copier l'invite</span></button>
+<main>
+<header>
+<h1>Ateliers interactifs de traduction législative</h1>
+<p>De courts exercices interactifs de traduction législative, guidés par un mentor IA</p>
+</header>
+<section class="instructions" aria-label="Mode d'emploi">
+<h2>Copiez-collez-lancez!</h2>
+<ol>
+<li><strong>Copiez</strong> les instructions destinées à l'IA (bouton ci-dessous).</li>
+<li><strong>Collez</strong> les instructions dans l'IA de votre choix (ChatGPT, Claude, Gemini, etc.).</li>
+<li><strong>Lancez</strong> l'exercice!</li>
+</ol>
+<p>Astuce : Vous pouvez traduire directement dans l'IA, mais il peut être préférable de travailler vos traductions successives dans Word ou un autre éditeur en parallèle.</p>
+</section>
+<section class="exercise" aria-label="Exercice de la semaine">
+<h2>Exercice du 30 octobre 2026</h2>
+<button id="copy" class="copy" type="button" aria-describedby="status"><span id="button-label">Copier les instructions pour l'IA</span></button>
 <p class="status" id="status" role="status" aria-live="polite"></p>
-<h2>À traduire cette semaine</h2>
+</section>
+<section class="reading" aria-label="Texte à traduire">
+<h2>Voici le texte à traduire cette semaine :</h2>
 <div class="provision" lang="en">
 <p><strong>7.2(2)</strong> The regulated profession may apply to the minister for an extension by</p>
 <p class="item">(a) making an application in accordance with the procedures set out in the regulations;</p>
 <p class="item">(b) submitting the appropriate supporting documents; and</p>
-<p class="item last">(c) providing reasons for requesting the extension.</p>
-<br>
-<p class="last"><strong>7.2(3)</strong> The minister may grant the extension to the regulated profession and may make the extension subject to the conditions determined by the minister.</p>
+<p class="item">(c) providing reasons for requesting the extension.</p>
+<p class="second"><strong>7.2(3)</strong> The minister may grant the extension to the regulated profession and may make the extension subject to the conditions determined by the minister.</p>
 </div>
-<p class="subtle">Le texte français de référence sera présenté au cours de l'exercice, après votre propre traduction.</p>
+</section>
 </main>
 <textarea id="prompt" readonly aria-hidden="true"># ATELIER DE TRADUCTION LÉGISLATIVE
 ## Partie A — Cadre pédagogique permanent
